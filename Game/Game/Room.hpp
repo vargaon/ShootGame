@@ -2,18 +2,31 @@
 
 #include <SFML/Graphics.hpp> 
 #include <iostream>
+#include <vector>
 
 class Room {
 
-public:
+private:
 
 	float top;
 	float left;
 	float bot;
 	float right;
 
-	Room(float top, float left, float bot, float right) : top(top), left(left), bot(bot), right(right) {};
-	bool inRoom(sf::Vector2f position, float size);
+	float wallThickness;
+
+	sf::FloatRect localBounds;
+
+public:
+
+	Room(float top, float left, float bot, float right, float wallThickness);
+
+	bool inRoom(sf::FloatRect rect);
+	bool inLocalBounds(sf::FloatRect rect);
+
+	sf::FloatRect getLocalBounds();
 
 	void print();
 };
+
+using rooms_con_t = std::vector<Room>;

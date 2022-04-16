@@ -7,12 +7,9 @@
 #include "Room.hpp"
 
 const int WIN_SIZE = 524;
-const float WALL_THICKNES = 4.f;
-const float PLAYER_SIZE = 10.f;
-
-const int DOOR_SIZE = 50;
-
-const int N_ROOMS = 5;
+const float WALL_THICKNESS = 4.f;
+const float ROOM_SIZE = 100.f;
+const float DOOR_SIZE = 50.f;
 
 class Game {
 
@@ -22,27 +19,25 @@ private:
 	sf::RenderWindow* window = nullptr;
 
 	Player p;
-
 	std::vector<Bullet> bullets;
 
-	std::vector<sf::RectangleShape> walls_entities;
+	std::vector<sf::RectangleShape> walls;
 
-	std::vector<Room> rooms;
-
+	rooms_con_t rooms;
 	doors_con_t doors;
 
 	void initWindow();
-
-	void initPlayer(sf::Vector2f position);
 	void initWalls();
 	void initRooms();
-
-	void createWall(bool horizontal, sf::Vector2f position);
-
-
 	void initDoors();
 
-	void updatePlayer();
+	void initPlayer(sf::Vector2f position);
+
+	void createWall(bool horizontal, sf::Vector2f position);
+	void createDoors(bool horizontal, bool mask[5][4]);
+
+	void processInput();
+	void updateBullets();
 
 public:
 
@@ -51,5 +46,6 @@ public:
 
 	void Update();
 	void Render();
+
 	bool IsRunning();
 };

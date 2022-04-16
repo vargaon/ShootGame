@@ -28,78 +28,32 @@ void Game::initWindow()
 
 void Game::initPlayer(sf::Vector2f position)
 {
-	this->p = Player(PLAYER_SIZE, position);
+	this->p = Player(position);
 }
 
-void Game::updatePlayer()
+void Game::updateBullets()
 {
-	if (Keyboard::isKeyPressed(Keyboard::A)) {
-		this->p.TurnLeft();
-	}
+	for (auto it = this->bullets.begin(); it != this->bullets.end();) {
 
-	if (Keyboard::isKeyPressed(Keyboard::D)) {
-		this->p.TurnRight();
-	}
+		it->update(this->rooms, this->doors);
 
-	if (Keyboard::isKeyPressed(Keyboard::Space)) {
-		this->p.Shoot(this->bullets);
-	}
-
-	if (Keyboard::isKeyPressed(Keyboard::W)) {
-		this->p.MoveForeward();
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::S)) {
-		this->p.MoveBack();
-	}
-	else {
-		this->p.Stop();
-	}
-
-	this->p.Update();
-
-
-	auto p_bounds = this->p.getBounds();
-
-	for (auto&& d : this->doors) {
-		if (d.intersectDoor(p_bounds)) {
-			if (this->p.inDoor) {
-				this->p.updateByDoor(d);
-				return;
-			}
-			else {
-				if (d.inDoor(p_bounds)) {
-					this->p.inDoor = true;
-					return;
-				}
-				else {
-					break;
-				}
-			}
+		if (!it->isActive()) {
+			it = this->bullets.erase(it);
 		}
-	}
-
-	this->p.inDoor = false;
-
-
-	int room_num = 0;
-
-	for (auto&& r : this->rooms) {
-
-		room_num++;
-		if (r.inRoom(this->p.getPosition(), PLAYER_SIZE)) {
-			//std::cout << "Room num: " << room_num << std::endl;
-			this->p.updateByRoom(r);
-			break;
+		else {
+			it++;
 		}
 	}
 }
 
 void Game::initWalls()
 {
-	for (int i = 0; i <= N_ROOMS; i++) {
+	int nRooms = int((WIN_SIZE - WALL_THICKNESS) / (ROOM_SIZE + WALL_THICKNESS));
 
-		Vector2f vertical_pos(WIN_SIZE / N_ROOMS * i, 0);
-		Vector2f horizontal_pos(0, WIN_SIZE / N_ROOMS * i);
+	for (int i = 0; i <= nRooms; i++) {
+
+		Vector2f vertical_pos(i*(ROOM_SIZE + WALL_THICKNESS), 0);
+		Vector2f horizontal_pos(0, i * (ROOM_SIZE + WALL_THICKNESS));
 
 		createWall(true, horizontal_pos);
 		createWall(false, vertical_pos);
@@ -111,11 +65,11 @@ void Game::createWall(bool horizontal, sf::Vector2f position)
 	Vector2f s;
 
 	if (horizontal) {
-		s = Vector2f(WIN_SIZE, WALL_THICKNES);
+		s = Vector2f(WIN_SIZE, WALL_THICKNESS);
 	}
 
 	else {
-		s = Vector2f(WALL_THICKNES, WIN_SIZE);
+		s = Vector2f(WALL_THICKNESS, WIN_SIZE);
 	}
 
 	RectangleShape entity(s);
@@ -123,40 +77,104 @@ void Game::createWall(bool horizontal, sf::Vector2f position)
 	entity.setFillColor(Color::Black);
 	entity.setPosition(position);
 
-	this->walls_entities.push_back(entity);
+	this->walls.push_back(entity);
+}
+
+void Game::processInput()
+{
+	if (Keyboard::isKeyPressed(Keyboard::A)) {
+		this->p.turnLeft();
+	}
+
+	if (Keyboard::isKeyPressed(Keyboard::D)) {
+		this->p.turnRight();
+	}
+
+	if (Keyboard::isKeyPressed(Keyboard::W)) {
+		this->p.goForward();
+	}
+	else if (Keyboard::isKeyPressed(Keyboard::S)) {
+		this->p.goBack();
+	}
+	else {
+		this->p.stop();
+	}
+
+	if (Keyboard::isKeyPressed(Keyboard::Space)) {
+		this->p.shoot(this->bullets);
+	}
 }
 
 void Game::initRooms()
 {
-	float left;
-	float right;
-	float top;
-	float bot;
+	int nRooms = int((WIN_SIZE - WALL_THICKNESS) / (ROOM_SIZE + WALL_THICKNESS));
 
-	float roomSize = 100.f + WALL_THICKNES;
+	float roomWallSize = ROOM_SIZE + WALL_THICKNESS;
 
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < nRooms; i++) {
 
-		for (int j = 0; j < 5; j++) {
+		for (int j = 0; j < nRooms; j++) {
 
-			top = i * roomSize;
-			left = j * roomSize;
-			bot = roomSize + WALL_THICKNES + i * roomSize;
-			right = roomSize + WALL_THICKNES + j * roomSize;
-
-			this->rooms.push_back(Room(top, left, bot, right));
-
+			this->rooms.push_back(Room(
+				i * roomWallSize, 
+				j * roomWallSize, 
+				roomWallSize + WALL_THICKNESS + i * roomWallSize, 
+				roomWallSize + WALL_THICKNESS + j * roomWallSize, 
+				WALL_THICKNESS));
 		}
 	}
 }
 
 void Game::initDoors()
 {
-	this->doors.push_back(Door(true, DOOR_SIZE, WALL_THICKNES, Vector2f(WIN_SIZE / 5 * 3 - 75, WIN_SIZE / 5 * 3)));
-	this->doors.push_back(Door(true, DOOR_SIZE, WALL_THICKNES, Vector2f(WIN_SIZE / 5 * 4 - 75, WIN_SIZE / 5 * 3)));
+	bool doorsMask[5][4];
 
-	this->doors.push_back(Door(false, DOOR_SIZE, WALL_THICKNES, Vector2f(WIN_SIZE / 5 * 3, WIN_SIZE / 5 * 3 - 75)));
-	this->doors.push_back(Door(false, DOOR_SIZE, WALL_THICKNES, Vector2f(WIN_SIZE / 5 * 3, WIN_SIZE / 5 * 4 - 75)));
+	doorsMask[0][0] = false;
+	doorsMask[0][1] = false;
+	doorsMask[0][2] = false;
+	doorsMask[0][3] = false;
+
+	doorsMask[1][1] = false;
+	doorsMask[1][2] = false;
+
+	doorsMask[2][0] = false;
+	doorsMask[2][1] = false;
+	doorsMask[2][2] = false;
+	doorsMask[2][3] = false;
+
+	doorsMask[3][1] = false;
+	doorsMask[3][2] = false;
+
+	doorsMask[4][0] = false;
+	doorsMask[4][1] = false;
+	doorsMask[4][2] = false;
+	doorsMask[4][3] = false;
+
+	this->createDoors(false, doorsMask);
+	this->createDoors(true, doorsMask);
+}
+
+void Game::createDoors(bool horizontal, bool mask[5][4])
+{
+
+	for (int i = 0; i < 5; i++) {
+
+		for (int j = 0; j < 4; j++) {
+
+			if (!mask[i][j]) {
+
+				float x = (i) * (WALL_THICKNESS + ROOM_SIZE) + WALL_THICKNESS + ((ROOM_SIZE - DOOR_SIZE) / 2);
+				float y = (j + 1) * (WALL_THICKNESS + ROOM_SIZE);
+
+				if (horizontal) {
+					this->doors.push_back(Door(horizontal, DOOR_SIZE, WALL_THICKNESS, Vector2f(x, y)));
+				}
+				else {
+					this->doors.push_back(Door(horizontal, DOOR_SIZE, WALL_THICKNESS, Vector2f(y, x)));
+				}
+			}
+		}
+	}
 }
 
 void Game::Update()
@@ -176,40 +194,31 @@ void Game::Update()
 		}
 	}
 
-	updatePlayer();
+	this->processInput();
 
-	for (auto it = this->bullets.begin(); it != this->bullets.end();) {
-		it->Update(this->window->getSize(), this->doors);
+	this->p.update(this->rooms, this->doors);
 
-		if (it->isNotActive()) {
-			it = this->bullets.erase(it);
-		}
-		else {
-			it++;
-		}
-	}
+	this->updateBullets();
 }
 
 void Game::Render()
 {
 	this->window->clear(Color::White);
 
-	
-
 	for (auto&& b : this->bullets) {
-		b.Render(*this->window);
+		b.render(*this->window);
 	}
 
-	for (auto&& w : this->walls_entities) {
+	for (auto&& w : this->walls) {
 
 		this->window->draw(w);
 	}
 
+	this->p.render(*this->window);
+
 	for (auto&& d : this->doors) {
 		this->window->draw(d.entity);
 	}
-
-	this->p.Render(*this->window);
 
 	this->window->display();
 }

@@ -6,11 +6,9 @@ class Door {
 
 private:
 
+	sf::FloatRect bounds;
 	bool horizontal;
 	float size;
-
-	sf::FloatRect bounds;
-
 	float minBound;
 	float maxBound;
 
@@ -18,12 +16,12 @@ public:
 
 	sf::RectangleShape entity;
 
-	Door(bool horizontal, float size, float wallThicknes, sf::Vector2f position);
+	Door(bool horizontal, float size, float wallThickness, sf::Vector2f position);
 
 	bool isHorizontal();
+	bool inDoorRange(sf::FloatRect rect);
 
-	bool intersectDoor(sf::FloatRect rect);
-	bool inDoor(sf::FloatRect rect);
+	sf::FloatRect getBounds();
 
 	float getMinBound();
 	float getMaxBound();

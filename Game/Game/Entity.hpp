@@ -4,28 +4,28 @@
 
 float const DEGTORAD = 0.017453f;
 
-class Entity {
+class MoveableEntity {
 
 public:
 
-	Entity() {};
-	Entity(float size, int nVertices, sf::Color color, sf::Vector2f position, int angle);
+	MoveableEntity() {};
+	MoveableEntity(float size, int pointCount, sf::Color color, sf::Vector2f position, int direction);
 	
-	virtual ~Entity() {};
+	virtual ~MoveableEntity() {};
 
-	virtual void Update(sf::Vector2u winSize) {};
-	virtual void Render(sf::RenderWindow& window) {};
+	sf::FloatRect getBounds();
+	sf::Vector2f getPosition();
 
 protected:
+
+	sf::CircleShape entity;
 
 	float size = 0.f;
 
 	float x = 0.f;
 	float y = 0.f;
 
-	int angle = 0;
-
-	sf::CircleShape entity;
+	int direction = 0;
 
 	sf::Vector2f computeDirectionsPowers();
 };
