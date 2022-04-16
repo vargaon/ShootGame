@@ -1,12 +1,21 @@
 #pragma once
 #include <SFML/Graphics.hpp> 
 #include "Player.hpp"
+#include "Door.hpp"
 #include <vector>
 
-const int WIN_H = 500;
-const int WIN_W = 500;
+#include "Room.hpp"
+
+const int WIN_SIZE = 524;
+const float WALL_THICKNES = 4.f;
+const float PLAYER_SIZE = 10.f;
+
+const int DOOR_SIZE = 50;
+
+const int N_ROOMS = 5;
 
 class Game {
+
 private:
 
 	sf::Event ev;
@@ -16,14 +25,30 @@ private:
 
 	std::vector<Bullet> bullets;
 
+	std::vector<sf::RectangleShape> walls_entities;
+
+	std::vector<Room> rooms;
+
+	doors_con_t doors;
+
 	void initWindow();
-	void initPlayer(sf::Vector2f pos);
+
+	void initPlayer(sf::Vector2f position);
+	void initWalls();
+	void initRooms();
+
+	void createWall(bool horizontal, sf::Vector2f position);
+
+
+	void initDoors();
+
 	void updatePlayer();
 
 public:
 
 	Game();
 	~Game();
+
 	void Update();
 	void Render();
 	bool IsRunning();

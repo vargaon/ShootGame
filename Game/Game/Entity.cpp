@@ -4,17 +4,17 @@
 
 using namespace sf;
 
-void Entity::setStartPosition(sf::Vector2f pos)
+Entity::Entity(float size, int nVertices, sf::Color color, sf::Vector2f position, int angle): size(size), x(position.x), y(position.y), angle(angle)
 {
-	this->x = pos.x;
-	this->y = pos.y;
-}
-
-void Entity::initEntity(float size, int nVertices, sf::Color color)
-{
-	this->size = size;
-
 	this->entity = CircleShape(size, nVertices);
 	this->entity.setFillColor(color);
 	this->entity.setOrigin(Vector2f(size, size));
+	
+	this->x = position.x;
+	this->y = position.y;
+}
+
+sf::Vector2f Entity::computeDirectionsPowers()
+{
+	return Vector2f(cos(this->angle * DEGTORAD), sin(this->angle * DEGTORAD));
 }

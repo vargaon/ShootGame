@@ -1,70 +1,106 @@
 #include "Player.hpp"
+#include <iostream>
 
 using namespace sf;
 
-Player::Player(): dx(0.f), dy(0.f), move(0), angle(-90)
+Player::Player(float size, sf::Vector2f position): Entity(size, 3, Color::Red, position, -90)
 {
-	initEntity(10.f, 3, Color::Red);
 }
 
 void Player::TurnLeft()
 {
-	angle -= 5;
+	angle -= PLAYER_TURN_SPEED;
 }
 
 void Player::TurnRight()
 {
-	angle += 5;
+	angle += PLAYER_TURN_SPEED;
 }
 
 void Player::MoveForeward()
 {
-	this->move = 1;
+	this->move = PlayerMove::FOREWARD;
 }
 
 void Player::MoveBack()
 {
-	this->move = -1;
+	this->move = PlayerMove::BACKWARD;
 }
 
 void Player::Stop()
 {
-	this->move = 0;
+	this->move = PlayerMove::STOP;
 }
 
 void Player::Shoot(std::vector<Bullet>& bulletes)
 {
 	if (this->clock.restart().asMilliseconds() > 50) {
 
-		Bullet b(this->angle);
-		b.setStartPosition(Vector2f(this->x, this->y));
+		Bullet b(Vector2f(this->x, this->y), this->angle);
 		bulletes.push_back(b);
-		
 	}
 }
 
-void Player::Update(Vector2u winSize)
+void Player::updateByRoom(Room& room)
 {
-	this->dx += cos(this->angle * DEGTORAD);
-	this->dy += sin(this->angle * DEGTORAD);
-
-	int maxSpeed = 2;
-	float speed = sqrt(this->dx * this->dx + this->dy * this->dy);
-
-	if (speed > maxSpeed)
-	{
-		this->dx *= maxSpeed / speed;
-		this->dy *= maxSpeed / speed;
+	if (this->x - this->size < room.left + 4.f) {
+		this->x = room.left + 4.f + this->size;
 	}
 
-	float xColision = winSize.x - this->size;
-	float yColision = winSize.y - this->size;
+	if (this->x + this->size > room.right - 4.f) {
+		this->x = room.right - 4.f - this->size;
+	}
 
-	if (this->x > xColision) this->x = xColision; if (this->x < this->size) this->x = this->size;
-	if (this->y > yColision) this->y = yColision; if (this->y < this->size) this->y = this->size;
+	if (this->y - this->size < room.top + 4.f) {
+		this->y = room.top + 4.f + this->size;
+	}
 
-	this->x += this->dx * this->move;
-	this->y += this->dy * this->move;
+	if (this->y + this->size > room.bot - 4.f) {
+		this->y = room.bot - 4.f - this->size;
+	}
+}
+
+void Player::updateByDoor(Door& door)
+{
+	if (door.isHorizontal()) {
+		if (this->x - this->size < door.getMinBound()) {
+			this->x = door.getMinBound() + this->size;
+		} 
+
+		if (this->x + this->size > door.getMaxBound()) {
+			this->x = door.getMaxBound() - this->size;
+		}
+	}
+	else {
+		if (this->y - this->size < door.getMinBound()) {
+			this->y = door.getMinBound() + this->size;
+		}
+
+		if (this->y + this->size > door.getMaxBound()) {
+			this->y = door.getMaxBound() - this->size;
+		}
+	}
+}
+
+sf::Vector2f Player::getPosition()
+{
+	return sf::Vector2f(this->x, this->y);
+}
+
+sf::FloatRect Player::getBounds()
+{
+	return FloatRect(this->x - this->size, this->y - this->size, this->size * 2, this->size * 2);
+}
+
+void Player::Update()
+{
+
+	if (this->move == 0) return;
+
+	auto p_directions = computeDirectionsPowers();
+
+	this->x += p_directions.x * this->move * PLAYER_MOVE_SPEED;
+	this->y += p_directions.y * this->move * PLAYER_MOVE_SPEED;
 }
 
 void Player::Render(sf::RenderWindow& window)
