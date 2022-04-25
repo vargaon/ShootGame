@@ -23,7 +23,7 @@ Game::~Game()
 
 void Game::initWindow()
 {
-	this->window = new RenderWindow(VideoMode(WIN_SIZE, WIN_SIZE + 50), "My Game!", Style::Titlebar | Style::Close);
+	this->window = new RenderWindow(VideoMode(WIN_SIZE, WIN_SIZE + 75), "My Game!", Style::Titlebar | Style::Close);
 	this->window->setFramerateLimit(60);
 }
 
@@ -94,6 +94,10 @@ void Game::processInput()
 	}
 	else {
 		this->p.stop();
+	}
+
+	if (Keyboard::isKeyPressed(Keyboard::X)) {
+		this->p.reload();
 	}
 
 	if (Keyboard::isKeyPressed(Keyboard::Space)) {

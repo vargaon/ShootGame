@@ -30,8 +30,6 @@ private:
 	void initRooms();
 	void initDoors();
 
-	void initPlayer(sf::Vector2f position);
-
 	void createWall(bool horizontal, sf::Vector2f position);
 	void createDoors(bool horizontal, bool mask[5][4]);
 

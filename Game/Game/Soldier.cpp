@@ -5,19 +5,43 @@ using namespace sf;
 
 void Soldier::shoot(bulletes_con_t& bulletes)
 {
-	if (this->clock.restart().asMilliseconds() > SOLDIER_SHOOT_COOLDOWN) {
+	if (this->nBulletes > 0 && !this->reloading) {
 
-		Bullet b;
+		if (this->shootClock.getElapsedTime().asMilliseconds() > SOLDIER_SHOOT_COOLDOWN) {
 
-		b.setStartPosition(Vector2f(this->x, this->y));
-		b.setStartDirection(this->direction);
+			this->shootClock.restart();
 
-		bulletes.push_back(b);
+			Bullet b;
+
+			b.setStartPosition(Vector2f(this->x, this->y));
+			b.setStartDirection(this->direction);
+
+			bulletes.push_back(b);
+
+			this->nBulletes--;
+
+			if (this->nBulletes == 0) {
+				this->reload();
+			}
+		}
 	}
+}
+
+void Soldier::reload()
+{
+	this->reloading = true;
+	this->reloadClock.restart();
 }
 
 void Soldier::update(rooms_con_t& rooms, doors_con_t& doors)
 {
+	std::cout << "Bulletes: " << this->nBulletes << std::endl;
+
+	if (this->reloading && this->reloadClock.getElapsedTime().asMilliseconds() > SOLDIER_RELOAD_COOLDOWN) {
+		this->reloading = false;
+		this->nBulletes = SOLDIER_BULLETES_NUMBER;
+	}
+
 	auto p_directions = computeDirectionsPowers();
 
 	this->x += p_directions.x * int(this->move) * SOLDIER_MOVE_SPEED;
