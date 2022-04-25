@@ -34,7 +34,7 @@ void Player::stop()
 
 void Player::shoot(std::vector<Bullet>& bulletes)
 {
-	if (this->clock.restart().asMilliseconds() > 50) {
+	if (this->clock.restart().asMilliseconds() > PLAYER_SHOOT_COOLDOWN) {
 
 		Bullet b(Vector2f(this->x, this->y), this->direction);
 		bulletes.push_back(b);
@@ -43,29 +43,19 @@ void Player::shoot(std::vector<Bullet>& bulletes)
 
 void Player::update(rooms_con_t& rooms, doors_con_t& doors)
 {
-	if (this->move == PlayerMove::STOP) return;
-
 	auto p_directions = computeDirectionsPowers();
 
 	this->x += p_directions.x * int(this->move) * PLAYER_MOVE_SPEED;
 	this->y += p_directions.y * int(this->move) * PLAYER_MOVE_SPEED;
 
-	if (!this->movementThroughDoor(doors)) {
+	this->moveThroughDoors(doors);
+	this->moveInRooms(rooms);
 
-		this->movementInRoom(rooms);
-	}
-}
-
-void Player::render(sf::RenderWindow& window)
-{
 	this->entity.setPosition(Vector2f(this->x, this->y));
 	this->entity.setRotation(this->direction + 90.f);
-
-	window.draw(this->entity);
 }
 
-
-bool Player::movementThroughDoor(doors_con_t doors)
+void Player::moveThroughDoors(doors_con_t doors)
 {
 	auto bounds = this->getBounds();
 
@@ -77,7 +67,7 @@ bool Player::movementThroughDoor(doors_con_t doors)
 
 		if (bounds.intersects(d_bounds)) {
 
-			if (this->lastInDoor) {
+			if (this->inDoor) {
 
 				this->updateByDoor(d);
 				state = true;
@@ -88,7 +78,7 @@ bool Player::movementThroughDoor(doors_con_t doors)
 
 				if (d.inDoorRange(bounds)) {
 
-					this->lastInDoor = true;
+					this->inDoor = true;
 					state = true;
 				}
 
@@ -97,13 +87,13 @@ bool Player::movementThroughDoor(doors_con_t doors)
 		}
 	}
 
-	if(!state) this->lastInDoor = false;
-
-	return state;
+	if(!state) this->inDoor = false;
 }
 
-void Player::movementInRoom(rooms_con_t rooms)
+void Player::moveInRooms(rooms_con_t rooms)
 {
+	if (this->inDoor) return;
+
 	auto bounds = this->getBounds();
 
 	for (auto&& r : rooms) {

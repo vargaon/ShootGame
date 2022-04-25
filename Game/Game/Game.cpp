@@ -206,15 +206,14 @@ void Game::Render()
 	this->window->clear(Color::White);
 
 	for (auto&& b : this->bullets) {
-		b.render(*this->window);
+		this->window->draw(b.entity);
 	}
 
 	for (auto&& w : this->walls) {
-
 		this->window->draw(w);
 	}
 
-	this->p.render(*this->window);
+	this->window->draw(p.entity);
 
 	for (auto&& d : this->doors) {
 		this->window->draw(d.entity);

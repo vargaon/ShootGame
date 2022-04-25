@@ -1,10 +1,7 @@
 #pragma once
 
 #include <iostream>
-
 #include "Entity.hpp"
-#include "Door.hpp"
-#include "Room.hpp"
 
 const int BULLET_MOVE_SPEED = 10;
 
@@ -20,15 +17,14 @@ private:
 	float dx, dy;
 	bool active;
 
-	bool movementThroughDoor(doors_con_t doors);
-	void movementInRoom(rooms_con_t rooms);
+	void moveThroughDoors(doors_con_t doors) override;
+	void moveInRooms(rooms_con_t rooms) override;
 
 public:
 
 	Bullet(sf::Vector2f position, int direction);
 
-	void update(rooms_con_t& rooms, doors_con_t& doors);
-	void render(sf::RenderWindow& window);
-
 	bool isActive();
+
+	void update(rooms_con_t& rooms, doors_con_t& doors) override;
 };

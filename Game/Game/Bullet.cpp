@@ -10,7 +10,7 @@ Bullet::Bullet(sf::Vector2f position, int direction): MoveableEntity(BULLET_SIZE
 	this->dy = p_directions.y;
 }
 
-bool Bullet::movementThroughDoor(doors_con_t doors)
+void Bullet::moveThroughDoors(doors_con_t doors)
 {
 	auto bounds = this->getBounds();
 
@@ -19,23 +19,22 @@ bool Bullet::movementThroughDoor(doors_con_t doors)
 		auto d_bounds = d.getBounds();
 
 		if (bounds.intersects(d_bounds) && d.inDoorRange(bounds)) {
-			return true;
+			this->inDoor = true;
+			return;
 		}
 	}
 
-	return false;
+	this->inDoor = false;
 }
 
-void Bullet::movementInRoom(rooms_con_t rooms)
+void Bullet::moveInRooms(rooms_con_t rooms)
 {
+	if (this->inDoor) return;
+
 	auto bounds = this->getBounds();
 
 	for (auto&& r : rooms) {
-
-		if (r.inLocalBounds(bounds)) {
-
-			return;
-		}
+		if (r.inLocalBounds(bounds)) return;
 	}
 
 	this->active = false;
@@ -53,19 +52,13 @@ void Bullet::update(rooms_con_t& rooms, doors_con_t& doors)
 		this->x += movePartX;
 		this->y += movePartY;
 
-
-		if (!this->movementThroughDoor(doors)) {
-			this->movementInRoom(rooms);
-		}
+		this->moveThroughDoors(doors);
+		this->moveInRooms(rooms);
 
 		if (!this->active) break;
 	}
-}
 
-void Bullet::render(sf::RenderWindow& window)
-{
 	this->entity.setPosition(Vector2f(this->x, this->y));
-	window.draw(this->entity);
 }
 
 bool Bullet::isActive()
