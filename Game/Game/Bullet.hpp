@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 #include "Entity.hpp"
 
 const int BULLET_MOVE_SPEED = 10;
@@ -22,9 +23,14 @@ private:
 
 public:
 
-	Bullet(sf::Vector2f position, int direction);
+	Bullet() : MoveableEntity(BULLET_SIZE, BULLET_POINT_COUNT, sf::Color::Black), active(true), dx(0.f), dy(0.f) {};
 
 	bool isActive();
 
-	void update(rooms_con_t& rooms, doors_con_t& doors) override;
+	void update(rooms_con_t& rooms, doors_con_t& doors);
+
+	void setStartDirection(int direction);
+	
 };
+
+using bulletes_con_t = std::vector<Bullet>;

@@ -26,13 +26,17 @@ protected:
 public:
 
 	MoveableEntity() {};
-	MoveableEntity(float size, int pointCount, sf::Color color, sf::Vector2f position, int direction);
+	MoveableEntity(float size, int pointCount, sf::Color color);
+
 
 	virtual ~MoveableEntity() {};
 
 	sf::CircleShape entity;
 	sf::FloatRect getBounds();
 	sf::Vector2f getPosition();
+
+	virtual void setStartPosition(sf::Vector2f position);
+	virtual void setStartDirection(int direction);
 
 	virtual void update(rooms_con_t& rooms, doors_con_t& doors) = 0;
 };

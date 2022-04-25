@@ -4,7 +4,7 @@
 
 using namespace sf;
 
-MoveableEntity::MoveableEntity(float size, int pointCount, sf::Color color, sf::Vector2f position, int direction): size(size), x(position.x), y(position.y), direction(direction)
+MoveableEntity::MoveableEntity(float size, int pointCount, sf::Color color): size(size), x(0.f), y(0.f), direction(0)
 {
 	this->entity = CircleShape(size, pointCount);
 	this->entity.setFillColor(color);
@@ -19,6 +19,17 @@ sf::FloatRect MoveableEntity::getBounds()
 sf::Vector2f MoveableEntity::getPosition()
 {
 	return sf::Vector2f(this->x, this->y);
+}
+
+void MoveableEntity::setStartPosition(sf::Vector2f position)
+{
+	this->x = position.x;
+	this->y = position.y;
+}
+
+void MoveableEntity::setStartDirection(int direction)
+{
+	this->direction = direction;
 }
 
 sf::Vector2f MoveableEntity::computeDirectionsPowers()

@@ -2,14 +2,6 @@
 
 using namespace sf;
 
-Bullet::Bullet(sf::Vector2f position, int direction): MoveableEntity(BULLET_SIZE, BULLET_POINT_COUNT, Color::Black, position, direction), active(true)
-{
-	auto p_directions = computeDirectionsPowers();
-
-	this->dx = p_directions.x;
-	this->dy = p_directions.y;
-}
-
 void Bullet::moveThroughDoors(doors_con_t doors)
 {
 	auto bounds = this->getBounds();
@@ -59,6 +51,16 @@ void Bullet::update(rooms_con_t& rooms, doors_con_t& doors)
 	}
 
 	this->entity.setPosition(Vector2f(this->x, this->y));
+}
+
+void Bullet::setStartDirection(int direction)
+{
+	this->direction = direction;
+
+	auto p_directions = computeDirectionsPowers();
+	
+	this->dx = p_directions.x;
+	this->dy = p_directions.y;
 }
 
 bool Bullet::isActive()

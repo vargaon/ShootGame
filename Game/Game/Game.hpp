@@ -2,9 +2,8 @@
 #include <SFML/Graphics.hpp> 
 #include "Player.hpp"
 #include "Door.hpp"
-#include <vector>
-
 #include "Room.hpp"
+#include <vector>
 
 const int WIN_SIZE = 524;
 const float WALL_THICKNESS = 4.f;
@@ -19,7 +18,7 @@ private:
 	sf::RenderWindow* window = nullptr;
 
 	Player p;
-	std::vector<Bullet> bullets;
+	bulletes_con_t bullets;
 
 	std::vector<sf::RectangleShape> walls;
 

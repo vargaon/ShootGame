@@ -12,7 +12,8 @@ Game::Game()
 
 	this->initDoors();
 
-	this->initPlayer(Vector2f(WIN_SIZE/2, WIN_SIZE / 2));
+	this->p.setStartPosition(Vector2f(WIN_SIZE/2, WIN_SIZE / 2));
+	this->p.setStartDirection(-90);
 }
 
 Game::~Game()
@@ -22,13 +23,8 @@ Game::~Game()
 
 void Game::initWindow()
 {
-	this->window = new RenderWindow(VideoMode(WIN_SIZE, WIN_SIZE), "My Game!", Style::Titlebar | Style::Close);
+	this->window = new RenderWindow(VideoMode(WIN_SIZE, WIN_SIZE + 50), "My Game!", Style::Titlebar | Style::Close);
 	this->window->setFramerateLimit(60);
-}
-
-void Game::initPlayer(sf::Vector2f position)
-{
-	this->p = Player(position);
 }
 
 void Game::updateBullets()
@@ -196,9 +192,8 @@ void Game::Update()
 
 	this->processInput();
 
-	this->p.update(this->rooms, this->doors);
-
 	this->updateBullets();
+	this->p.update(this->rooms, this->doors);
 }
 
 void Game::Render()
