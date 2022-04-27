@@ -5,6 +5,7 @@
 #include "Room.hpp"
 
 float const DEGTORAD = 0.017453f;
+const float PI = 3.14159265;
 
 class MoveableEntity {
 
@@ -15,11 +16,12 @@ private:
 
 protected:
 
-	int direction = 0;
+	
 	float size = 0.f;
 	float x = 0.f;
 	float y = 0.f;
 	bool inDoor = false;
+	float direction = 0.f;
 
 	sf::Vector2f computeDirectionsPowers();
 
@@ -36,7 +38,6 @@ public:
 	sf::Vector2f getPosition();
 
 	virtual void setStartPosition(sf::Vector2f position);
-	virtual void setStartDirection(int direction);
 
 	virtual void update(rooms_con_t& rooms, doors_con_t& doors) = 0;
 };

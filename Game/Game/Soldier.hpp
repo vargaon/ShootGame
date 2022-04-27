@@ -3,7 +3,7 @@
 #include "Entity.hpp"
 #include "Bullet.hpp"
 
-const float SOLDIER_MOVE_SPEED = 1.f;
+const float SOLDIER_MOVE_SPEED = 2.f;
 const int SOLDIER_TURN_SPEED = 3;
 const float SOLDIER_SIZE = 10.f;
 const int SOLDIER_POINT_COUNT = 3;
@@ -12,9 +12,8 @@ const int SOLDIER_BULLETES_NUMBER = 10;
 const int SOLDIER_SHOOT_COOLDOWN = 300;
 const int SOLDIER_RELOAD_COOLDOWN = 2000;
 
-enum class SoldierMove {
+enum class SoldierMovePower {
 	FORWARD = 1,
-	BACKWARD = -1,
 	STOP = 0
 };
 
@@ -22,7 +21,7 @@ class Soldier : public MoveableEntity {
 
 protected:
 
-	SoldierMove move = SoldierMove::STOP;
+	SoldierMovePower movePower = SoldierMovePower::STOP;
 
 	int nBulletes;
 	bool reloading;

@@ -35,7 +35,6 @@ void Soldier::reload()
 
 void Soldier::update(rooms_con_t& rooms, doors_con_t& doors)
 {
-	std::cout << "Bulletes: " << this->nBulletes << std::endl;
 
 	if (this->reloading && this->reloadClock.getElapsedTime().asMilliseconds() > SOLDIER_RELOAD_COOLDOWN) {
 		this->reloading = false;
@@ -44,8 +43,8 @@ void Soldier::update(rooms_con_t& rooms, doors_con_t& doors)
 
 	auto p_directions = computeDirectionsPowers();
 
-	this->x += p_directions.x * int(this->move) * SOLDIER_MOVE_SPEED;
-	this->y += p_directions.y * int(this->move) * SOLDIER_MOVE_SPEED;
+	this->x += p_directions.x * int(this->movePower) * SOLDIER_MOVE_SPEED;
+	this->y += p_directions.y * int(this->movePower) * SOLDIER_MOVE_SPEED;
 
 	this->moveThroughDoors(doors);
 	this->moveInRooms(rooms);

@@ -2,28 +2,19 @@
 #include <iostream>
 
 using namespace sf;
+ 
 
-void Player::turnLeft()
+void Player::move()
 {
-	direction -= SOLDIER_TURN_SPEED;
-}
-
-void Player::turnRight()
-{
-	direction += SOLDIER_TURN_SPEED;
-}
-
-void Player::goForward()
-{
-	this->move = SoldierMove::FORWARD;
-}
-
-void Player::goBack()
-{
-	this->move = SoldierMove::BACKWARD;
+	this->movePower = SoldierMovePower::FORWARD;
 }
 
 void Player::stop()
 {
-	this->move = SoldierMove::STOP;
+	this->movePower = SoldierMovePower::STOP;
+}
+
+void Player::changeDirection(sf::Vector2i mousePos)
+{
+	this->direction = atan2(mousePos.y - this->y, mousePos.x - this->x) * 180 / PI;
 }

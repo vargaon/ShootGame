@@ -7,9 +7,7 @@ public:
 
 	Player(): Soldier(sf::Color::Red) {};
 
-	void turnLeft();
-	void turnRight();
-	void goForward();
-	void goBack();
+	void changeDirection(sf::Vector2i mousePos);
+	void move();
 	void stop();
 };

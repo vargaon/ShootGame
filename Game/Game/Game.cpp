@@ -13,7 +13,6 @@ Game::Game()
 	this->initDoors();
 
 	this->p.setStartPosition(Vector2f(WIN_SIZE/2, WIN_SIZE / 2));
-	this->p.setStartDirection(-90);
 }
 
 Game::~Game()
@@ -78,23 +77,15 @@ void Game::createWall(bool horizontal, sf::Vector2f position)
 
 void Game::processInput()
 {
-	if (Keyboard::isKeyPressed(Keyboard::A)) {
-		this->p.turnLeft();
-	}
-
-	if (Keyboard::isKeyPressed(Keyboard::D)) {
-		this->p.turnRight();
-	}
-
+	
 	if (Keyboard::isKeyPressed(Keyboard::W)) {
-		this->p.goForward();
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::S)) {
-		this->p.goBack();
+		this->p.move();
 	}
 	else {
 		this->p.stop();
 	}
+
+	this->p.changeDirection(sf::Mouse::getPosition(*this->window));
 
 	if (Keyboard::isKeyPressed(Keyboard::X)) {
 		this->p.reload();
