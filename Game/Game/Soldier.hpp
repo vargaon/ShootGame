@@ -9,7 +9,7 @@ const float SOLDIER_SIZE = 10.f;
 const int SOLDIER_POINT_COUNT = 3;
 
 const int SOLDIER_BULLETES_NUMBER = 10;
-const int SOLDIER_SHOOT_COOLDOWN = 300;
+const int SOLDIER_SHOOT_COOLDOWN = 100;
 const int SOLDIER_RELOAD_COOLDOWN = 2000;
 
 enum class SoldierMovePower {
@@ -44,4 +44,6 @@ public:
 	void reload();
 
 	void update(rooms_con_t& rooms, doors_con_t& doors);
+
+	bool isReloading();
 };

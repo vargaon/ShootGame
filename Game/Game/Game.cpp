@@ -13,6 +13,13 @@ Game::Game()
 	this->initDoors();
 
 	this->p.setStartPosition(Vector2f(WIN_SIZE/2, WIN_SIZE / 2));
+
+	if (!font.loadFromFile("Bodoni.ttf"))
+	{
+		// error...
+	}
+
+	this->initInfoPanel();
 }
 
 Game::~Game()
@@ -24,21 +31,6 @@ void Game::initWindow()
 {
 	this->window = new RenderWindow(VideoMode(WIN_SIZE, WIN_SIZE + 75), "My Game!", Style::Titlebar | Style::Close);
 	this->window->setFramerateLimit(60);
-}
-
-void Game::updateBullets()
-{
-	for (auto it = this->bullets.begin(); it != this->bullets.end();) {
-
-		it->update(this->rooms, this->doors);
-
-		if (!it->isActive()) {
-			it = this->bullets.erase(it);
-		}
-		else {
-			it++;
-		}
-	}
 }
 
 void Game::initWalls()
@@ -87,11 +79,11 @@ void Game::processInput()
 
 	this->p.changeDirection(sf::Mouse::getPosition(*this->window));
 
-	if (Keyboard::isKeyPressed(Keyboard::X)) {
+	if (Mouse::isButtonPressed(Mouse::Right)) {
 		this->p.reload();
 	}
 
-	if (Keyboard::isKeyPressed(Keyboard::Space)) {
+	if (Mouse::isButtonPressed(Mouse::Left)) {
 		this->p.shoot(this->bullets);
 	}
 }
@@ -145,6 +137,13 @@ void Game::initDoors()
 	this->createDoors(true, doorsMask);
 }
 
+void Game::initInfoPanel()
+{
+	this->playerBulletesInfo.setFont(font);
+	this->playerBulletesInfo.setFillColor(Color::Black);
+	this->playerBulletesInfo.setPosition(Vector2f(WIN_SIZE - 100, WIN_SIZE + 20));
+}
+
 void Game::createDoors(bool horizontal, bool mask[5][4])
 {
 
@@ -168,6 +167,27 @@ void Game::createDoors(bool horizontal, bool mask[5][4])
 	}
 }
 
+void Game::updateBullets()
+{
+	for (auto it = this->bullets.begin(); it != this->bullets.end();) {
+
+		it->update(this->rooms, this->doors);
+
+		if (!it->isActive()) {
+			it = this->bullets.erase(it);
+		}
+		else {
+			it++;
+		}
+	}
+}
+
+void Game::updateInfoPanel()
+{
+	std::string bulletes = this->p.isReloading() ? "R" : std::to_string(this->p.getBulletesNumber());
+	this->playerBulletesInfo.setString(bulletes + "/" + std::to_string(SOLDIER_BULLETES_NUMBER));
+}
+
 void Game::Update()
 {
 	while (this->window->pollEvent(this->ev)) {
@@ -189,6 +209,7 @@ void Game::Update()
 
 	this->updateBullets();
 	this->p.update(this->rooms, this->doors);
+	this->updateInfoPanel();
 }
 
 void Game::Render()
@@ -208,6 +229,8 @@ void Game::Render()
 	for (auto&& d : this->doors) {
 		this->window->draw(d.entity);
 	}
+
+	this->window->draw(this->playerBulletesInfo);
 
 	this->window->display();
 }

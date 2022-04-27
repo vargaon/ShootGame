@@ -10,4 +10,6 @@ public:
 	void changeDirection(sf::Vector2i mousePos);
 	void move();
 	void stop();
+
+	int getBulletesNumber();
 };

@@ -53,6 +53,11 @@ void Soldier::update(rooms_con_t& rooms, doors_con_t& doors)
 	this->entity.setRotation(this->direction + 90.f);
 }
 
+bool Soldier::isReloading()
+{
+	return this->reloading;
+}
+
 void Soldier::moveThroughDoors(doors_con_t doors)
 {
 	auto bounds = this->getBounds();
