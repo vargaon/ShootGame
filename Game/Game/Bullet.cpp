@@ -53,7 +53,7 @@ void Bullet::update(rooms_con_t& rooms, doors_con_t& doors)
 	this->entity.setPosition(Vector2f(this->x, this->y));
 }
 
-void Bullet::setStartDirection(int direction)
+void Bullet::setStartDirection(float direction)
 {
 	this->direction = direction;
 

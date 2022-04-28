@@ -18,6 +18,12 @@ bool Room::inLocalBounds(sf::FloatRect rect)
 		(rect.top >= this->localBounds.top && rect.top + rect.height <= this->localBounds.top + this->localBounds.height);
 }
 
+void Room::addItem(item_ptr_t i, RoomPosition p)
+{
+	//TODO: set item position
+	this->items.push_back(std::move(i));
+}
+
 sf::FloatRect Room::getLocalBounds()
 {
 	return this->localBounds;

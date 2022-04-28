@@ -5,7 +5,7 @@
 #include "Room.hpp"
 
 float const DEGTORAD = 0.017453f;
-const float PI = 3.14159265;
+const double PI = 3.14159265;
 
 class MoveableEntity {
 

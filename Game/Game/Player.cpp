@@ -21,5 +21,5 @@ int Player::getBulletesNumber()
 
 void Player::changeDirection(sf::Vector2i mousePos)
 {
-	this->direction = atan2(mousePos.y - this->y, mousePos.x - this->x) * 180 / PI;
+	this->direction = atan2(mousePos.y - this->y, mousePos.x - this->x) * 180 / float(PI);
 }

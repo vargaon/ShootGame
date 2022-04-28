@@ -1,12 +1,12 @@
 #pragma once
-#include <SFML/Graphics.hpp> 
-#include "Player.hpp"
-#include "Door.hpp"
-#include "Room.hpp"
+#include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
 #include <sstream>
 #include <iostream>
+#include "Player.hpp"
+#include "Door.hpp"
+#include "Room.hpp"
 
 const int WIN_SIZE = 524;
 const float WALL_THICKNESS = 4.f;
@@ -30,7 +30,6 @@ private:
 
 	rooms_con_t rooms;
 	doors_con_t doors;
-
 
 	void initWindow();
 	void initWalls();

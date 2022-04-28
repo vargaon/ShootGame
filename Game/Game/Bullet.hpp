@@ -5,10 +5,8 @@
 #include "Entity.hpp"
 
 const int BULLET_MOVE_SPEED = 10;
-
 const float BULLET_SIZE = 2.f;
 const int BULLET_POINT_COUNT = 30;
-
 const int BULLET_SPLIT_FRAME_COUNT = 2;
 
 class Bullet : public MoveableEntity {
@@ -29,7 +27,7 @@ public:
 
 	void update(rooms_con_t& rooms, doors_con_t& doors);
 
-	void setStartDirection(int direction);
+	void setStartDirection(float direction);
 	
 };
 
