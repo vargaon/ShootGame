@@ -5,6 +5,11 @@ void Zombie::checkForBulletes(bulletes_con_t& bulletes)
 	auto bounds = this->getBounds();
 
 	for (auto&& b : bulletes) {
+
+		if (!b.isActive()) {
+			continue;
+		}
+
 		auto bb = b.getBounds();
 		if (bounds.inCollisionWith(bb)) {
 			this->alive = false;
@@ -14,20 +19,35 @@ void Zombie::checkForBulletes(bulletes_con_t& bulletes)
 	}
 }
 
+void Zombie::checkForPlayer(Player& p)
+{
+	auto bounds = this->getBounds();
+
+	auto pb = p.getBounds();
+
+	if (bounds.inCollisionWith(pb)) {
+
+		p.bite();
+		this->alive = false;
+	}
+	else {
+
+		auto playerPosition = p.getPosition();
+		this->setDirectionByPosition(playerPosition.x, playerPosition.y);
+	}
+}
+
 void Zombie::update(Map& m, Player& p, bulletes_con_t& bulletes)
 {
 	this->checkForBulletes(bulletes);
+	this->checkForPlayer(p);
 
 	if (!this->alive) return;
 
-	auto playerPosition = p.getPosition();
-
-	this->setDirectionByPosition(playerPosition.x, playerPosition.y);
-
 	if (this->movePower == PersonMovePower::FORWARD) {
 
-		this->x += this->dx * PLAYER_MOVE_SPEED;
-		this->y += this->dy * PLAYER_MOVE_SPEED;
+		this->x += this->dx * ZOMBIE_MOVE_SPEED;
+		this->y += this->dy * ZOMBIE_MOVE_SPEED;
 
 		this->moveInDoors(m.doors);
 

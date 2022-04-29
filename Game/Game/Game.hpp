@@ -31,7 +31,7 @@ private:
 	void initWindow();
 	void initInfoPanel();
 
-	void spawnZombie();
+	void spawnZombie(float x, float y);
 
 	void processInput();
 	void updateBullets();

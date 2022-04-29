@@ -3,19 +3,30 @@
 #include <SFML/Graphics.hpp> 
 #include <vector>
 #include <memory>
+#include "Bounds.hpp"
+
+const float ITEM_SIZE = 5;
+const int ITEM_POINT_COUNT = 30;
+
+enum class ItemType {
+	COIN,
+	HEARTH,
+	BULLETES
+};
 
 class Item {
 
 private:
 	sf::CircleShape entity;
+	bool active = true;
 
 public:
 
-	Item() {};
-	virtual ~Item() {};
-
-	void setPosition(sf::Vector2f position);
-	//virtual void apply(Player& p) = 0;
+	Bounds bounds;
+	Item(ItemType t, float x, float y);
+	void render(sf::RenderWindow* window);
+	void destroy();
+	bool isActive();
 };
 
 using item_ptr_t = std::shared_ptr<Item>;

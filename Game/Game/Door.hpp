@@ -4,7 +4,7 @@
 #include "Room.hpp"
 #include "Bounds.hpp"
 
-const float DOOR_SIZE = 50.f;
+const float DOOR_SIZE = 70.f;
 
 class Door {
 

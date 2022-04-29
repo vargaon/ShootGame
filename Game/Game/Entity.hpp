@@ -22,8 +22,6 @@ public:
 	Entity(float size, int pointCount, sf::Color color);
 	virtual ~Entity() {};
 
-	Bounds getBounds();
-
 	void setPosition(float x, float y);
 	void render(sf::RenderWindow* window);
 };
@@ -46,6 +44,8 @@ public:
 
 	MoveableEntity() {};
 	MoveableEntity(float size, int pointCount, sf::Color color) : Entity(size, pointCount, color) {};
+
+	Bounds getBounds();
 
 	float getDirection();
 	void setDirection(float direction);

@@ -7,12 +7,7 @@ Entity::Entity(float size, int pointCount, sf::Color color) : size(size)
 {
 	this->entity = CircleShape(size, pointCount);
 	this->entity.setFillColor(color);
-	this->entity.setOrigin(Vector2f(size, size));
-}
-
-Bounds Entity::getBounds()
-{
-	return Bounds(this->y - this->size, this->y + this->size, this->x - this->size, this->x + this->size);
+	this->entity.setOrigin(size, size);
 }
 
 void Entity::setPosition(float x, float y)
@@ -30,6 +25,11 @@ void MoveableEntity::computeDirectionsPowers(float d)
 {
 	this->dx = cos(d * DEGTORAD);
 	this->dy = sin(d * DEGTORAD);
+}
+
+Bounds MoveableEntity::getBounds()
+{
+	return Bounds(this->y - this->size, this->y + this->size, this->x - this->size, this->x + this->size);
 }
 
 float MoveableEntity::getDirection()

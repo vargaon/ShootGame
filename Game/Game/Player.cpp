@@ -26,9 +26,19 @@ int Player::getBulletesNumber()
 	return this->nBulletes;
 }
 
-PlayerPosition Player::getPosition()
+Position Player::getPosition()
 {
-	return PlayerPosition(this->x, this->y);
+	return Position(this->x, this->y);
+}
+
+int Player::getLives()
+{
+	return this->lives;
+}
+
+void Player::bite()
+{
+	--this->lives;
 }
 
 void Player::update(Map& m)

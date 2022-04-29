@@ -1,22 +1,17 @@
 #pragma once
 #include "Person.hpp"
 
+const int PLAYER_LIVES = 3;
 const float PLAYER_MOVE_SPEED = 2.f;
 const int PLAYER_BULLETES_NUMBER = 10;
 const int PLAYER_SHOOT_COOLDOWN = 100;
 const int PLAYER_RELOAD_COOLDOWN = 2000;
 
-class PlayerPosition {
-public:
-	float x = 0.f;
-	float y = 0.f;
-	PlayerPosition(float x, float y) : x(x), y(y) {};
-};
-
 class Player: public Person {
 
 private:
 
+	int lives = PLAYER_LIVES;
 	int nBulletes = PLAYER_BULLETES_NUMBER;
 	bool reloading = false;
 
@@ -25,7 +20,7 @@ private:
 
 public:
 
-	Player(): Person(sf::Color::Red) {};
+	Player(): Person(sf::Color::Blue) {};
 	
 	Bullet shoot();
 	void reload();
@@ -33,7 +28,9 @@ public:
 	bool canShoot();
 	bool isReloading();
 	int getBulletesNumber();
-	PlayerPosition getPosition();
+	Position getPosition();
+	int getLives();
+	void bite();
 
 	void update(Map& m);
 };
