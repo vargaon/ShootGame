@@ -43,6 +43,8 @@ bool Bullet::isActive()
 
 void Bullet::update(Map& m)
 {
+	if (!this->active) return;
+
 	float moveX = this->dx * BULLET_MOVE_SPEED / BULLET_SPLIT_FRAME_COUNT;
 	float moveY = this->dy * BULLET_MOVE_SPEED / BULLET_SPLIT_FRAME_COUNT;
 
@@ -61,4 +63,9 @@ void Bullet::update(Map& m)
 	}
 
 	this->entity.setPosition(this->x, this->y);
+}
+
+void Bullet::destroy()
+{
+	this->active = false;
 }

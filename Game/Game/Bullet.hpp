@@ -1,5 +1,4 @@
 #pragma once
-
 #include <iostream>
 #include <vector>
 #include "Entity.hpp"
@@ -24,7 +23,8 @@ public:
 	Bullet() : MoveableEntity(BULLET_SIZE, BULLET_POINT_COUNT, sf::Color::Black) {};
 
 	bool isActive();
-	void update(Map& m);	
+	void update(Map& m);
+	void destroy();
 };
 
 using bulletes_con_t = std::vector<Bullet>;

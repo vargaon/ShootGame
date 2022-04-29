@@ -1,6 +1,5 @@
 #pragma once
 #include "Game.hpp"
-#include <iostream>
 
 using namespace sf;
 
@@ -8,9 +7,11 @@ Game::Game()
 {
 	this->initWindow();
 
+	this->initInfoPanel();
+
 	this->p.setPosition(WIN_SIZE / 2, WIN_SIZE / 2);
 
-	this->initInfoPanel();
+	this->spawnZombie();
 }
 
 Game::~Game()
@@ -36,19 +37,29 @@ void Game::initInfoPanel()
 	this->playerBulletesInfo.setPosition(Vector2f(WIN_SIZE - 100, WIN_SIZE + 20));
 }
 
+void Game::spawnZombie()
+{
+	Zombie z;
+
+	z.setMovePower(PersonMovePower::FORWARD);
+	z.setPosition(10, 10);
+
+	this->zombies.push_back(z);
+}
+
 void Game::processInput()
 {
 
 	if (Keyboard::isKeyPressed(Keyboard::W)) {
-		this->p.setMovePower(PlayerMovePower::FORWARD);
+		this->p.setMovePower(PersonMovePower::FORWARD);
 	}
 	else {
-		this->p.setMovePower(PlayerMovePower::STOP);
+		this->p.setMovePower(PersonMovePower::STOP);
 	}
 
 	auto mousePosition = sf::Mouse::getPosition(*this->window);
 
-	this->p.setDirectionByMousePosition(float(mousePosition.x), float(mousePosition.y));
+	this->p.setDirectionByPosition(float(mousePosition.x), float(mousePosition.y));
 
 	if (Mouse::isButtonPressed(Mouse::Right)) {
 		this->p.reload();
@@ -70,6 +81,21 @@ void Game::updateBullets()
 
 		if (!it->isActive()) {
 			it = this->bullets.erase(it);
+		}
+		else {
+			it++;
+		}
+	}
+}
+
+void Game::updateZombies()
+{
+	for (auto it = this->zombies.begin(); it != this->zombies.end();) {
+
+		it->update(this->m, this->p, this->bullets);
+
+		if (!it->isAlive()) {
+			it = this->zombies.erase(it);
 		}
 		else {
 			it++;
@@ -104,6 +130,7 @@ void Game::Update()
 
 	this->updateBullets();
 	this->p.update(this->m);
+	this->updateZombies();
 	this->updateInfoPanel();
 }
 
@@ -111,11 +138,14 @@ void Game::Render()
 {
 	this->window->clear(Color::White);
 
-
 	this->m.render(this->window);
 
 	for (auto&& b : this->bullets) {
 		b.render(this->window);
+	}
+
+	for (auto&& z : this->zombies) {
+		z.render(this->window);
 	}
 
 	p.render(this->window);

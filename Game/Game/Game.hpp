@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "Player.hpp"
+#include "Zombie.hpp"
 #include "Bullet.hpp"
 #include "Map.hpp"
 
@@ -22,6 +23,7 @@ private:
 	Map m;
 	Player p;
 	bulletes_con_t bullets;
+	zombies_con_t zombies;
 
 	sf::Font font;
 	sf::Text playerBulletesInfo;
@@ -29,8 +31,11 @@ private:
 	void initWindow();
 	void initInfoPanel();
 
+	void spawnZombie();
+
 	void processInput();
 	void updateBullets();
+	void updateZombies();
 	void updateInfoPanel();
 
 public:
