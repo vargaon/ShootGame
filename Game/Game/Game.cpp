@@ -7,17 +7,8 @@ using namespace sf;
 Game::Game()
 {
 	this->initWindow();
-	this->initWalls();
-	this->initRooms();
 
-	this->initDoors();
-
-	this->p.setStartPosition(Vector2f(WIN_SIZE/2, WIN_SIZE / 2));
-
-	if (!font.loadFromFile("Bodoni.ttf"))
-	{
-		// error...
-	}
+	this->p.setPosition(WIN_SIZE / 2, WIN_SIZE / 2);
 
 	this->initInfoPanel();
 }
@@ -29,140 +20,44 @@ Game::~Game()
 
 void Game::initWindow()
 {
-	this->window = new RenderWindow(VideoMode(WIN_SIZE, WIN_SIZE + 75), "My Game!", Style::Titlebar | Style::Close);
-	this->window->setFramerateLimit(60);
+	this->window = new RenderWindow(VideoMode(WIN_SIZE, WIN_SIZE + INFO_PANEL_SIZE), "My Game!", Style::Titlebar | Style::Close);
+	this->window->setFramerateLimit(WIN_FRAME_LIMIT);
 }
 
-void Game::initWalls()
+void Game::initInfoPanel()
 {
-	int nRooms = int((WIN_SIZE - WALL_THICKNESS) / (ROOM_SIZE + WALL_THICKNESS));
-
-	for (int i = 0; i <= nRooms; i++) {
-
-		Vector2f vertical_pos(i*(ROOM_SIZE + WALL_THICKNESS), 0);
-		Vector2f horizontal_pos(0, i * (ROOM_SIZE + WALL_THICKNESS));
-
-		createWall(true, horizontal_pos);
-		createWall(false, vertical_pos);
-	}
-}
-
-void Game::createWall(bool horizontal, sf::Vector2f position)
-{
-	Vector2f s;
-
-	if (horizontal) {
-		s = Vector2f(WIN_SIZE, WALL_THICKNESS);
+	if (!font.loadFromFile("Bodoni.ttf"))
+	{
+		throw("Font file does not exist!");
 	}
 
-	else {
-		s = Vector2f(WALL_THICKNESS, WIN_SIZE);
-	}
-
-	RectangleShape entity(s);
-
-	entity.setFillColor(Color::Black);
-	entity.setPosition(position);
-
-	this->walls.push_back(entity);
+	this->playerBulletesInfo.setFont(font);
+	this->playerBulletesInfo.setFillColor(Color::Black);
+	this->playerBulletesInfo.setPosition(Vector2f(WIN_SIZE - 100, WIN_SIZE + 20));
 }
 
 void Game::processInput()
 {
-	
+
 	if (Keyboard::isKeyPressed(Keyboard::W)) {
-		this->p.move();
+		this->p.setMovePower(PlayerMovePower::FORWARD);
 	}
 	else {
-		this->p.stop();
+		this->p.setMovePower(PlayerMovePower::STOP);
 	}
 
-	this->p.changeDirection(sf::Mouse::getPosition(*this->window));
+	auto mousePosition = sf::Mouse::getPosition(*this->window);
+
+	this->p.setDirectionByMousePosition(float(mousePosition.x), float(mousePosition.y));
 
 	if (Mouse::isButtonPressed(Mouse::Right)) {
 		this->p.reload();
 	}
 
 	if (Mouse::isButtonPressed(Mouse::Left)) {
-		this->p.shoot(this->bullets);
-	}
-}
 
-void Game::initRooms()
-{
-	int nRooms = int((WIN_SIZE - WALL_THICKNESS) / (ROOM_SIZE + WALL_THICKNESS));
-
-	float roomWallSize = ROOM_SIZE + WALL_THICKNESS;
-
-	for (int i = 0; i < nRooms; i++) {
-
-		for (int j = 0; j < nRooms; j++) {
-
-			this->rooms.push_back(Room(
-				i * roomWallSize, 
-				j * roomWallSize, 
-				roomWallSize + WALL_THICKNESS + i * roomWallSize, 
-				roomWallSize + WALL_THICKNESS + j * roomWallSize, 
-				WALL_THICKNESS));
-		}
-	}
-}
-
-void Game::initDoors()
-{
-	bool doorsMask[5][4];
-
-	doorsMask[0][0] = false;
-	doorsMask[0][1] = false;
-	doorsMask[0][2] = false;
-	doorsMask[0][3] = false;
-
-	doorsMask[1][1] = false;
-	doorsMask[1][2] = false;
-
-	doorsMask[2][0] = false;
-	doorsMask[2][1] = false;
-	doorsMask[2][2] = false;
-	doorsMask[2][3] = false;
-
-	doorsMask[3][1] = false;
-	doorsMask[3][2] = false;
-
-	doorsMask[4][0] = false;
-	doorsMask[4][1] = false;
-	doorsMask[4][2] = false;
-	doorsMask[4][3] = false;
-
-	this->createDoors(false, doorsMask);
-	this->createDoors(true, doorsMask);
-}
-
-void Game::initInfoPanel()
-{
-	this->playerBulletesInfo.setFont(font);
-	this->playerBulletesInfo.setFillColor(Color::Black);
-	this->playerBulletesInfo.setPosition(Vector2f(WIN_SIZE - 100, WIN_SIZE + 20));
-}
-
-void Game::createDoors(bool horizontal, bool mask[5][4])
-{
-
-	for (int i = 0; i < 5; i++) {
-
-		for (int j = 0; j < 4; j++) {
-
-			if (!mask[i][j]) {
-
-				float x = (i) * (WALL_THICKNESS + ROOM_SIZE) + WALL_THICKNESS + ((ROOM_SIZE - DOOR_SIZE) / 2);
-				float y = (j + 1) * (WALL_THICKNESS + ROOM_SIZE);
-
-				if (horizontal) {
-					this->doors.push_back(Door(horizontal, DOOR_SIZE, WALL_THICKNESS, Vector2f(x, y)));
-				}
-				else {
-					this->doors.push_back(Door(horizontal, DOOR_SIZE, WALL_THICKNESS, Vector2f(y, x)));
-				}
-			}
+		if (this->p.canShoot()) {
+			this->bullets.push_back(this->p.shoot());
 		}
 	}
 }
@@ -171,7 +66,7 @@ void Game::updateBullets()
 {
 	for (auto it = this->bullets.begin(); it != this->bullets.end();) {
 
-		it->update(this->rooms, this->doors);
+		it->update(this->m);
 
 		if (!it->isActive()) {
 			it = this->bullets.erase(it);
@@ -185,7 +80,7 @@ void Game::updateBullets()
 void Game::updateInfoPanel()
 {
 	std::string bulletes = this->p.isReloading() ? "R" : std::to_string(this->p.getBulletesNumber());
-	this->playerBulletesInfo.setString(bulletes + "/" + std::to_string(SOLDIER_BULLETES_NUMBER));
+	this->playerBulletesInfo.setString(bulletes + "/" + std::to_string(PLAYER_BULLETES_NUMBER));
 }
 
 void Game::Update()
@@ -208,7 +103,7 @@ void Game::Update()
 	this->processInput();
 
 	this->updateBullets();
-	this->p.update(this->rooms, this->doors);
+	this->p.update(this->m);
 	this->updateInfoPanel();
 }
 
@@ -216,22 +111,16 @@ void Game::Render()
 {
 	this->window->clear(Color::White);
 
+
+	this->m.render(this->window);
+
 	for (auto&& b : this->bullets) {
-		this->window->draw(b.entity);
+		b.render(this->window);
 	}
 
-	for (auto&& w : this->walls) {
-		this->window->draw(w);
-	}
-
-	this->window->draw(p.entity);
-
-	for (auto&& d : this->doors) {
-		this->window->draw(d.entity);
-	}
+	p.render(this->window);
 
 	this->window->draw(this->playerBulletesInfo);
-
 	this->window->display();
 }
 

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include "Entity.hpp"
+#include "Map.hpp"
 
 const int BULLET_MOVE_SPEED = 10;
 const float BULLET_SIZE = 2.f;
@@ -13,22 +14,17 @@ class Bullet : public MoveableEntity {
 
 private:
 
-	float dx, dy;
-	bool active;
+	bool active = true;
 
-	void moveThroughDoors(doors_con_t doors) override;
-	void moveInRooms(rooms_con_t rooms) override;
+	void moveInRooms(rooms_con_t& rooms);
+	void moveInDoors(doors_con_t& doors);
 
 public:
 
-	Bullet() : MoveableEntity(BULLET_SIZE, BULLET_POINT_COUNT, sf::Color::Black), active(true), dx(0.f), dy(0.f) {};
+	Bullet() : MoveableEntity(BULLET_SIZE, BULLET_POINT_COUNT, sf::Color::Black) {};
 
 	bool isActive();
-
-	void update(rooms_con_t& rooms, doors_con_t& doors);
-
-	void setStartDirection(float direction);
-	
+	void update(Map& m);	
 };
 
 using bulletes_con_t = std::vector<Bullet>;

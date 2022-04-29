@@ -1,31 +1,28 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include "Room.hpp"
+#include "Bounds.hpp"
+
+const float DOOR_SIZE = 50.f;
 
 class Door {
 
 private:
 
-	sf::FloatRect bounds;
+	sf::RectangleShape entity;
+
 	bool horizontal;
-	float size;
-	float minBound;
-	float maxBound;
 
 public:
 
-	sf::RectangleShape entity;
-
-	Door(bool horizontal, float size, float wallThickness, sf::Vector2f position);
+	Bounds bounds;
+	
+	Door(bool isHorizontal, float x, float y);
 
 	bool isHorizontal();
-	bool inDoorRange(sf::FloatRect rect);
 
-	sf::FloatRect getBounds();
-
-	float getMinBound();
-	float getMaxBound();
-
+	void render(sf::RenderWindow* window);
 };
 
 using doors_con_t = std::vector<Door>;

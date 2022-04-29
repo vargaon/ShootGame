@@ -1,33 +1,44 @@
 #pragma once
-
 #include "Entity.hpp"
 
 using namespace sf;
 
-MoveableEntity::MoveableEntity(float size, int pointCount, sf::Color color): size(size), x(0.f), y(0.f), direction(0.f)
+Entity::Entity(float size, int pointCount, sf::Color color) : size(size)
 {
 	this->entity = CircleShape(size, pointCount);
 	this->entity.setFillColor(color);
 	this->entity.setOrigin(Vector2f(size, size));
 }
 
-sf::FloatRect MoveableEntity::getBounds()
+Bounds Entity::getBounds()
 {
-	return sf::FloatRect(this->x - this->size, this->y - this->size, this->size *2, this->size*2);
+	return Bounds(this->y - this->size, this->y + this->size, this->x - this->size, this->x + this->size);
 }
 
-sf::Vector2f MoveableEntity::getPosition()
+void Entity::setPosition(float x, float y)
 {
-	return sf::Vector2f(this->x, this->y);
+	this->x = x;
+	this->y = y;
 }
 
-void MoveableEntity::setStartPosition(sf::Vector2f position)
+void Entity::render(sf::RenderWindow* window)
 {
-	this->x = position.x;
-	this->y = position.y;
+	window->draw(this->entity);
 }
 
-sf::Vector2f MoveableEntity::computeDirectionsPowers()
+void MoveableEntity::computeDirectionsPowers(float d)
 {
-	return Vector2f(cos(this->direction * DEGTORAD), sin(this->direction * DEGTORAD));
+	this->dx = cos(d * DEGTORAD);
+	this->dy = sin(d * DEGTORAD);
+}
+
+float MoveableEntity::getDirection()
+{
+	return this->direction;
+}
+
+void MoveableEntity::setDirection(float direction)
+{
+	this->direction = direction;
+	this->computeDirectionsPowers(direction);
 }
