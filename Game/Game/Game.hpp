@@ -8,6 +8,7 @@
 #include "Zombie.hpp"
 #include "Bullet.hpp"
 #include "Map.hpp"
+#include "InfoPanel.hpp"
 
 const int WIN_SIZE = 524;
 const int INFO_PANEL_SIZE = 75;
@@ -27,6 +28,7 @@ private:
 
 	sf::Event ev;
 	sf::RenderWindow* window = nullptr;
+	InfoPanel infoPanel;
 
 	Map m;
 	Player p;
@@ -35,18 +37,13 @@ private:
 
 	sf::Clock zombieSpawnClock;
 
-	sf::Font font;
-	sf::Text playerBulletesInfo;
-
 	void initWindow();
-	void initInfoPanel();
 
 	void spawnZombie();
 
 	void processInput();
 	void updateBullets();
 	void updateZombies();
-	void updateInfoPanel();
 
 public:
 

@@ -13,6 +13,8 @@ Map::Map()
 
 void Map::update()
 {
+	this->createItem();
+
 	for (auto&& r : this->rooms)
 	{
 		r.update();
@@ -43,8 +45,6 @@ void Map::initRooms()
 			this->rooms[id] = Room(id, i * distance, j * distance);
 		}
 	}
-
-	this->initItems();
 }
 
 void Map::initDoors()
@@ -61,14 +61,6 @@ void Map::initDoors()
 
 	this->createDoorsByMask(false, doorsMask);
 	this->createDoorsByMask(true, doorsMask);
-}
-
-void Map::initItems()
-{
-	this->getRoom(0)->addItem(RoomPosition::LEFT_BOT);
-	this->getRoom(4)->addItem(RoomPosition::RIGHT_TOP);
-	this->getRoom(7)->addItem(RoomPosition::LEFT_TOP);
-	this->getRoom(9)->addItem(RoomPosition::RIGHT_BOT);
 }
 
 void Map::createWall(bool isHorizontal, float x, float y)
@@ -112,6 +104,19 @@ void Map::createDoorsByMask(bool isHorizontal, door_mask_t& mask)
 	}
 }
 
+void Map::createItem()
+{
+	if (this->itemSpawnClock.getElapsedTime().asMilliseconds() > ITEM_SPAW_COOLDOWN) {
+
+		this->itemSpawnClock.restart();
+
+		auto r = this->getRandomRoom();
+		auto p = this->getRandomRoomPosition();
+
+		r->addItem(p);
+	}
+}
+
 Room* Map::getRoom(int id)
 {
 	return &this->rooms.at(id);
@@ -121,6 +126,12 @@ Room* Map::getRandomRoom()
 {
 	int roomID = rand() % (NUM_OF_ROOM_PER_LINE * NUM_OF_ROOM_PER_LINE);
 	return this->getRoom(roomID);
+}
+
+RoomPosition Map::getRandomRoomPosition()
+{
+	int roomPosiontID = rand() % 4;
+	return this->roomPositions.at(roomPosiontID);
 }
 
 void Map::render(sf::RenderWindow* window)

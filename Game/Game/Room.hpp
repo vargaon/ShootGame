@@ -11,10 +11,10 @@ const float WALL_THICKNESS = 4.f;
 const float ROOM_SIZE = 100.f;
 
 enum class RoomPosition {
-	LEFT_TOP = 0,
-	RIGHT_TOP = 1,
-	LEFT_BOT = 2,
-	RIGHT_BOT = 3,
+	LEFT_TOP,
+	RIGHT_TOP,
+	LEFT_BOT,
+	RIGHT_BOT,
 	CENTRE
 };
 

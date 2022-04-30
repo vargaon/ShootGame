@@ -7,8 +7,7 @@ Game::Game()
 {
 	this->initWindow();
 
-	this->initInfoPanel();
-
+	this->infoPanel.setPosition(0, WIN_SIZE);
 	this->p.setStartPositionByRoom(this->m.getRoom(24));
 }
 
@@ -21,18 +20,6 @@ void Game::initWindow()
 {
 	this->window = new RenderWindow(VideoMode(WIN_SIZE, WIN_SIZE + INFO_PANEL_SIZE), "My Game!", Style::Titlebar | Style::Close);
 	this->window->setFramerateLimit(WIN_FRAME_LIMIT);
-}
-
-void Game::initInfoPanel()
-{
-	if (!font.loadFromFile("Bodoni.ttf"))
-	{
-		throw("Font file does not exist!");
-	}
-
-	this->playerBulletesInfo.setFont(font);
-	this->playerBulletesInfo.setFillColor(Color::Black);
-	this->playerBulletesInfo.setPosition(Vector2f(WIN_SIZE - 100, WIN_SIZE + 20));
 }
 
 void Game::spawnZombie()
@@ -105,12 +92,6 @@ void Game::updateZombies()
 	}
 }
 
-void Game::updateInfoPanel()
-{
-	std::string bulletes = this->p.isReloading() ? "R" : std::to_string(this->p.getBulletesNumber());
-	this->playerBulletesInfo.setString(bulletes + "/" + std::to_string(PLAYER_BULLETES_NUMBER));
-}
-
 void Game::Update()
 {
 	while (this->window->pollEvent(this->ev)) {
@@ -135,7 +116,7 @@ void Game::Update()
 	this->p.update(this->m);
 
 	this->updateZombies();
-	this->updateInfoPanel();
+	this->infoPanel.update(this->p);
 
 	this->spawnZombie();
 
@@ -156,9 +137,9 @@ void Game::Render()
 		z.render(this->window);
 	}
 
-	p.render(this->window);
+	this->p.render(this->window);
+	this->infoPanel.render(this->window);
 
-	this->window->draw(this->playerBulletesInfo);
 	this->window->display();
 }
 
