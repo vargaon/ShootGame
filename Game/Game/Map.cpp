@@ -27,8 +27,11 @@ void Map::initWalls()
 
 	for (int i = 0; i <= NUM_OF_ROOM_PER_LINE; i++) {
 
-		this->createWall(false, i * wallDistance, 0);
-		this->createWall(true, 0, i * wallDistance);
+		Position vp(i * wallDistance, 0);
+		Position hp(0, i * wallDistance);
+
+		this->createWall(false, vp);
+		this->createWall(true, hp);
 	}
 }
 
@@ -41,8 +44,7 @@ void Map::initRooms()
 		for (int j = 0; j < NUM_OF_ROOM_PER_LINE; j++) {
 
 			int id = i * NUM_OF_ROOM_PER_LINE + j;
-
-			this->rooms[id] = Room(id, i * distance, j * distance);
+			this->rooms[id] = Room(id, Position(i * distance, j * distance));
 		}
 	}
 }
@@ -63,7 +65,7 @@ void Map::initDoors()
 	this->createDoorsByMask(true, doorsMask);
 }
 
-void Map::createWall(bool isHorizontal, float x, float y)
+void Map::createWall(bool isHorizontal, Position p)
 {
 	Vector2f s;
 
@@ -77,7 +79,7 @@ void Map::createWall(bool isHorizontal, float x, float y)
 	RectangleShape wall(s);
 
 	wall.setFillColor(Color::Black);
-	wall.setPosition(x, y);
+	wall.setPosition(p.x, p.y);
 
 	this->walls.push_back(wall);
 }
@@ -94,10 +96,10 @@ void Map::createDoorsByMask(bool isHorizontal, door_mask_t& mask)
 				float y = (j + 1) * (WALL_THICKNESS + ROOM_SIZE);
 
 				if (isHorizontal) {
-					this->doors.push_back(Door(isHorizontal, x, y));
+					this->doors.push_back(Door(isHorizontal, Position(x, y)));
 				}
 				else {
-					this->doors.push_back(Door(isHorizontal, y, x));
+					this->doors.push_back(Door(isHorizontal, Position(y, x)));
 				}
 			}
 		}
@@ -109,10 +111,10 @@ void Map::createItem()
 	if (this->itemSpawnClock.getElapsedTime().asMilliseconds() > ITEM_SPAW_COOLDOWN) {
 
 		this->itemSpawnClock.restart();
-
 		auto r = this->getRandomRoom();
-
 		r->addItem();
+
+		++this->itemsCreated;
 	}
 }
 
@@ -125,6 +127,11 @@ Room* Map::getRandomRoom()
 {
 	int roomID = rand() % (NUM_OF_ROOM_PER_LINE * NUM_OF_ROOM_PER_LINE);
 	return this->getRoom(roomID);
+}
+
+int Map::getTotalItems()
+{
+	return this->itemsCreated;
 }
 
 void Map::render(sf::RenderWindow* window)

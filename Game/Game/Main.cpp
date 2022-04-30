@@ -4,12 +4,11 @@ using namespace sf;
 
 int main()
 {
-   
 	Game game;
 
 	while (game.IsRunning())
 	{
-		game.Update();
+		game.update();
 		game.Render();
 	}
 

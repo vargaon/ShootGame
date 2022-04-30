@@ -1,8 +1,8 @@
-#include "InfoPanel.hpp"
+#include "Panel.hpp"
 
 using namespace sf;
 
-InfoPanel::InfoPanel()
+Panel::Panel()
 {
 	if (!font.loadFromFile("Bodoni.ttf"))
 	{
@@ -13,14 +13,14 @@ InfoPanel::InfoPanel()
 	this->infoText.setFillColor(Color::Black);
 }
 
-void InfoPanel::setPosition(float x, float y)
+void Panel::setPosition(float x, float y)
 {
 	float yPosition = y + 4;
 
 	this->infoText.setPosition(x + 4, yPosition);
 }
 
-void InfoPanel::update(Player& p)
+void Panel::updateRunPanel(Player& p)
 {
 	int bulletes = p.getBulletesNumber();
 	int items = p.getItemsNumber();
@@ -30,8 +30,8 @@ void InfoPanel::update(Player& p)
 
 	std::stringstream ss;
 
-	ss	<< "L: " << lives << "/" << PLAYER_LIVES << sep 
-		<< "I: " << items << sep 
+	ss << "L: " << lives << "/" << PLAYER_LIVES << sep
+		<< "I: " << items << sep
 		<< "B: " << bulletes << "/" << PLAYER_BULLETES_NUMBER;
 
 	if (p.isReloading()) {
@@ -41,7 +41,23 @@ void InfoPanel::update(Player& p)
 	this->infoText.setString(ss.str());
 }
 
-void InfoPanel::render(sf::RenderWindow* window)
+void Panel::updateEndPanel(Player& p)
+{
+}
+
+void Panel::updateStartPanel()
+{
+}
+
+void Panel::renderRunPanel(sf::RenderWindow* window)
 {
 	window->draw(this->infoText);
+}
+
+void Panel::renderEndPanel(sf::RenderWindow* window)
+{
+}
+
+void Panel::renderStartPanel(sf::RenderWindow* window)
+{
 }

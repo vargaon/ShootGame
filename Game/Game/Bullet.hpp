@@ -26,7 +26,7 @@ public:
 	void update(Map& m);
 	void destroy();
 
-	void setStartPosition(float x, float y);
+	void setStartPosition(Position& p);
 };
 
 using bulletes_con_t = std::vector<Bullet>;

@@ -17,13 +17,15 @@ private:
 
 	float mapSize = NUM_OF_ROOM_PER_LINE * (WALL_THICKNESS + ROOM_SIZE) + WALL_THICKNESS;
 
+	int itemsCreated = 0;
+
 	sf::Clock itemSpawnClock;
 
 	void initWalls();
 	void initRooms();
 	void initDoors();
 
-	void createWall(bool isHorizontal, float x, float y);
+	void createWall(bool isHorizontal, Position p);
 	void createDoorsByMask(bool isHorizontal, door_mask_t& mask);
 
 	void createItem();
@@ -39,6 +41,8 @@ public:
 
 	Room* getRoom(int id);
 	Room* getRandomRoom();
+
+	int getTotalItems();
 
 	void update();
 	void render(sf::RenderWindow* window);

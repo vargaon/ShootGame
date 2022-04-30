@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <vector>
-#include "Bounds.hpp"
+#include "Utils.hpp"
 #include "Item.hpp"
 
 const float WALL_THICKNESS = 4.f;
@@ -12,11 +12,12 @@ const int ROOM_PADDING = 10;
 class Room {
 
 private:
-	float x = 0.f;
-	float y = 0.f;
+	Position p;
 
 	float cx = 0.f;
 	float cy = 0.f;
+
+	Bounds spawnRange;
 
 	int maxX = 0;
 	int minX = 0;
@@ -34,11 +35,11 @@ public:
 	Bounds innerBounds;
 
 	Room() {};
-	Room(int id, float x, float y);
+	Room(int id, Position p);
 
 	void addItem();
 	Position getRandomPosition();
-	Position getPosition();
+	Position getCentrePosition();
 
 	void render(sf::RenderWindow* window);
 	void update();

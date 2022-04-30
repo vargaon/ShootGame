@@ -2,8 +2,6 @@
 
 void Zombie::checkForBulletes(bulletes_con_t& bulletes)
 {
-	auto bounds = this->getBounds();
-
 	for (auto&& b : bulletes) {
 
 		if (!b.isActive()) {
@@ -11,7 +9,9 @@ void Zombie::checkForBulletes(bulletes_con_t& bulletes)
 		}
 
 		auto bb = b.getBounds();
-		if (bounds.inCollisionWith(bb)) {
+
+		if (this->bounds.inCollisionWith(bb)) {
+
 			this->alive = false;
 			b.destroy();
 			return;
@@ -21,11 +21,9 @@ void Zombie::checkForBulletes(bulletes_con_t& bulletes)
 
 void Zombie::checkForPlayer(Player& p)
 {
-	auto bounds = this->getBounds();
-
 	auto pb = p.getBounds();
 
-	if (bounds.inCollisionWith(pb)) {
+	if (this->bounds.inCollisionWith(pb)) {
 
 		p.hurt();
 		this->alive = false;
@@ -33,7 +31,7 @@ void Zombie::checkForPlayer(Player& p)
 	else {
 
 		auto playerPosition = p.getPosition();
-		this->setDirectionByPosition(playerPosition.x, playerPosition.y);
+		this->setDirectionByPosition(playerPosition);
 	}
 }
 
@@ -49,7 +47,8 @@ void Zombie::update(Map& m, Player& p, bulletes_con_t& bulletes)
 		this->x += this->dx * ZOMBIE_MOVE_SPEED;
 		this->y += this->dy * ZOMBIE_MOVE_SPEED;
 
-		this->bounds = this->getBounds();
+		Position p(this->x, this->y);
+		this->setPosition(p);
 
 		this->moveInDoors(m.doors);
 
@@ -57,8 +56,6 @@ void Zombie::update(Map& m, Player& p, bulletes_con_t& bulletes)
 			this->moveInRooms(m.rooms);
 		}
 	}
-
-	this->setPosition(this->x, this->y);
 }
 
 bool Zombie::isAlive()

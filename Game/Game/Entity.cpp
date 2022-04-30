@@ -10,9 +10,12 @@ Entity::Entity(float size, int pointCount, sf::Color color) : size(size)
 	this->entity.setOrigin(size, size);
 }
 
-void Entity::setPosition(float x, float y)
+void Entity::setPosition(Position& p)
 {
-	this->entity.setPosition(x, y);
+	this->position = Position(p.x, p.y);
+	this->bounds = Bounds(p.y - this->size, p.y + this->size, p.x - this->size, p.x + this->size);
+
+	this->entity.setPosition(p.x, p.y);
 }
 
 void Entity::setRotation(float direction)
@@ -20,9 +23,14 @@ void Entity::setRotation(float direction)
 	this->entity.setRotation(direction);
 }
 
-Bounds Entity::getBounds(float x, float y)
+Bounds Entity::getBounds()
 {
-	return Bounds(y - this->size, y + this->size, x - this->size, x + this->size);
+	return this->bounds;
+}
+
+Position Entity::getPosition()
+{
+	return this->position;
 }
 
 void Entity::render(sf::RenderWindow* window)
@@ -34,11 +42,6 @@ void MoveableEntity::computeDirectionsPowers(float d)
 {
 	this->dx = cos(d * float(PI) / 180);
 	this->dy = sin(d * float(PI) / 180);
-}
-
-Bounds MoveableEntity::getBounds()
-{
-	return Entity::getBounds(this->x, this->y);
 }
 
 float MoveableEntity::getDirection()

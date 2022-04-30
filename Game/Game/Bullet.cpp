@@ -49,7 +49,8 @@ void Bullet::update(Map& m)
 		this->x += moveX;
 		this->y += moveY;
 
-		this->bounds = this->getBounds();
+		Position p(this->x, this->y);
+		this->setPosition(p);
 
 		this->moveInDoors(m.doors);
 
@@ -59,8 +60,6 @@ void Bullet::update(Map& m)
 		
 		if (!this->active) break;
 	}
-
-	this->setPosition(this->x, this->y);
 }
 
 void Bullet::destroy()
@@ -68,10 +67,10 @@ void Bullet::destroy()
 	this->active = false;
 }
 
-void Bullet::setStartPosition(float x, float y)
+void Bullet::setStartPosition(Position& p)
 {
-	this->x = x;
-	this->y = y;
+	this->x = p.x;
+	this->y = p.y;
 
-	this->setPosition(x, y);
+	this->setPosition(p);
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "Person.hpp"
 #include "Player.hpp"
+#include <vector>
 
 const float ZOMBIE_MOVE_SPEED = 1.f;
 

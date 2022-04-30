@@ -10,6 +10,24 @@ const int PLAYER_RELOAD_COOLDOWN = 2000;
 
 class Player: public Person {
 
+public:
+
+	Player() : Person(sf::Color::Blue) {};
+
+	Bullet shoot();
+	void reload();
+
+	bool canShoot();
+	bool isReloading();
+
+	int getBulletesNumber();
+	int getItemsNumber();
+	int getLives();
+
+	void hurt();
+	void update(Map& m);
+
+
 private:
 
 	int lives = PLAYER_LIVES;
@@ -22,22 +40,4 @@ private:
 
 	void checkForCollectedItems();
 
-public:
-
-	Player(): Person(sf::Color::Blue) {};
-	
-	Bullet shoot();
-	void reload();
-
-	bool canShoot();
-	bool isReloading();
-
-	int getBulletesNumber();
-	int getItemsNumber();
-	int getLives();
-
-	Position getPosition();
-
-	void hurt();
-	void update(Map& m);
 };

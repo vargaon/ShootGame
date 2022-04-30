@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "Room.hpp"
-#include "Bounds.hpp"
+#include "Utils.hpp"
 
 const float DOOR_SIZE = 70.f;
 
@@ -18,7 +18,7 @@ public:
 
 	Bounds bounds;
 	
-	Door(bool isHorizontal, float x, float y);
+	Door(bool isHorizontal, Position p);
 
 	bool isHorizontal();
 

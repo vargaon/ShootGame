@@ -6,7 +6,7 @@
 #include "Zombie.hpp"
 #include "Bullet.hpp"
 #include "Map.hpp"
-#include "InfoPanel.hpp"
+#include "Panel.hpp"
 
 const int WIN_SIZE = 524;
 const int INFO_PANEL_SIZE = 75;
@@ -25,9 +25,11 @@ class Game {
 
 private:
 
+	GameState state = GameState::RUN;
+
 	sf::Event ev;
 	sf::RenderWindow* window = nullptr;
-	InfoPanel infoPanel;
+	Panel panel;
 
 	Map m;
 	Player p;
@@ -36,21 +38,29 @@ private:
 
 	sf::Clock zombieSpawnClock;
 
+	int zombieSpawned = 0;
+
 	void initWindow();
 
 	void spawnZombie();
-
-	void processInput();
+	void processRunInput();
 	void updateBullets();
 	void updateZombies();
+
+	void updateRunGame();
+	void updateStartGame();
+	void updateEndGame();
+
+	void renderRunGame();
+	void renderStartGame();
+	void renderEndGame();
 
 public:
 
 	Game();
 	~Game();
 
-	void Update();
+	void update();
 	void Render();
-
 	bool IsRunning();
 };

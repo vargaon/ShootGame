@@ -1,4 +1,4 @@
-#include "Bounds.hpp"
+#include "Utils.hpp"
 
 bool Bounds::inCollisionWith(Bounds& b)
 {
@@ -24,6 +24,11 @@ bool Bounds::inRange(bool horizontal, Bounds& b)
 			this->bot <= b.bot
 			);
 	}
+}
+
+bool Bounds::contains(Float2Vector& v)
+{
+	return this->left <= v.x && this->right >= v.y;
 }
 
 bool Bounds::isIn(Bounds& b)

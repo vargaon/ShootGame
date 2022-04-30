@@ -8,7 +8,9 @@ Bullet Player::shoot()
 
 	Bullet b;
 
-	b.setStartPosition(this->x, this->y);
+	auto p = this->getPosition();
+
+	b.setStartPosition(p);
 	b.setDirection(this->getDirection());
 
 	--this->nBulletes;
@@ -30,11 +32,6 @@ int Player::getItemsNumber()
 	return this->nItems;
 }
 
-Position Player::getPosition()
-{
-	return Position(this->x, this->y);
-}
-
 int Player::getLives()
 {
 	return this->lives;
@@ -48,9 +45,13 @@ void Player::hurt()
 void Player::checkForCollectedItems()
 {
 	for (auto&& i : this->room->items) {
-		if (this->bounds.inCollisionWith(i.bounds)) {
+
+		auto ib = i.getBounds();
+
+		if (this->bounds.inCollisionWith(ib)) {
 			i.collect();
 			++this->nItems;
+			std::cout << "Item collected" << std::endl;
 		}
 	}
 }
@@ -67,17 +68,17 @@ void Player::update(Map& m)
 		this->x += this->dx * PLAYER_MOVE_SPEED;
 		this->y += this->dy * PLAYER_MOVE_SPEED;
 
-		this->bounds = this->getBounds();
+		Position p(this->x, this->y);
+		this->setPosition(p);
 	
 		this->moveInDoors(m.doors);
 
 		if (!this->inDoor) {
+
 			this->moveInRooms(m.rooms);
 			this->checkForCollectedItems();
 		}
 	}
-
-	this->setPosition(this->x, this->y);
 }
 
 bool Player::canShoot()

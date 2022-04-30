@@ -1,9 +1,8 @@
 #include "Item.hpp"
 
-Item::Item(float x, float y) : Entity(ITEM_SIZE, ITEM_POINT_COUNT, sf::Color::Yellow)
+Item::Item(Position p) : Entity(ITEM_SIZE, ITEM_POINT_COUNT, sf::Color::Yellow)
 {
-	this->setPosition(x, y);
-	this->bounds = this->getBounds(x, y);
+	this->setPosition(p);
 }
 
 void Item::update()

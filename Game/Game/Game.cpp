@@ -7,7 +7,7 @@ Game::Game()
 {
 	this->initWindow();
 
-	this->infoPanel.setPosition(0, WIN_SIZE);
+	this->panel.setPosition(0, WIN_SIZE);
 	this->p.setStartPositionByRoom(this->m.getRoom(12));
 }
 
@@ -18,7 +18,7 @@ Game::~Game()
 
 void Game::initWindow()
 {
-	this->window = new RenderWindow(VideoMode(WIN_SIZE, WIN_SIZE + INFO_PANEL_SIZE), "My Game!", Style::Titlebar | Style::Close);
+	this->window = new RenderWindow(VideoMode(WIN_SIZE, WIN_SIZE + INFO_PANEL_SIZE), "Shoot Game!", Style::Titlebar | Style::Close);
 	this->window->setFramerateLimit(WIN_FRAME_LIMIT);
 }
 
@@ -40,10 +40,12 @@ void Game::spawnZombie()
 		z.setStartPositionByRoom(r);
 
 		this->zombies.push_back(z);
+
+		++this->zombieSpawned;
 	}
 }
 
-void Game::processInput()
+void Game::processRunInput()
 {
 
 	if (Keyboard::isKeyPressed(Keyboard::W)) {
@@ -55,7 +57,9 @@ void Game::processInput()
 
 	auto mousePosition = sf::Mouse::getPosition(*this->window);
 
-	this->p.setDirectionByPosition(float(mousePosition.x), float(mousePosition.y));
+	Position p(float(mousePosition.x), float(mousePosition.y));
+
+	this->p.setDirectionByPosition(p);
 
 	if (Mouse::isButtonPressed(Mouse::Right)) {
 		this->p.reload();
@@ -99,7 +103,52 @@ void Game::updateZombies()
 	}
 }
 
-void Game::Update()
+void Game::updateRunGame()
+{
+	this->processRunInput();
+
+	this->updateBullets();
+	this->p.update(this->m);
+	this->updateZombies();
+	this->panel.updateRunPanel(this->p);
+	this->m.update();
+
+	this->spawnZombie();
+}
+
+void Game::updateStartGame()
+{
+}
+
+void Game::updateEndGame()
+{
+}
+
+void Game::renderRunGame()
+{
+	this->m.render(this->window);
+
+	for (auto&& b : this->bullets) {
+		b.render(this->window);
+	}
+
+	for (auto&& z : this->zombies) {
+		z.render(this->window);
+	}
+
+	this->p.render(this->window);
+	this->panel.renderRunPanel(this->window);
+}
+
+void Game::renderStartGame()
+{
+}
+
+void Game::renderEndGame()
+{
+}
+
+void Game::update()
 {
 	while (this->window->pollEvent(this->ev)) {
 
@@ -116,36 +165,40 @@ void Game::Update()
 		}
 	}
 
-	this->processInput();
-
-	this->updateBullets();
-
-	this->p.update(this->m);
-
-	this->updateZombies();
-	this->infoPanel.update(this->p);
-
-	this->spawnZombie();
-
-	this->m.update();
+	switch (this->state)
+	{
+	case GameState::START:
+		this->updateStartGame();
+		break;
+	case GameState::RUN:
+		this->updateRunGame();
+		break;
+	case GameState::END:
+		this->updateEndGame();
+		break;
+	default:
+		break;
+	}
 }
 
 void Game::Render()
 {
 	this->window->clear(Color::White);
 
-	this->m.render(this->window);
-
-	for (auto&& b : this->bullets) {
-		b.render(this->window);
+	switch (this->state)
+	{
+	case GameState::START:
+		this->renderStartGame();
+		break;
+	case GameState::RUN:
+		this->renderRunGame();
+		break;
+	case GameState::END:
+		this->renderEndGame();
+		break;
+	default:
+		break;
 	}
-
-	for (auto&& z : this->zombies) {
-		z.render(this->window);
-	}
-
-	this->p.render(this->window);
-	this->infoPanel.render(this->window);
 
 	this->window->display();
 }

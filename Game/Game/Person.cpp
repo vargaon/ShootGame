@@ -6,9 +6,9 @@ bool Person::inRoom(Room& r)
 	return this->bounds.isIn(ob);
 }
 
-void Person::moveInRoom(Room* r)
+void Person::moveInRoom(Room& r)
 {
-	auto ib = r->innerBounds;
+	auto ib = r.innerBounds;
 
 	if (!this->bounds.isIn(ib)) {
 
@@ -27,13 +27,16 @@ void Person::moveInRoom(Room* r)
 		if (bounds.bot > ib.bot) {
 			this->y = ib.bot - this->size;
 		}
+
+		Position p(this->x, this->y);
+		this->setPosition(p);
 	}
 }
 
 void Person::moveInRooms(rooms_con_t& rooms)
 {
 	if (this->room != nullptr) {
-		this->moveInRoom(this->room);
+		this->moveInRoom(*this->room);
 	}
 	else {
 		for (auto&& r : rooms) {
@@ -41,7 +44,7 @@ void Person::moveInRooms(rooms_con_t& rooms)
 			if (this->inRoom(r)) {
 
 				this->room = &r;
-				this->moveInRoom(this->room);
+				this->moveInRoom(*this->room);
 				break;
 			}
 		}
@@ -80,6 +83,9 @@ void Person::moveInDoors(doors_con_t& doors)
 							this->y = db.bot - this->size;
 						}
 					}
+
+					Position p(this->x, this->y);
+					this->setPosition(p);
 				}
 			}
 
@@ -102,22 +108,20 @@ void Person::setMovePower(PersonMovePower mp)
 	this->movePower = mp;
 }
 
-void Person::setDirectionByPosition(float x, float y)
+void Person::setDirectionByPosition(Position& p)
 {
-	this->setDirection(atan2(y - this->y, x - this->x) * 180 / float(PI));
+	this->setDirection(atan2(p.y - this->y, p.x - this->x) * 180 / float(PI));
 }
 
 void Person::setStartPositionByRoom(Room* room)
 {
 	this->room = room;
-	auto p = room->getPosition();
+	auto p = room->getCentrePosition();
 
 	this->x = p.x;
 	this->y = p.y;
 
-	this->bounds = this->getBounds();
-
-	this->setPosition(p.x, p.y);
+	this->setPosition(p);
 }
 
 Room* Person::getRoom()

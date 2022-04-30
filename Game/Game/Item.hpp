@@ -14,9 +14,7 @@ private:
 
 public:
 
-	Bounds bounds;
-
-	Item(float x, float y);
+	Item(Position p);
 
 	void update();
 	void collect();

@@ -1,5 +1,22 @@
 #pragma once
 
+class Float2Vector {
+public:
+	float x = 0.f;
+	float y = 0.f;
+
+	Float2Vector() {};
+	Float2Vector(float x, float y) : x(x), y(y) {};
+
+	virtual ~Float2Vector() {};
+};
+
+class Position : public Float2Vector {
+public:
+	Position() {};
+	Position(float x, float y) : Float2Vector(x, y) {};
+};
+
 class Bounds {
 public:
 
@@ -14,13 +31,5 @@ public:
 	bool inCollisionWith(Bounds& b);
 	bool isIn(Bounds& b);
 	bool inRange(bool horizontal, Bounds& b);
-};
-
-class Position {
-public:
-	float x = 0.f;
-	float y = 0.f;
-
-	Position() {};
-	Position(float x, float y) : x(x), y(y) {};
+	bool contains(Float2Vector& v);
 };

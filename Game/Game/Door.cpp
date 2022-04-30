@@ -2,7 +2,7 @@
 
 using namespace sf;
 
-Door::Door(bool isHorizontal, float x, float y)
+Door::Door(bool isHorizontal, Position p)
 {
 	this->horizontal = isHorizontal;
 
@@ -18,9 +18,9 @@ Door::Door(bool isHorizontal, float x, float y)
 
 	this->entity = RectangleShape(s);
 	this->entity.setFillColor(Color::Green);
-	this->entity.setPosition(x, y);
+	this->entity.setPosition(p.x, p.y);
 
-	this->bounds = Bounds(y, y + s.y, x, x + s.x);
+	this->bounds = Bounds(p.y, p.y + s.y, p.x, p.x + s.x);
 }
 
 bool Door::isHorizontal()
