@@ -38,7 +38,8 @@ public:
 	Room() {};
 	Room(float x, float y);
 
-	void addItem(ItemType it, RoomPosition rp);
+	void addItem(RoomPosition rp);
+
 	Position getRoomPosition(RoomPosition rp);
 	void render(sf::RenderWindow* window);
 	void update();

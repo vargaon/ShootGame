@@ -53,10 +53,10 @@ void Map::initDoors()
 
 void Map::initItems()
 {
-	this->rooms[0].addItem(ItemType::COIN, RoomPosition::LEFT_BOT);
-	this->rooms[0].addItem(ItemType::COIN, RoomPosition::RIGHT_TOP);
-	this->rooms[0].addItem(ItemType::COIN, RoomPosition::LEFT_TOP);
-	this->rooms[0].addItem(ItemType::COIN, RoomPosition::RIGHT_BOT);
+	this->rooms[0].addItem(RoomPosition::LEFT_BOT);
+	this->rooms[0].addItem(RoomPosition::RIGHT_TOP);
+	this->rooms[0].addItem(RoomPosition::LEFT_TOP);
+	this->rooms[0].addItem(RoomPosition::RIGHT_BOT);
 }
 
 void Map::createWall(bool isHorizontal, float x, float y)

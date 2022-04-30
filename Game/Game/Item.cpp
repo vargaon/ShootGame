@@ -1,6 +1,6 @@
 #include "Item.hpp"
 
-Item::Item(ItemType t, float x, float y) : Entity(ITEM_SIZE, ITEM_POINT_COUNT, ITEM_COLOR.find(t)->second)
+Item::Item(float x, float y) : Entity(ITEM_SIZE, ITEM_POINT_COUNT, sf::Color::Yellow)
 {
 	this->setPosition(x, y);
 	this->bounds = this->getBounds(x, y);

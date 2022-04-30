@@ -13,23 +13,34 @@ Room::Room(float x, float y)
 
 void Room::initRoomPositions()
 {
+	float itemPositionPadding = 20.f;
+
 	this->positions[RoomPosition::CENTRE] = Position((this->innerBounds.right - this->innerBounds.left) / 2, (this->innerBounds.bot - this->innerBounds.top) / 2);
-	this->positions[RoomPosition::LEFT_TOP] = Position(this->innerBounds.left + 20, this->innerBounds.top + 20);
-	this->positions[RoomPosition::LEFT_BOT] = Position(this->innerBounds.left + 20, this->innerBounds.bot - 20);
-	this->positions[RoomPosition::RIGHT_BOT] = Position(this->innerBounds.right - 20, this->innerBounds.bot - 20);
-	this->positions[RoomPosition::RIGHT_TOP] = Position(this->innerBounds.right - 20, this->innerBounds.top + 20);
+
+	this->positions[RoomPosition::LEFT_TOP] = Position(this->innerBounds.left + itemPositionPadding, this->innerBounds.top + itemPositionPadding);
+	this->positions[RoomPosition::LEFT_BOT] = Position(this->innerBounds.left + itemPositionPadding, this->innerBounds.bot - itemPositionPadding);
+	this->positions[RoomPosition::RIGHT_BOT] = Position(this->innerBounds.right - itemPositionPadding, this->innerBounds.bot - itemPositionPadding);
+	this->positions[RoomPosition::RIGHT_TOP] = Position(this->innerBounds.right - itemPositionPadding, this->innerBounds.top + itemPositionPadding);
 }
 
-void Room::addItem(ItemType it, RoomPosition rp)
+void Room::addItem(RoomPosition rp)
 {
-	auto ip = this->positions[rp];
-	Item i(it, ip.x, ip.y);
+	auto ip = this->getRoomPosition(rp);
+
+	Item i(ip.x, ip.y);
+
 	this->items.insert({ rp , i });
 }
 
 Position Room::getRoomPosition(RoomPosition rp)
 {
-	return this->positions[rp];
+	auto it = this->positions.find(rp);
+
+	if (it != this->positions.end()) {
+		return it->second;
+	}
+
+	throw ("Room position was not set.");
 }
 
 void Room::render(sf::RenderWindow* window)

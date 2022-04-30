@@ -1,11 +1,17 @@
 #include "Person.hpp"
 
+bool Person::inRoom(Room& r, Bounds& bounds)
+{
+	auto ob = r.outerBounds;
+	return bounds.isIn(ob);
+}
+
 void Person::moveInRooms(rooms_con_t& rooms, Bounds& bounds)
 {
 	for (auto&& r : rooms) {
-		auto ob = r.outerBounds;
+		
+		if (this->inRoom(r, bounds)) {
 
-		if (bounds.isIn(ob)) {
 			auto ib = r.innerBounds;
 
 			if (!bounds.isIn(ib)) {

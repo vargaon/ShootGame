@@ -15,7 +15,11 @@ class Person: public MoveableEntity {
 
 protected:
 
+	Room* room = nullptr;
+
 	PersonMovePower movePower = PersonMovePower::STOP;
+
+	bool inRoom(Room& r, Bounds& bounds);
 
 	void moveInRooms(rooms_con_t& rooms, Bounds& bounds);
 	void moveInDoors(doors_con_t& doors, Bounds& bounds);

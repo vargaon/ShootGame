@@ -72,6 +72,8 @@ bool Player::canShoot()
 
 void Player::reload()
 {
+	if (this->reloading) return;
+
 	this->reloading = true;
 	this->reloadClock.restart();
 }
