@@ -2,7 +2,7 @@
 #include "Person.hpp"
 #include "Player.hpp"
 
-const float ZOMBIE_MOVE_SPEED = 1.5f;
+const float ZOMBIE_MOVE_SPEED = 1.f;
 
 class Zombie : public Person {
 private:

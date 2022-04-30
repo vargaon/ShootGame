@@ -51,6 +51,8 @@ void Room::update()
 {
 	for (auto it = this->items.begin(); it != this->items.end();) {
 
+		it->second.update();
+
 		if (!it->second.isActive()) {
 			it = this->items.erase(it);
 		}
