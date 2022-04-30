@@ -14,6 +14,7 @@ const int WIN_SIZE = 524;
 const int INFO_PANEL_SIZE = 75;
 const int WIN_FRAME_LIMIT = 60;
 
+const int MAX_ZOMBIES = 20;
 const int ZOMBI_SPAWN_COOLDOWN = 2000;
 
 enum class GameState {

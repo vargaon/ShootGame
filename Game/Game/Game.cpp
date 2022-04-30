@@ -24,7 +24,7 @@ void Game::initWindow()
 
 void Game::spawnZombie()
 {
-	if (this->zombieSpawnClock.getElapsedTime().asMilliseconds() > ZOMBI_SPAWN_COOLDOWN) {
+	if (this->zombies.size() < MAX_ZOMBIES && this->zombieSpawnClock.getElapsedTime().asMilliseconds() > ZOMBI_SPAWN_COOLDOWN) {
 		this->zombieSpawnClock.restart();
 
 		Zombie z;
