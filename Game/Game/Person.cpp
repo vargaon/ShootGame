@@ -1,72 +1,82 @@
 #include "Person.hpp"
 
-bool Person::inRoom(Room& r, Bounds& bounds)
+bool Person::inRoom(Room& r)
 {
 	auto ob = r.outerBounds;
-	return bounds.isIn(ob);
+	return this->bounds.isIn(ob);
 }
 
-void Person::moveInRooms(rooms_con_t& rooms, Bounds& bounds)
+void Person::moveInRoom(Room* r)
 {
-	for (auto&& r : rooms) {
-		
-		if (this->inRoom(r, bounds)) {
+	auto ib = r->innerBounds;
 
-			auto ib = r.innerBounds;
+	if (!this->bounds.isIn(ib)) {
 
-			if (!bounds.isIn(ib)) {
+		if (this->bounds.left < ib.left) {
+			this->x = ib.left + this->size;
+		}
 
-				if (bounds.left < ib.left) {
-					this->x = ib.left + this->size;
-				}
+		if (this->bounds.right > ib.right) {
+			this->x = ib.right - this->size;
+		}
 
-				if (bounds.right > ib.right) {
-					this->x = ib.right - this->size;
-				}
+		if (this->bounds.top < ib.top) {
+			this->y = ib.top + this->size;
+		}
 
-				if (bounds.top < ib.top) {
-					this->y = ib.top + this->size;
-				}
-
-				if (bounds.bot > ib.bot) {
-					this->y = ib.bot - this->size;
-				}
-			}
-
-			break;
+		if (bounds.bot > ib.bot) {
+			this->y = ib.bot - this->size;
 		}
 	}
 }
 
-void Person::moveInDoors(doors_con_t& doors, Bounds& bounds)
+void Person::moveInRooms(rooms_con_t& rooms)
+{
+	if (this->room != nullptr) {
+		this->moveInRoom(this->room);
+	}
+	else {
+		for (auto&& r : rooms) {
+
+			if (this->inRoom(r)) {
+
+				this->room = &r;
+				this->moveInRoom(this->room);
+				break;
+			}
+		}
+	}
+}
+
+void Person::moveInDoors(doors_con_t& doors)
 {
 	for (auto&& d : doors) {
 
 		auto db = d.bounds;
 
-		if (bounds.inCollisionWith(db)) {
+		if (this->bounds.inCollisionWith(db)) {
 
 			if (this->inDoor) {
 
-				if (!bounds.inRange(d.isHorizontal(), db)) {
+				if (!this->bounds.inRange(d.isHorizontal(), db)) {
 
 					if (d.isHorizontal()) {
 
-						if (bounds.left < db.left) {
+						if (this->bounds.left < db.left) {
 							this->x = db.left + this->size;
 						}
 
-						if (bounds.right > db.right) {
+						if (this->bounds.right > db.right) {
 							this->x = db.right - this->size;
 						}
 					}
 					else {
 
-						if (bounds.top < db.top) {
+						if (this->bounds.top < db.top) {
 							this->y = db.top + this->size;
 						}
 
-						if (bounds.bot > db.bot) {
+						if (this->bounds.bot > db.bot) {
 							this->y = db.bot - this->size;
 						}
 					}
@@ -74,7 +84,10 @@ void Person::moveInDoors(doors_con_t& doors, Bounds& bounds)
 			}
 
 			else {
-				this->inDoor = bounds.inRange(d.isHorizontal(), db);
+				if (this->bounds.inRange(d.isHorizontal(), db)) {
+					this->inDoor = true;
+					this->room = nullptr;
+				}
 			}
 
 			return;
@@ -92,4 +105,17 @@ void Person::setMovePower(PersonMovePower mp)
 void Person::setDirectionByPosition(float x, float y)
 {
 	this->setDirection(atan2(y - this->y, x - this->x) * 180 / float(PI));
+}
+
+void Person::setStartPositionByRoom(Room* room)
+{
+	this->room = room;
+	auto p = room->getRoomPosition(RoomPosition::CENTRE);
+
+	this->x = p.x;
+	this->y = p.y;
+
+	this->bounds = this->getBounds();
+
+	this->setPosition(p.x, p.y);
 }

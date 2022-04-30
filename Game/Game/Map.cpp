@@ -4,9 +4,19 @@ using namespace sf;
 
 Map::Map()
 {
+	std::srand(42);
+
 	this->initWalls();
 	this->initDoors();
 	this->initRooms();
+}
+
+void Map::update()
+{
+	for (auto&& r : this->rooms)
+	{
+		r.update();
+	}
 }
 
 void Map::initWalls()
@@ -28,7 +38,9 @@ void Map::initRooms()
 
 		for (int j = 0; j < NUM_OF_ROOM_PER_LINE; j++) {
 
-			this->rooms[i * NUM_OF_ROOM_PER_LINE + j] = Room(i * distance, j * distance);
+			int id = i * NUM_OF_ROOM_PER_LINE + j;
+
+			this->rooms[id] = Room(id, i * distance, j * distance);
 		}
 	}
 
@@ -53,10 +65,10 @@ void Map::initDoors()
 
 void Map::initItems()
 {
-	this->rooms[0].addItem(RoomPosition::LEFT_BOT);
-	this->rooms[0].addItem(RoomPosition::RIGHT_TOP);
-	this->rooms[0].addItem(RoomPosition::LEFT_TOP);
-	this->rooms[0].addItem(RoomPosition::RIGHT_BOT);
+	this->getRoom(0)->addItem(RoomPosition::LEFT_BOT);
+	this->getRoom(4)->addItem(RoomPosition::RIGHT_TOP);
+	this->getRoom(7)->addItem(RoomPosition::LEFT_TOP);
+	this->getRoom(9)->addItem(RoomPosition::RIGHT_BOT);
 }
 
 void Map::createWall(bool isHorizontal, float x, float y)
@@ -98,6 +110,17 @@ void Map::createDoorsByMask(bool isHorizontal, door_mask_t& mask)
 			}
 		}
 	}
+}
+
+Room* Map::getRoom(int id)
+{
+	return &this->rooms.at(id);
+}
+
+Room* Map::getRandomRoom()
+{
+	int roomID = rand() % (NUM_OF_ROOM_PER_LINE * NUM_OF_ROOM_PER_LINE);
+	return this->getRoom(roomID);
 }
 
 void Map::render(sf::RenderWindow* window)

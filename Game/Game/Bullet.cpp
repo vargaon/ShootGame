@@ -4,13 +4,11 @@ using namespace sf;
 
 void Bullet::moveInRooms(rooms_con_t& rooms)
 {
-	auto bounds = this->getBounds();
-
 	for (auto&& r : rooms) {
 
-		if (bounds.isIn(r.outerBounds)) {
+		if (this->bounds.isIn(r.outerBounds)) {
 
-			this->active = bounds.isIn(r.innerBounds);
+			this->active = this->bounds.isIn(r.innerBounds);
 			return;
 		}
 	}
@@ -20,14 +18,12 @@ void Bullet::moveInRooms(rooms_con_t& rooms)
 
 void Bullet::moveInDoors(doors_con_t& doors)
 {
-	auto bounds = this->getBounds();
-
 	for (auto&& d : doors) {
 
-		if (bounds.inCollisionWith(d.bounds)) {
+		if (this->bounds.inCollisionWith(d.bounds)) {
 
 			this->inDoor = true;
-			this->active = bounds.inRange(d.isHorizontal(), d.bounds);
+			this->active = this->bounds.inRange(d.isHorizontal(), d.bounds);
 
 			return;
 		}
@@ -53,6 +49,8 @@ void Bullet::update(Map& m)
 		this->x += moveX;
 		this->y += moveY;
 
+		this->bounds = this->getBounds();
+
 		this->moveInDoors(m.doors);
 
 		if (!this->inDoor && this->active) {
@@ -68,4 +66,12 @@ void Bullet::update(Map& m)
 void Bullet::destroy()
 {
 	this->active = false;
+}
+
+void Bullet::setStartPosition(float x, float y)
+{
+	this->x = x;
+	this->y = y;
+
+	this->setPosition(x, y);
 }

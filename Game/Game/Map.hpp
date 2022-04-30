@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp> 
 #include <array>
 #include <vector>
+#include <cstdlib>
 #include "Room.hpp"
 #include "Door.hpp"
 
@@ -32,5 +33,9 @@ public:
 
 	Map();
 
+	Room* getRoom(int id);
+	Room* getRandomRoom();
+
+	void update();
 	void render(sf::RenderWindow* window);
 };

@@ -1,5 +1,4 @@
 #include "Player.hpp"
-#include <iostream>
 
 using namespace sf;
 
@@ -26,6 +25,11 @@ int Player::getBulletesNumber()
 	return this->nBulletes;
 }
 
+int Player::getItemsNumber()
+{
+	return this->nItems;
+}
+
 Position Player::getPosition()
 {
 	return Position(this->x, this->y);
@@ -36,9 +40,19 @@ int Player::getLives()
 	return this->lives;
 }
 
-void Player::bite()
+void Player::hurt()
 {
 	--this->lives;
+}
+
+void Player::checkForCollectedItems()
+{
+	for (auto&& i : this->room->items) {
+		if (this->bounds.inCollisionWith(i.second.bounds)) {
+			i.second.collect();
+			++this->nItems;
+		}
+	}
 }
 
 void Player::update(Map& m)
@@ -53,12 +67,13 @@ void Player::update(Map& m)
 		this->x += this->dx * PLAYER_MOVE_SPEED;
 		this->y += this->dy * PLAYER_MOVE_SPEED;
 
-		auto bounds = this->getBounds();
+		this->bounds = this->getBounds();
 	
-		this->moveInDoors(m.doors, bounds);
+		this->moveInDoors(m.doors);
 
 		if (!this->inDoor) {
-			this->moveInRooms(m.rooms, bounds);
+			this->moveInRooms(m.rooms);
+			this->checkForCollectedItems();
 		}
 	}
 

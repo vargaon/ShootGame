@@ -27,7 +27,7 @@ void Zombie::checkForPlayer(Player& p)
 
 	if (bounds.inCollisionWith(pb)) {
 
-		p.bite();
+		p.hurt();
 		this->alive = false;
 	}
 	else {
@@ -49,12 +49,12 @@ void Zombie::update(Map& m, Player& p, bulletes_con_t& bulletes)
 		this->x += this->dx * ZOMBIE_MOVE_SPEED;
 		this->y += this->dy * ZOMBIE_MOVE_SPEED;
 
-		auto bounds = this->getBounds();
+		this->bounds = this->getBounds();
 
-		this->moveInDoors(m.doors, bounds);
+		this->moveInDoors(m.doors);
 
 		if (!this->inDoor) {
-			this->moveInRooms(m.rooms, bounds);
+			this->moveInRooms(m.rooms);
 		}
 	}
 

@@ -13,6 +13,8 @@ const int WIN_SIZE = 524;
 const int INFO_PANEL_SIZE = 75;
 const int WIN_FRAME_LIMIT = 60;
 
+const int ZOMBI_SPAWN_COOLDOWN = 2000;
+
 enum class GameState {
 	START,
 	RUN,
@@ -31,13 +33,15 @@ private:
 	bulletes_con_t bullets;
 	zombies_con_t zombies;
 
+	sf::Clock zombieSpawnClock;
+
 	sf::Font font;
 	sf::Text playerBulletesInfo;
 
 	void initWindow();
 	void initInfoPanel();
 
-	void spawnZombie(float x, float y);
+	void spawnZombie();
 
 	void processInput();
 	void updateBullets();

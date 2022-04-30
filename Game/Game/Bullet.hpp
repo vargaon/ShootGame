@@ -25,6 +25,8 @@ public:
 	bool isActive();
 	void update(Map& m);
 	void destroy();
+
+	void setStartPosition(float x, float y);
 };
 
 using bulletes_con_t = std::vector<Bullet>;

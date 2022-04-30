@@ -1,6 +1,6 @@
 #include "Room.hpp"
 
-Room::Room(float x, float y)
+Room::Room(int id, float x, float y): id(id)
 {
 	float globalRoomSize = ROOM_SIZE + 2 * WALL_THICKNESS;
 	float localRoomSize = WALL_THICKNESS + ROOM_SIZE;
@@ -15,7 +15,10 @@ void Room::initRoomPositions()
 {
 	float itemPositionPadding = 20.f;
 
-	this->positions[RoomPosition::CENTRE] = Position((this->innerBounds.right - this->innerBounds.left) / 2, (this->innerBounds.bot - this->innerBounds.top) / 2);
+	this->positions[RoomPosition::CENTRE] = Position(
+		this->innerBounds.left + (this->innerBounds.right - this->innerBounds.left) / 2, 
+		this->innerBounds.top + (this->innerBounds.bot - this->innerBounds.top) / 2
+	);
 
 	this->positions[RoomPosition::LEFT_TOP] = Position(this->innerBounds.left + itemPositionPadding, this->innerBounds.top + itemPositionPadding);
 	this->positions[RoomPosition::LEFT_BOT] = Position(this->innerBounds.left + itemPositionPadding, this->innerBounds.bot - itemPositionPadding);
@@ -34,13 +37,7 @@ void Room::addItem(RoomPosition rp)
 
 Position Room::getRoomPosition(RoomPosition rp)
 {
-	auto it = this->positions.find(rp);
-
-	if (it != this->positions.end()) {
-		return it->second;
-	}
-
-	throw ("Room position was not set.");
+	return this->positions.at(rp);
 }
 
 void Room::render(sf::RenderWindow* window)

@@ -41,6 +41,8 @@ protected:
 
 	float dx = 0.f;
 	float dy = 0.f;
+
+	Bounds bounds;
 	
 	bool inDoor = false;
 
@@ -50,8 +52,6 @@ public:
 	MoveableEntity(float size, int pointCount, sf::Color color) : Entity(size, pointCount, color) {};
 
 	Bounds getBounds();
-
-	void setStartPosition(float x, float y);
 
 	float getDirection();
 	void setDirection(float direction);

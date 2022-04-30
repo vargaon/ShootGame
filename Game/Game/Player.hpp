@@ -1,5 +1,6 @@
 #pragma once
 #include "Person.hpp"
+#include <iostream>
 
 const int PLAYER_LIVES = 3;
 const float PLAYER_MOVE_SPEED = 2.f;
@@ -13,10 +14,13 @@ private:
 
 	int lives = PLAYER_LIVES;
 	int nBulletes = PLAYER_BULLETES_NUMBER;
+	int nItems = 0;
 	bool reloading = false;
 
 	sf::Clock shootClock;
 	sf::Clock reloadClock;
+
+	void checkForCollectedItems();
 
 public:
 
@@ -27,10 +31,13 @@ public:
 
 	bool canShoot();
 	bool isReloading();
-	int getBulletesNumber();
-	Position getPosition();
-	int getLives();
-	void bite();
 
+	int getBulletesNumber();
+	int getItemsNumber();
+	int getLives();
+
+	Position getPosition();
+
+	void hurt();
 	void update(Map& m);
 };

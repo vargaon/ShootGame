@@ -19,15 +19,18 @@ protected:
 
 	PersonMovePower movePower = PersonMovePower::STOP;
 
-	bool inRoom(Room& r, Bounds& bounds);
+	bool inRoom(Room& r);
 
-	void moveInRooms(rooms_con_t& rooms, Bounds& bounds);
-	void moveInDoors(doors_con_t& doors, Bounds& bounds);
+	void moveInRoom(Room* r);
+
+	void moveInRooms(rooms_con_t& rooms);
+	void moveInDoors(doors_con_t& doors);
 
 public:
 
 	Person(sf::Color color) : MoveableEntity(PERSON_SIZE, PERSON_POINT_COUNT, color) {};
 	void setMovePower(PersonMovePower mp);
 	void setDirectionByPosition(float x, float y);
+	void setStartPositionByRoom(Room* room);
 
 };

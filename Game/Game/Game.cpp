@@ -9,12 +9,7 @@ Game::Game()
 
 	this->initInfoPanel();
 
-	this->p.setStartPosition(WIN_SIZE / 2, WIN_SIZE / 2);
-
-	this->spawnZombie(10 , 10);
-	this->spawnZombie(120, 10);
-	this->spawnZombie(220, 10);
-	this->spawnZombie(360, 10);
+	this->p.setStartPositionByRoom(this->m.getRoom(24));
 }
 
 Game::~Game()
@@ -40,14 +35,18 @@ void Game::initInfoPanel()
 	this->playerBulletesInfo.setPosition(Vector2f(WIN_SIZE - 100, WIN_SIZE + 20));
 }
 
-void Game::spawnZombie(float x, float y)
+void Game::spawnZombie()
 {
-	Zombie z;
+	if (this->zombieSpawnClock.getElapsedTime().asMilliseconds() > ZOMBI_SPAWN_COOLDOWN) {
+		this->zombieSpawnClock.restart();
 
-	z.setMovePower(PersonMovePower::FORWARD);
-	z.setStartPosition(x, y);
+		Zombie z;
 
-	this->zombies.push_back(z);
+		z.setMovePower(PersonMovePower::FORWARD);
+		z.setStartPositionByRoom(this->m.getRandomRoom());
+
+		this->zombies.push_back(z);
+	}
 }
 
 void Game::processInput()
@@ -132,9 +131,15 @@ void Game::Update()
 	this->processInput();
 
 	this->updateBullets();
+
 	this->p.update(this->m);
+
 	this->updateZombies();
 	this->updateInfoPanel();
+
+	this->spawnZombie();
+
+	this->m.update();
 }
 
 void Game::Render()

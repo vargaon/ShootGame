@@ -38,15 +38,7 @@ void MoveableEntity::computeDirectionsPowers(float d)
 
 Bounds MoveableEntity::getBounds()
 {
-	return Bounds(this->y - this->size, this->y + this->size, this->x - this->size, this->x + this->size);
-}
-
-void MoveableEntity::setStartPosition(float x, float y)
-{
-	this->x = x;
-	this->y = y;
-
-	this->setPosition(x, y);
+	return Entity::getBounds(this->x, this->y);
 }
 
 float MoveableEntity::getDirection()
