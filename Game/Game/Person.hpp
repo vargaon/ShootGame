@@ -33,4 +33,5 @@ public:
 	void setDirectionByPosition(float x, float y);
 	void setStartPositionByRoom(Room* room);
 
+	Room* getRoom();
 };

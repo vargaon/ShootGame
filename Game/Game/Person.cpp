@@ -119,3 +119,8 @@ void Person::setStartPositionByRoom(Room* room)
 
 	this->setPosition(p.x, p.y);
 }
+
+Room* Person::getRoom()
+{
+	return this->room;
+}

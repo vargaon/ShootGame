@@ -8,7 +8,7 @@ Game::Game()
 	this->initWindow();
 
 	this->infoPanel.setPosition(0, WIN_SIZE);
-	this->p.setStartPositionByRoom(this->m.getRoom(24));
+	this->p.setStartPositionByRoom(this->m.getRoom(12));
 }
 
 Game::~Game()
@@ -25,12 +25,19 @@ void Game::initWindow()
 void Game::spawnZombie()
 {
 	if (this->zombies.size() < MAX_ZOMBIES && this->zombieSpawnClock.getElapsedTime().asMilliseconds() > ZOMBI_SPAWN_COOLDOWN) {
+
+		auto r = this->m.getRandomRoom();
+
+		if (this->p.getRoom() != nullptr && this->p.getRoom()->id == r->id) {
+			return;
+		}
+
 		this->zombieSpawnClock.restart();
 
 		Zombie z;
 
 		z.setMovePower(PersonMovePower::FORWARD);
-		z.setStartPositionByRoom(this->m.getRandomRoom());
+		z.setStartPositionByRoom(r);
 
 		this->zombies.push_back(z);
 	}
