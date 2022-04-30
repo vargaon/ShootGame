@@ -9,7 +9,7 @@ Game::Game()
 
 	this->initInfoPanel();
 
-	this->p.setPosition(WIN_SIZE / 2, WIN_SIZE / 2);
+	this->p.setStartPosition(WIN_SIZE / 2, WIN_SIZE / 2);
 
 	this->spawnZombie(10 , 10);
 	this->spawnZombie(120, 10);
@@ -45,7 +45,7 @@ void Game::spawnZombie(float x, float y)
 	Zombie z;
 
 	z.setMovePower(PersonMovePower::FORWARD);
-	z.setPosition(x, y);
+	z.setStartPosition(x, y);
 
 	this->zombies.push_back(z);
 }

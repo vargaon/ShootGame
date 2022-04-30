@@ -3,18 +3,20 @@
 #include <SFML/Graphics.hpp> 
 #include "Bounds.hpp"
 
-float const DEGTORAD = 0.017453f;
 const double PI = 3.14159265;
 
 class Entity {
 
-protected:
+private:
+	sf::CircleShape entity;
 
-	float x = 0.f;
-	float y = 0.f;
+protected:
 	float size = 0.f;
 
-	sf::CircleShape entity;
+	void setPosition(float x, float y);
+	void setRotation(float direction);
+
+	Bounds getBounds(float x, float y);
 
 public:
 
@@ -22,7 +24,6 @@ public:
 	Entity(float size, int pointCount, sf::Color color);
 	virtual ~Entity() {};
 
-	void setPosition(float x, float y);
 	void render(sf::RenderWindow* window);
 };
 
@@ -35,6 +36,9 @@ private:
 
 protected:
 
+	float x = 0.f;
+	float y = 0.f;
+
 	float dx = 0.f;
 	float dy = 0.f;
 	
@@ -46,6 +50,8 @@ public:
 	MoveableEntity(float size, int pointCount, sf::Color color) : Entity(size, pointCount, color) {};
 
 	Bounds getBounds();
+
+	void setStartPosition(float x, float y);
 
 	float getDirection();
 	void setDirection(float direction);

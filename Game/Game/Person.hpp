@@ -17,8 +17,8 @@ protected:
 
 	PersonMovePower movePower = PersonMovePower::STOP;
 
-	void moveInRooms(rooms_con_t& rooms);
-	void moveInDoors(doors_con_t& doors);
+	void moveInRooms(rooms_con_t& rooms, Bounds& bounds);
+	void moveInDoors(doors_con_t& doors, Bounds& bounds);
 
 public:
 

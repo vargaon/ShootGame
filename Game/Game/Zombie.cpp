@@ -49,15 +49,16 @@ void Zombie::update(Map& m, Player& p, bulletes_con_t& bulletes)
 		this->x += this->dx * ZOMBIE_MOVE_SPEED;
 		this->y += this->dy * ZOMBIE_MOVE_SPEED;
 
-		this->moveInDoors(m.doors);
+		auto bounds = this->getBounds();
+
+		this->moveInDoors(m.doors, bounds);
 
 		if (!this->inDoor) {
-			this->moveInRooms(m.rooms);
+			this->moveInRooms(m.rooms, bounds);
 		}
 	}
 
-	this->entity.setPosition(this->x, this->y);
-	this->entity.setRotation(this->getDirection() + 90.f);
+	this->setPosition(this->x, this->y);
 }
 
 bool Zombie::isAlive()

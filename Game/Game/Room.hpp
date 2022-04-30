@@ -28,17 +28,18 @@ private:
 	room_items_con_t items;
 	room_position_con_t positions;
 
+	void initRoomPositions();
+
 public:
 
 	Bounds outerBounds;
 	Bounds innerBounds;
 
+	Room() {};
 	Room(float x, float y);
 
-	void addItem(Item i, RoomPosition rp);
+	void addItem(ItemType it, RoomPosition rp);
 	Position getRoomPosition(RoomPosition rp);
 	void render(sf::RenderWindow* window);
 	void update();
 };
-
-using rooms_con_t = std::vector<Room>;

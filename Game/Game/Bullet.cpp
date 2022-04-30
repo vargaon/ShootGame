@@ -62,7 +62,7 @@ void Bullet::update(Map& m)
 		if (!this->active) break;
 	}
 
-	this->entity.setPosition(this->x, this->y);
+	this->setPosition(this->x, this->y);
 }
 
 void Bullet::destroy()

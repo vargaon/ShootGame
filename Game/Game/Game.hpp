@@ -13,6 +13,12 @@ const int WIN_SIZE = 524;
 const int INFO_PANEL_SIZE = 75;
 const int WIN_FRAME_LIMIT = 60;
 
+enum class GameState {
+	START,
+	RUN,
+	END
+};
+
 class Game {
 
 private:

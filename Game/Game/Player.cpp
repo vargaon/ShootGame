@@ -9,7 +9,7 @@ Bullet Player::shoot()
 
 	Bullet b;
 
-	b.setPosition(this->x, this->y);
+	b.setStartPosition(this->x, this->y);
 	b.setDirection(this->getDirection());
 
 	--this->nBulletes;
@@ -52,16 +52,17 @@ void Player::update(Map& m)
 
 		this->x += this->dx * PLAYER_MOVE_SPEED;
 		this->y += this->dy * PLAYER_MOVE_SPEED;
+
+		auto bounds = this->getBounds();
 	
-		this->moveInDoors(m.doors);
+		this->moveInDoors(m.doors, bounds);
 
 		if (!this->inDoor) {
-			this->moveInRooms(m.rooms);
+			this->moveInRooms(m.rooms, bounds);
 		}
 	}
 
-	this->entity.setPosition(this->x, this->y);
-	this->entity.setRotation(this->getDirection() + 90.f);
+	this->setPosition(this->x, this->y);
 }
 
 bool Player::canShoot()

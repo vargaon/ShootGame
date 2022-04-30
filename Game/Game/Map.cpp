@@ -28,9 +28,11 @@ void Map::initRooms()
 
 		for (int j = 0; j < NUM_OF_ROOM_PER_LINE; j++) {
 
-			this->rooms.push_back(Room(i * distance, j * distance));
+			this->rooms[i * NUM_OF_ROOM_PER_LINE + j] = Room(i * distance, j * distance);
 		}
 	}
+
+	this->initItems();
 }
 
 void Map::initDoors()
@@ -47,6 +49,14 @@ void Map::initDoors()
 
 	this->createDoorsByMask(false, doorsMask);
 	this->createDoorsByMask(true, doorsMask);
+}
+
+void Map::initItems()
+{
+	this->rooms[0].addItem(ItemType::COIN, RoomPosition::LEFT_BOT);
+	this->rooms[0].addItem(ItemType::COIN, RoomPosition::RIGHT_TOP);
+	this->rooms[0].addItem(ItemType::COIN, RoomPosition::LEFT_TOP);
+	this->rooms[0].addItem(ItemType::COIN, RoomPosition::RIGHT_BOT);
 }
 
 void Map::createWall(bool isHorizontal, float x, float y)
@@ -98,5 +108,9 @@ void Map::render(sf::RenderWindow* window)
 
 	for (auto&& d : this->doors) {
 		d.render(window);
+	}
+
+	for (auto&& r : this->rooms) {
+		r.render(window);
 	}
 }

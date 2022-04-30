@@ -8,6 +8,11 @@ Room::Room(float x, float y)
 	this->outerBounds = Bounds(y, y + globalRoomSize, x, x + globalRoomSize);
 	this->innerBounds = Bounds(y + WALL_THICKNESS, y + localRoomSize, x + WALL_THICKNESS, x + localRoomSize);
 
+	this->initRoomPositions();
+}
+
+void Room::initRoomPositions()
+{
 	this->positions[RoomPosition::CENTRE] = Position((this->innerBounds.right - this->innerBounds.left) / 2, (this->innerBounds.bot - this->innerBounds.top) / 2);
 	this->positions[RoomPosition::LEFT_TOP] = Position(this->innerBounds.left + 20, this->innerBounds.top + 20);
 	this->positions[RoomPosition::LEFT_BOT] = Position(this->innerBounds.left + 20, this->innerBounds.bot - 20);
@@ -15,9 +20,10 @@ Room::Room(float x, float y)
 	this->positions[RoomPosition::RIGHT_TOP] = Position(this->innerBounds.right - 20, this->innerBounds.top + 20);
 }
 
-void Room::addItem(Item i, RoomPosition rp)
+void Room::addItem(ItemType it, RoomPosition rp)
 {
-	//TODO: set item position
+	auto ip = this->positions[rp];
+	Item i(it, ip.x, ip.y);
 	this->items.insert({ rp , i });
 }
 

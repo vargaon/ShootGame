@@ -1,9 +1,7 @@
 #include "Person.hpp"
 
-void Person::moveInRooms(rooms_con_t& rooms)
+void Person::moveInRooms(rooms_con_t& rooms, Bounds& bounds)
 {
-	auto bounds = this->getBounds();
-
 	for (auto&& r : rooms) {
 		auto ob = r.outerBounds;
 
@@ -34,10 +32,8 @@ void Person::moveInRooms(rooms_con_t& rooms)
 	}
 }
 
-void Person::moveInDoors(doors_con_t& doors)
+void Person::moveInDoors(doors_con_t& doors, Bounds& bounds)
 {
-	auto bounds = this->getBounds();
-
 	for (auto&& d : doors) {
 
 		auto db = d.bounds;
