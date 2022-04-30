@@ -48,8 +48,8 @@ void Player::hurt()
 void Player::checkForCollectedItems()
 {
 	for (auto&& i : this->room->items) {
-		if (this->bounds.inCollisionWith(i.second.bounds)) {
-			i.second.collect();
+		if (this->bounds.inCollisionWith(i.bounds)) {
+			i.collect();
 			++this->nItems;
 		}
 	}

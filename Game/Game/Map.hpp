@@ -17,8 +17,6 @@ private:
 
 	float mapSize = NUM_OF_ROOM_PER_LINE * (WALL_THICKNESS + ROOM_SIZE) + WALL_THICKNESS;
 
-	std::array<RoomPosition, 4> roomPositions = { { RoomPosition::LEFT_BOT, RoomPosition::LEFT_TOP , RoomPosition::RIGHT_BOT , RoomPosition::RIGHT_TOP } };
-
 	sf::Clock itemSpawnClock;
 
 	void initWalls();
@@ -41,7 +39,6 @@ public:
 
 	Room* getRoom(int id);
 	Room* getRandomRoom();
-	RoomPosition getRandomRoomPosition();
 
 	void update();
 	void render(sf::RenderWindow* window);

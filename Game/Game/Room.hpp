@@ -2,38 +2,33 @@
 
 #include <iostream>
 #include <vector>
-#include <map>
-
 #include "Bounds.hpp"
 #include "Item.hpp"
 
 const float WALL_THICKNESS = 4.f;
 const float ROOM_SIZE = 100.f;
-
-enum class RoomPosition {
-	LEFT_TOP,
-	RIGHT_TOP,
-	LEFT_BOT,
-	RIGHT_BOT,
-	CENTRE
-};
-
-using room_position_con_t = std::map<RoomPosition, Position>;
-using room_items_con_t = std::map<RoomPosition, Item>;
+const int ROOM_PADDING = 10;
 
 class Room {
 
 private:
+	float x = 0.f;
+	float y = 0.f;
 
-	room_position_con_t positions;
+	float cx = 0.f;
+	float cy = 0.f;
 
-	void initRoomPositions();
+	int maxX = 0;
+	int minX = 0;
+
+	int maxY = 0;
+	int minY = 0;
 
 public:
 
 	int id = 0;
 
-	room_items_con_t items;
+	items_con_t items;
 
 	Bounds outerBounds;
 	Bounds innerBounds;
@@ -41,9 +36,10 @@ public:
 	Room() {};
 	Room(int id, float x, float y);
 
-	void addItem(RoomPosition rp);
+	void addItem();
+	Position getRandomPosition();
+	Position getPosition();
 
-	Position getRoomPosition(RoomPosition rp);
 	void render(sf::RenderWindow* window);
 	void update();
 };

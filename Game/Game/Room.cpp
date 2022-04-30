@@ -1,6 +1,6 @@
 #include "Room.hpp"
 
-Room::Room(int id, float x, float y): id(id)
+Room::Room(int id, float x, float y): id(id), x(x), y(y)
 {
 	float globalRoomSize = ROOM_SIZE + 2 * WALL_THICKNESS;
 	float localRoomSize = WALL_THICKNESS + ROOM_SIZE;
@@ -8,42 +8,40 @@ Room::Room(int id, float x, float y): id(id)
 	this->outerBounds = Bounds(y, y + globalRoomSize, x, x + globalRoomSize);
 	this->innerBounds = Bounds(y + WALL_THICKNESS, y + localRoomSize, x + WALL_THICKNESS, x + localRoomSize);
 
-	this->initRoomPositions();
+	this->cx = this->innerBounds.left + (this->innerBounds.right - this->innerBounds.left) / 2;
+	this->cy = this->innerBounds.top + (this->innerBounds.bot - this->innerBounds.top) / 2;
+
+	this->maxX = int(this->innerBounds.right - ROOM_PADDING);
+	this->minX = int(this->innerBounds.left + ROOM_PADDING);
+	this->maxY = int(this->innerBounds.bot - ROOM_PADDING);
+	this->minY = int(this->innerBounds.top + ROOM_PADDING);
 }
 
-void Room::initRoomPositions()
+void Room::addItem()
 {
-	float itemPositionPadding = 20.f;
+	auto p = this->getRandomPosition();
 
-	this->positions[RoomPosition::CENTRE] = Position(
-		this->innerBounds.left + (this->innerBounds.right - this->innerBounds.left) / 2, 
-		this->innerBounds.top + (this->innerBounds.bot - this->innerBounds.top) / 2
-	);
-
-	this->positions[RoomPosition::LEFT_TOP] = Position(this->innerBounds.left + itemPositionPadding, this->innerBounds.top + itemPositionPadding);
-	this->positions[RoomPosition::LEFT_BOT] = Position(this->innerBounds.left + itemPositionPadding, this->innerBounds.bot - itemPositionPadding);
-	this->positions[RoomPosition::RIGHT_BOT] = Position(this->innerBounds.right - itemPositionPadding, this->innerBounds.bot - itemPositionPadding);
-	this->positions[RoomPosition::RIGHT_TOP] = Position(this->innerBounds.right - itemPositionPadding, this->innerBounds.top + itemPositionPadding);
+	Item i(p.x, p.y);
+	this->items.push_back(i);
 }
 
-void Room::addItem(RoomPosition rp)
+Position Room::getRandomPosition()
 {
-	auto ip = this->getRoomPosition(rp);
+	int rx = minX + rand() % (maxX - minX + 1);
+	int ry = minY + rand() % (maxY - minY + 1);
 
-	Item i(ip.x, ip.y);
-
-	this->items.insert({ rp , i });
+	return Position(float(rx), float(ry));
 }
 
-Position Room::getRoomPosition(RoomPosition rp)
+Position Room::getPosition()
 {
-	return this->positions.at(rp);
+	return Position(this->cx, this->cy);
 }
 
 void Room::render(sf::RenderWindow* window)
 {
-	for (auto&& i : items) {
-		i.second.render(window);
+	for (auto&& i : this->items) {
+		i.render(window);
 	}
 }
 
@@ -51,9 +49,9 @@ void Room::update()
 {
 	for (auto it = this->items.begin(); it != this->items.end();) {
 
-		it->second.update();
+		it->update();
 
-		if (!it->second.isActive()) {
+		if (!it->isActive()) {
 			it = this->items.erase(it);
 		}
 		else {

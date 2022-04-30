@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "Entity.hpp"
 
 const float ITEM_SIZE = 5;
@@ -21,3 +22,5 @@ public:
 	void collect();
 	bool isActive();
 };
+
+using items_con_t = std::vector<Item>;

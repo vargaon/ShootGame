@@ -1,7 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <string>
-#include <sstream>
 #include <iostream>
 
 #include "Player.hpp"

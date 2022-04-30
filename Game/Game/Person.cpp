@@ -110,7 +110,7 @@ void Person::setDirectionByPosition(float x, float y)
 void Person::setStartPositionByRoom(Room* room)
 {
 	this->room = room;
-	auto p = room->getRoomPosition(RoomPosition::CENTRE);
+	auto p = room->getPosition();
 
 	this->x = p.x;
 	this->y = p.y;

@@ -111,9 +111,8 @@ void Map::createItem()
 		this->itemSpawnClock.restart();
 
 		auto r = this->getRandomRoom();
-		auto p = this->getRandomRoomPosition();
 
-		r->addItem(p);
+		r->addItem();
 	}
 }
 
@@ -126,12 +125,6 @@ Room* Map::getRandomRoom()
 {
 	int roomID = rand() % (NUM_OF_ROOM_PER_LINE * NUM_OF_ROOM_PER_LINE);
 	return this->getRoom(roomID);
-}
-
-RoomPosition Map::getRandomRoomPosition()
-{
-	int roomPosiontID = rand() % 4;
-	return this->roomPositions.at(roomPosiontID);
 }
 
 void Map::render(sf::RenderWindow* window)
