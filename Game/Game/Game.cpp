@@ -6,9 +6,10 @@ using namespace sf;
 Game::Game()
 {
 	this->initWindow();
-
-	this->panel.setPosition(0, WIN_SIZE);
-	this->p.setStartPositionByRoom(this->m.getRoom(12));
+	
+	this->runPanel.setup({ 0, WIN_SIZE }, {WIN_SIZE, INFO_PANEL_SIZE });
+	this->startPanel.setup({ 0, 0 }, { WIN_SIZE, WIN_SIZE + INFO_PANEL_SIZE });
+	//this->endPanel.setup({ 0, WIN_SIZE }, { WIN_SIZE, INFO_PANEL_SIZE });
 }
 
 Game::~Game()
@@ -20,6 +21,27 @@ void Game::initWindow()
 {
 	this->window = new RenderWindow(VideoMode(WIN_SIZE, WIN_SIZE + INFO_PANEL_SIZE), "Shoot Game!", Style::Titlebar | Style::Close);
 	this->window->setFramerateLimit(WIN_FRAME_LIMIT);
+}
+
+void Game::setupGame()
+{
+	this->bullets.clear();
+	this->zombies.clear();
+
+	this->zombieSpawnClock.restart();
+
+	//TODO: different doors masks
+
+	door_mask_t doorsMask = { {
+		{true, true, true, true},
+		{false, true, true, false},
+		{true, true, true, true},
+		{false, true, true, false},
+		{true, true, true, true}
+	} };
+
+	this->m.setup(doorsMask, doorsMask);
+	this->p.setup(this->m.getRoom(12));
 }
 
 void Game::spawnZombie()
@@ -110,7 +132,7 @@ void Game::updateRunGame()
 	this->updateBullets();
 	this->p.update(this->m);
 	this->updateZombies();
-	this->panel.updateRunPanel(this->p);
+	this->runPanel.update(this->p);
 	this->m.update();
 
 	this->spawnZombie();
@@ -118,6 +140,17 @@ void Game::updateRunGame()
 
 void Game::updateStartGame()
 {
+	if (Mouse::isButtonPressed(Mouse::Left)) {
+
+		auto mP = Mouse::getPosition(*this->window);
+		Position mPosition(float(mP.x), float(mP.y));
+
+		if (this->startPanel.update(mPosition)) {
+
+			this->setupGame();
+			this->state = GameState::RUN;
+		}
+	}	
 }
 
 void Game::updateEndGame()
@@ -137,11 +170,12 @@ void Game::renderRunGame()
 	}
 
 	this->p.render(this->window);
-	this->panel.renderRunPanel(this->window);
+	this->runPanel.render(this->window);
 }
 
 void Game::renderStartGame()
 {
+	this->startPanel.render(this->window);
 }
 
 void Game::renderEndGame()

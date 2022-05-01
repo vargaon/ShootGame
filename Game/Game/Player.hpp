@@ -27,6 +27,7 @@ public:
 	void hurt();
 	void update(Map& m);
 
+	void setup(Room* room);
 
 private:
 

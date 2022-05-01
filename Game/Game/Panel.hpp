@@ -1,25 +1,41 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <sstream>
+#include "Button.hpp"
+#include "TextField.hpp"
 #include "Player.hpp"
 
-class Panel {
-private:
-
-	sf::Font font;
-	sf::Text infoText;
+class StartPanel {
 
 public:
+	StartPanel();
+	void setup(Position p, Float2Vector size);
+	void render(sf::RenderWindow* window);
+	bool update(Position mPosition);
 
-	Panel();
+private:
+	sf::Font font;
+	TextField welcomeTextFiled;
+	Button startGameBtn;
+};
 
-	void setPosition(float x, float y);
+class EndPanel {
 
-	void updateRunPanel(Player& p);
-	void updateEndPanel(Player& p);
-	void updateStartPanel();
+public:
+	void setInfo(int spendTime, int collecteItems, int totalItems, int killedZombies, int totalZombies);
+	void render(sf::RenderWindow* window);
+	bool update();
+};
 
-	void renderRunPanel(sf::RenderWindow* window);
-	void renderEndPanel(sf::RenderWindow* window);
-	void renderStartPanel(sf::RenderWindow* window);
+class RunPanel {
+
+public:
+	RunPanel();
+	void setup(Position p, Float2Vector size);
+	void render(sf::RenderWindow* window);
+	void update(Player& p);
+
+private:
+	sf::Font font;
+	TextField infoTextField;
 };

@@ -2,25 +2,62 @@
 
 using namespace sf;
 
-Panel::Panel()
+StartPanel::StartPanel()
 {
 	if (!font.loadFromFile("Bodoni.ttf"))
 	{
 		throw("Font file does not exist!");
 	}
 
-	this->infoText.setFont(font);
-	this->infoText.setFillColor(Color::Black);
+	this->welcomeTextFiled.setFont(this->font);
+	this->welcomeTextFiled.setString("Shoot Game!");
+
+	this->startGameBtn.setFont(this->font);
+	this->startGameBtn.setString("Play Game");
 }
 
-void Panel::setPosition(float x, float y)
+void StartPanel::setup(Position p, Float2Vector size)
 {
-	float yPosition = y + 4;
+	float pX = p.x + size.x / 2;
+	float pY = p.y + size.y / 2;
 
-	this->infoText.setPosition(x + 4, yPosition);
+	this->welcomeTextFiled.setPosition({ pX, pY - 50 });
+	this->startGameBtn.setPosition({ pX, pY + 20 });
 }
 
-void Panel::updateRunPanel(Player& p)
+void StartPanel::render(sf::RenderWindow* window)
+{
+	this->welcomeTextFiled.render(window);
+	this->startGameBtn.render(window);
+}
+
+bool StartPanel::update(Position mPosition)
+{
+	return this->startGameBtn.isMouseOver(mPosition);
+}
+
+RunPanel::RunPanel()
+{
+	if (!font.loadFromFile("Bodoni.ttf"))
+	{
+		throw("Font file does not exist!");
+	}
+
+	this->infoTextField.setFont(this->font);
+}
+
+void RunPanel::setup(Position p, Float2Vector size)
+{
+	Position pField(p.x + (size.x / 2) - 270, p.y + size.y / 2 - 20);
+	this->infoTextField.setPosition(pField);
+}
+
+void RunPanel::render(sf::RenderWindow* window)
+{
+	this->infoTextField.render(window);
+}
+
+void RunPanel::update(Player& p)
 {
 	int bulletes = p.getBulletesNumber();
 	int items = p.getItemsNumber();
@@ -30,34 +67,13 @@ void Panel::updateRunPanel(Player& p)
 
 	std::stringstream ss;
 
-	ss << "L: " << lives << "/" << PLAYER_LIVES << sep
+	ss << sep << "L: " << lives << "/" << PLAYER_LIVES << sep
 		<< "I: " << items << sep
-		<< "B: " << bulletes << "/" << PLAYER_BULLETES_NUMBER;
+		<< "B: " << bulletes << "/" << PLAYER_BULLETES_NUMBER << sep;
 
 	if (p.isReloading()) {
-		ss << sep << "R";
+		ss << "R" << sep;
 	}
 
-	this->infoText.setString(ss.str());
-}
-
-void Panel::updateEndPanel(Player& p)
-{
-}
-
-void Panel::updateStartPanel()
-{
-}
-
-void Panel::renderRunPanel(sf::RenderWindow* window)
-{
-	window->draw(this->infoText);
-}
-
-void Panel::renderEndPanel(sf::RenderWindow* window)
-{
-}
-
-void Panel::renderStartPanel(sf::RenderWindow* window)
-{
+	this->infoTextField.setString(ss.str());
 }

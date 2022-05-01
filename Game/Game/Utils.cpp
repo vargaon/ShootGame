@@ -28,7 +28,12 @@ bool Bounds::inRange(bool horizontal, Bounds& b)
 
 bool Bounds::contains(Float2Vector& v)
 {
-	return this->left <= v.x && this->right >= v.y;
+	return (
+		this->left <= v.x && 
+		this->right >= v.x &&
+		this->top <= v.y &&
+		this->bot >= v.y
+		);
 }
 
 bool Bounds::isIn(Bounds& b)

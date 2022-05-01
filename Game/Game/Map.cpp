@@ -7,7 +7,6 @@ Map::Map()
 	std::srand(42);
 
 	this->initWalls();
-	this->initDoors();
 	this->initRooms();
 }
 
@@ -49,22 +48,6 @@ void Map::initRooms()
 	}
 }
 
-void Map::initDoors()
-{
-	//TODO: differen masks
-
-	door_mask_t doorsMask = { {
-		{true, true, true, true},
-		{false, true, true, false},
-		{true, true, true, true},
-		{false, true, true, false},
-		{true, true, true, true}
-	} };
-
-	this->createDoorsByMask(false, doorsMask);
-	this->createDoorsByMask(true, doorsMask);
-}
-
 void Map::createWall(bool isHorizontal, Position p)
 {
 	Vector2f s;
@@ -104,6 +87,18 @@ void Map::createDoorsByMask(bool isHorizontal, door_mask_t& mask)
 			}
 		}
 	}
+}
+
+void Map::setup(door_mask_t hMask, door_mask_t vMask)
+{
+	this->createDoorsByMask(false, vMask);
+	this->createDoorsByMask(true, hMask);
+
+	for (auto&& r : this->rooms) {
+		r.items.clear();
+	}
+
+	this->itemSpawnClock.restart();
 }
 
 void Map::createItem()

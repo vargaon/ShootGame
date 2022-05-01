@@ -57,6 +57,9 @@
     <ClCompile Include="Button.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
+    <ClCompile Include="TextField.cpp">
+      <Filter>Zdrojové soubory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.hpp">
@@ -96,6 +99,9 @@
       <Filter>Hlavičkové soubory</Filter>
     </ClInclude>
     <ClInclude Include="Button.hpp">
+      <Filter>Hlavičkové soubory</Filter>
+    </ClInclude>
+    <ClInclude Include="TextField.hpp">
       <Filter>Hlavičkové soubory</Filter>
     </ClInclude>
   </ItemGroup>

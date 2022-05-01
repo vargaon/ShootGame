@@ -25,11 +25,14 @@ class Game {
 
 private:
 
-	GameState state = GameState::RUN;
+	GameState state = GameState::START;
 
 	sf::Event ev;
 	sf::RenderWindow* window = nullptr;
-	Panel panel;
+
+	RunPanel runPanel;
+	StartPanel startPanel;
+	EndPanel endPanel;
 
 	Map m;
 	Player p;
@@ -41,6 +44,8 @@ private:
 	int zombieSpawned = 0;
 
 	void initWindow();
+
+	void setupGame();
 
 	void spawnZombie();
 	void processRunInput();

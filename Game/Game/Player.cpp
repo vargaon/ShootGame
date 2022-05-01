@@ -81,6 +81,18 @@ void Player::update(Map& m)
 	}
 }
 
+void Player::setup(Room* room)
+{
+	this->lives = PLAYER_LIVES;
+	this->nBulletes = PLAYER_BULLETES_NUMBER;
+	this->nItems = 0;
+
+	this->setStartPositionByRoom(room);
+
+	this->reloadClock.restart();
+	this->shootClock.restart();
+}
+
 bool Player::canShoot()
 {
 	return (!this->reloading && this->nBulletes > 0 && this->shootClock.getElapsedTime().asMilliseconds() > PLAYER_SHOOT_COOLDOWN);
