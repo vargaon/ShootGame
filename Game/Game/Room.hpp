@@ -33,12 +33,7 @@ public:
 private:
 
 	Position centrePosition;
-
 	Bounds spawnRange;
 
-	int maxX = 0;
-	int minX = 0;
-
-	int maxY = 0;
-	int minY = 0;
+	void updateItems();
 };

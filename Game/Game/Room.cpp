@@ -46,7 +46,7 @@ void Room::render(sf::RenderWindow* window)
 	}
 }
 
-void Room::update()
+void Room::updateItems()
 {
 	for (auto it = this->items.begin(); it != this->items.end();) {
 
@@ -59,5 +59,10 @@ void Room::update()
 			it++;
 		}
 	}
+}
+
+void Room::update()
+{
+	this->updateItems();
 }
 
