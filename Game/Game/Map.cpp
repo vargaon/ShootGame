@@ -56,7 +56,7 @@ void Map::createWall(bool isHorizontal, Position p)
 
 	RectangleShape wall(s);
 
-	wall.setFillColor(Color::Black);
+	wall.setFillColor(WALL_COLOR);
 	wall.setPosition(p.x, p.y);
 
 	this->walls.push_back(wall);

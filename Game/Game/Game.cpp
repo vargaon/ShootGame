@@ -214,7 +214,7 @@ void Game::renderRunningGame()
 
 void Game::Render()
 {
-	this->window->clear(Color::White);
+	this->window->clear(this->backgColor);
 
 	switch (this->state)
 	{

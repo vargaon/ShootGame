@@ -10,6 +10,18 @@ Panel::Panel()
 	}
 }
 
+void Panel::setup(Position p, Float2Vector size)
+{
+	this->backgroud.setSize({ size.x, size.y });
+	this->backgroud.setPosition(p.x, p.y);
+	this->backgroud.setFillColor(PANEL_BACKG_COLOR);
+}
+
+void Panel::render(sf::RenderWindow* window)
+{
+	window->draw(this->backgroud);
+}
+
 StartPanel::StartPanel()
 {
 	this->welcomeTextFiled.setFont(this->font);
@@ -24,6 +36,8 @@ StartPanel::StartPanel()
 
 void StartPanel::setup(Position p, Float2Vector size)
 {
+	Panel::setup(p, size);
+
 	float cx = p.x + size.x / 2;
 	float cy = p.y + size.y / 2;
 
@@ -33,12 +47,15 @@ void StartPanel::setup(Position p, Float2Vector size)
 
 void StartPanel::render(sf::RenderWindow* window)
 {
+	Panel::render(window);
+
 	this->welcomeTextFiled.render(window);
 	this->startGameBtn.render(window);
 }
 
-bool StartPanel::update(Position mPosition, bool mClicked)
+bool StartPanel::update(Position& mPosition, bool mClicked)
 {
+	this->startGameBtn.update(mPosition);
 	return mClicked && this->startGameBtn.isMouseOver(mPosition);
 }
 
@@ -61,6 +78,8 @@ EndPanel::EndPanel()
 
 void EndPanel::setup(Position p, Float2Vector size)
 {
+	Panel::setup(p, size);
+
 	float cx = p.x + size.x / 2;
 	float cy = p.y + size.y / 2;
 
@@ -85,14 +104,17 @@ void EndPanel::setInfo(int collectedItems, int totalItems, int killedZombies, in
 
 void EndPanel::render(sf::RenderWindow* window)
 {
+	Panel::render(window);
+
 	this->gameOverText.render(window);
 	this->itemSummaryText.render(window);
 	this->zombieSummaryText.render(window);
 	this->newGameBtn.render(window);
 }
 
-bool EndPanel::update(Position mPosition, bool mClicked)
+bool EndPanel::update(Position& mPosition, bool mClicked)
 {
+	this->newGameBtn.update(mPosition);
 	return mClicked && this->newGameBtn.isMouseOver(mPosition);
 }
 
@@ -113,6 +135,8 @@ RunPanel::RunPanel()
 
 void RunPanel::setup(Position p, Float2Vector size)
 {
+	Panel::setup(p, size);
+
 	Position tp(p.x + size.x / 2, p.y + size.y / 2 - 10);
 
 	this->infoTextPosition = tp;
@@ -121,6 +145,8 @@ void RunPanel::setup(Position p, Float2Vector size)
 
 void RunPanel::render(sf::RenderWindow* window)
 {
+	Panel::render(window);
+
 	this->infoTextField.render(window);
 }
 

@@ -1,6 +1,6 @@
 #include "Item.hpp"
 
-Item::Item(Position p) : Entity(ITEM_SIZE, ITEM_POINT_COUNT, sf::Color::Yellow)
+Item::Item(Position p) : Entity(ITEM_SIZE, ITEM_POINT_COUNT, ITEM_COLOR)
 {
 	this->setPosition(p);
 }

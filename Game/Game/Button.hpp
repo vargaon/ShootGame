@@ -3,7 +3,11 @@
 #include <iostream>
 #include "Utils.hpp"
 
-const int BTN_TEXT_PADDING = 5;
+const int BTN_TEXT_PADDING = 20;
+
+const sf::Color BTN_TEXT_COLOR = { 255, 255, 255, 255 };
+const sf::Color BTN_COLOR = { 90, 90, 90, 255 };
+const sf::Color BTN_HOVER_COLOR = {100, 100, 100, 255};
 
 class Button {
 
@@ -16,7 +20,8 @@ public:
 	void setFont(sf::Font& font);
 	void setFontSize(unsigned int s);
 	void render(sf::RenderWindow* window);
-	bool isMouseOver(Position p);
+	bool isMouseOver(Position& p);
+	void update(Position& p);
 
 private:
 

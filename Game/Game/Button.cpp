@@ -4,8 +4,8 @@ using namespace sf;
 
 Button::Button()
 {
-	this->entity.setFillColor(sf::Color::Black);
-	this->text.setFillColor(sf::Color::White);
+	this->entity.setFillColor(BTN_COLOR);
+	this->text.setFillColor(BTN_TEXT_COLOR);
 }
 
 void Button::setString(std::string s)
@@ -13,7 +13,7 @@ void Button::setString(std::string s)
 	this->text.setString(s);
 
 	float sizeX = this->text.getLocalBounds().width + BTN_TEXT_PADDING * 2;
-	float sizeY = this->text.getLocalBounds().height + BTN_TEXT_PADDING * 4;
+	float sizeY = this->text.getLocalBounds().height + BTN_TEXT_PADDING * 2;
 
 	this->size = Float2Vector(sizeX, sizeY);
 	this->entity.setSize({ sizeX, sizeY});
@@ -27,7 +27,7 @@ void Button::setPosition(Position p)
 	this->entity.setPosition(bx, by);
 
 	float tx = bx + BTN_TEXT_PADDING;
-	float ty = by + BTN_TEXT_PADDING - 5;
+	float ty = by + BTN_TEXT_PADDING - BTN_TEXT_PADDING/3;
 
 	this->text.setPosition(tx, ty);
 
@@ -50,7 +50,17 @@ void Button::render(sf::RenderWindow* window)
 	window->draw(this->text);
 }
 
-bool Button::isMouseOver(Position p)
+bool Button::isMouseOver(Position& p)
 {
 	return this->bounds.contains(p);
+}
+
+void Button::update(Position& p)
+{
+	if (this->isMouseOver(p)) {
+		this->entity.setFillColor(BTN_HOVER_COLOR);
+	}
+	else {
+		this->entity.setFillColor(BTN_COLOR);
+	}
 }

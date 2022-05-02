@@ -2,7 +2,7 @@
 
 TextField::TextField()
 {
-	this->text.setFillColor(sf::Color::Black);
+	this->text.setFillColor(TEXT_COLOR);
 }
 
 void TextField::setPosition(Position p)

@@ -8,6 +8,7 @@
 
 const int NUM_OF_ROOM_PER_LINE = 5;
 const int ITEM_SPAW_COOLDOWN = 2500;
+const sf::Color WALL_COLOR = { 0, 0, 0, 255 };
 
 using rooms_con_t = std::array<Room, NUM_OF_ROOM_PER_LINE * NUM_OF_ROOM_PER_LINE>;
 using door_mask_t = std::array<std::array<bool, NUM_OF_ROOM_PER_LINE - 1>, NUM_OF_ROOM_PER_LINE>;

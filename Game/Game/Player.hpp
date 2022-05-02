@@ -9,11 +9,13 @@ const int PLAYER_STACK_CAPACITY = 10;
 const int PLAYER_SHOOT_COOLDOWN = 100;
 const int PLAYER_RELOAD_COOLDOWN = 2000;
 
+const sf::Color PLAYER_COLOR = { 0, 0, 255, 255 };
+
 class Player: public Person {
 
 public:
 
-	Player() : Person(sf::Color::Blue) {};
+	Player() : Person(PLAYER_COLOR) {};
 
 	void shoot();
 	void reload();

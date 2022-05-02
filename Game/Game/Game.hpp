@@ -38,6 +38,7 @@ private:
 
 	sf::Event ev;
 	sf::RenderWindow* window = nullptr;
+	sf::Color backgColor = sf::Color(165, 165, 165, 255);
 
 	RunPanel runPanel;
 	StartPanel startPanel;

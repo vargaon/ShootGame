@@ -5,13 +5,18 @@
 #include "TextField.hpp"
 #include "Player.hpp"
 
+const sf::Color PANEL_BACKG_COLOR = { 0, 0, 0, 255 };
+
 class Panel {
 
 public:
 	Panel();
+	void setup(Position p, Float2Vector size);
+	void render(sf::RenderWindow* window);
 
 protected:
 	sf::Font font;
+	sf::RectangleShape backgroud;
 };
 
 class StartPanel: public Panel {
@@ -20,7 +25,7 @@ public:
 	StartPanel();
 	void setup(Position p, Float2Vector size);
 	void render(sf::RenderWindow* window);
-	bool update(Position mPosition, bool mClicked);
+	bool update(Position& mPosition, bool mClicked);
 
 private:
 	TextField welcomeTextFiled;
@@ -34,7 +39,7 @@ public:
 	void setup(Position p, Float2Vector size);
 	void setInfo(int collecteItems, int totalItems, int killedZombies, int totalZombies);
 	void render(sf::RenderWindow* window);
-	bool update(Position mPosition, bool mClicked);
+	bool update(Position& mPosition, bool mClicked);
 
 private:
 	Position p;

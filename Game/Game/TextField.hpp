@@ -3,6 +3,8 @@
 #include <iostream>
 #include "Utils.hpp"
 
+const sf::Color TEXT_COLOR = { 255,255,255,255 };
+
 class TextField {
 
 public:

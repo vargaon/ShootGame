@@ -3,12 +3,13 @@
 #include <vector>
 
 const float ZOMBIE_MOVE_SPEED = 1.f;
+const sf::Color ZOMBIE_COLOR = { 255, 0, 0, 255 };
 
 class Zombie : public Person {
 
 public:
 
-	Zombie() : Person(sf::Color::Red) {};
+	Zombie() : Person(ZOMBIE_COLOR) {};
 	void update(Map& m);
 	bool isAlive() const;
 	void die();

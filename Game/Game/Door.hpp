@@ -5,6 +5,7 @@
 #include "Utils.hpp"
 
 const float DOOR_SIZE = 70.f;
+const sf::Color DOOR_COLOR = { 0,255,0,255 };
 
 class Door {
 

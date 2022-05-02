@@ -17,7 +17,7 @@ Door::Door(bool isHorizontal, Position p)
 	}
 
 	this->entity = RectangleShape(s);
-	this->entity.setFillColor(Color::Green);
+	this->entity.setFillColor(DOOR_COLOR);
 	this->entity.setPosition(p.x, p.y);
 
 	this->bounds = Bounds(p.y, p.y + s.y, p.x, p.x + s.x);
