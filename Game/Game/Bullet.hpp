@@ -14,7 +14,6 @@ class Bullet : public MoveableEntity {
 private:
 
 	bool active = true;
-
 	void moveInRooms(rooms_con_t& rooms);
 	void moveInDoors(doors_con_t& doors);
 
@@ -26,7 +25,7 @@ public:
 	void update(Map& m);
 	void destroy();
 
-	void setStartPosition(Position& p);
+	void setStartPosition(Position p);
 };
 
 using bulletes_con_t = std::vector<Bullet>;

@@ -36,13 +36,11 @@ private:
 
 	Map m;
 	Player p;
-	bulletes_con_t bullets;
 	zombies_con_t zombies;
 
 	sf::Clock zombieSpawnClock;
 
 	int zombiesSpawned = 0;
-	int killedZombies = 0;
 
 	Position mousePosition;
 	bool mouseLeftBtnClicked = false;
@@ -51,7 +49,6 @@ private:
 	void setupGame();
 
 	void spawnZombie();
-	void updateBullets();
 	void updateZombies();
 
 	void updateRunGame();

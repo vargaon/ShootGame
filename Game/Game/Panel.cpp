@@ -106,7 +106,7 @@ RunPanel::RunPanel()
 
 	ss << sep << "L: " << 0 << "/" << PLAYER_LIVES << sep
 		<< "I: " << 0 << sep
-		<< "B: " << PLAYER_BULLETES_NUMBER << "/" << PLAYER_BULLETES_NUMBER << sep;
+		<< "B: " << PLAYER_STACK_CAPACITY << "/" << PLAYER_STACK_CAPACITY << sep;
 
 	this->infoTextField.setString(ss.str());
 }
@@ -136,7 +136,7 @@ void RunPanel::update(Player& p)
 
 	ss << "L: " << lives << "/" << PLAYER_LIVES << sep
 		<< "I: " << items << sep
-		<< "B: " << bulletes << "/" << PLAYER_BULLETES_NUMBER;
+		<< "B: " << bulletes << "/" << PLAYER_STACK_CAPACITY;
 
 	if (p.isReloading()) {
 		ss << sep << "R";

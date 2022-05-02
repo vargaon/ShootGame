@@ -67,7 +67,7 @@ void Bullet::destroy()
 	this->active = false;
 }
 
-void Bullet::setStartPosition(Position& p)
+void Bullet::setStartPosition(Position p)
 {
 	this->x = p.x;
 	this->y = p.y;

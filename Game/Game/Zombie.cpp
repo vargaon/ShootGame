@@ -1,45 +1,7 @@
 #include "Zombie.hpp"
 
-void Zombie::checkForBulletes(bulletes_con_t& bulletes)
+void Zombie::update(Map& m)
 {
-	for (auto&& b : bulletes) {
-
-		if (!b.isActive()) {
-			continue;
-		}
-
-		auto bb = b.getBounds();
-
-		if (this->bounds.inCollisionWith(bb)) {
-
-			this->alive = false;
-			b.destroy();
-			return;
-		}
-	}
-}
-
-void Zombie::checkForPlayer(Player& p)
-{
-	auto pb = p.getBounds();
-
-	if (this->bounds.inCollisionWith(pb)) {
-
-		p.hurt();
-		this->alive = false;
-	}
-	else {
-
-		auto playerPosition = p.getPosition();
-		this->setDirectionByPosition(playerPosition);
-	}
-}
-
-void Zombie::update(Map& m, Player& p, bulletes_con_t& bulletes)
-{
-	this->checkForBulletes(bulletes);
-	this->checkForPlayer(p);
-
 	if (!this->alive) return;
 
 	if (this->movePower == PersonMovePower::FORWARD) {
@@ -61,4 +23,9 @@ void Zombie::update(Map& m, Player& p, bulletes_con_t& bulletes)
 bool Zombie::isAlive()
 {
 	return this->alive;
+}
+
+void Zombie::die()
+{
+	this->alive = false;
 }

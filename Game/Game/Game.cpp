@@ -27,13 +27,9 @@ void Game::setupGame()
 {
 	this->state = GameState::RUN;
 
-	this->bullets.clear();
 	this->zombies.clear();
-
 	this->zombieSpawnClock.restart();
-
 	this->zombiesSpawned = 0;
-	this->killedZombies = 0;
 
 	//TODO: different doors masks
 
@@ -72,30 +68,14 @@ void Game::spawnZombie()
 	}
 }
 
-void Game::updateBullets()
-{
-	for (auto it = this->bullets.begin(); it != this->bullets.end();) {
-
-		it->update(this->m);
-
-		if (!it->isActive()) {
-			it = this->bullets.erase(it);
-		}
-		else {
-			it++;
-		}
-	}
-}
-
 void Game::updateZombies()
 {
 	for (auto it = this->zombies.begin(); it != this->zombies.end();) {
 
-		it->update(this->m, this->p, this->bullets);
+		it->update(this->m);
 
 		if (!it->isAlive()) {
 			it = this->zombies.erase(it);
-			++this->killedZombies;
 		}
 		else {
 			it++;
@@ -115,26 +95,21 @@ void Game::processMouseMoved()
 
 void Game::processMousePressed()
 {
-	if (Mouse::isButtonPressed(Mouse::Left)) {
-
-		this->mouseLeftBtnClicked = true;
-
-		if (this->state == GameState::RUN) {
-			if (this->p.canShoot()) {
-				this->bullets.push_back(this->p.shoot());
-			}
-		}
-	}
-	else{ 
-
-		this->mouseLeftBtnClicked = false;
-
-		if (Mouse::isButtonPressed(Mouse::Right)) {
+	if (this->state == GameState::RUN) {
+	
+		if (Mouse::isButtonPressed(Mouse::Left)) {
 
 			if (this->state == GameState::RUN) {
-				this->p.reload();
+				this->p.shoot();
 			}
 		}
+
+		if (Mouse::isButtonPressed(Mouse::Right)) {
+			this->p.reload();
+		}
+	}
+	else {
+		this->mouseLeftBtnClicked = Mouse::isButtonPressed(Mouse::Left);
 	}
 }
 
@@ -147,11 +122,12 @@ void Game::updateRunGame()
 		this->p.setMovePower(PersonMovePower::STOP);
 	}
 
-	this->updateBullets();
-	this->p.update(this->m);
+	this->p.update(this->m, this->zombies);
 	this->updateZombies();
 	this->m.update();
+
 	this->spawnZombie();
+
 	this->runPanel.update(this->p);
 
 	if (this->p.getLives() <= 0) {
@@ -161,7 +137,7 @@ void Game::updateRunGame()
 		this->endPanel.setInfo(
 			this->p.getCollectedItems(),
 			this->m.getTotalItems(),
-			this->killedZombies,
+			this->p.getKilledZombies(),
 			this->zombiesSpawned
 		);
 	}
@@ -227,10 +203,6 @@ void Game::update()
 void Game::renderRunningGame()
 {
 	this->m.render(this->window);
-
-	for (auto&& b : this->bullets) {
-		b.render(this->window);
-	}
 
 	for (auto&& z : this->zombies) {
 		z.render(this->window);
