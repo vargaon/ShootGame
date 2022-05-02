@@ -4,8 +4,6 @@ using namespace sf;
 
 Map::Map()
 {
-	std::srand(42);
-
 	this->initWalls();
 	this->initRooms();
 }
@@ -91,6 +89,8 @@ void Map::createDoorsByMask(bool isHorizontal, door_mask_t& mask)
 
 void Map::setup(door_mask_t hMask, door_mask_t vMask)
 {
+	std::srand(42);
+
 	this->createDoorsByMask(false, vMask);
 	this->createDoorsByMask(true, hMask);
 
@@ -99,6 +99,7 @@ void Map::setup(door_mask_t hMask, door_mask_t vMask)
 	}
 
 	this->itemSpawnClock.restart();
+	this->itemsCreated = 0;
 }
 
 void Map::createItem()

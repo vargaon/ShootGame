@@ -9,7 +9,7 @@ Game::Game()
 	
 	this->runPanel.setup({ 0, WIN_SIZE }, {WIN_SIZE, INFO_PANEL_SIZE });
 	this->startPanel.setup({ 0, 0 }, { WIN_SIZE, WIN_SIZE + INFO_PANEL_SIZE });
-	//this->endPanel.setup({ 0, WIN_SIZE }, { WIN_SIZE, INFO_PANEL_SIZE });
+	this->endPanel.setup({ 0, 0 }, { WIN_SIZE, WIN_SIZE + INFO_PANEL_SIZE });
 }
 
 Game::~Game()
@@ -25,10 +25,15 @@ void Game::initWindow()
 
 void Game::setupGame()
 {
+	this->state = GameState::RUN;
+
 	this->bullets.clear();
 	this->zombies.clear();
 
 	this->zombieSpawnClock.restart();
+
+	this->zombiesSpawned = 0;
+	this->killedZombies = 0;
 
 	//TODO: different doors masks
 
@@ -63,35 +68,7 @@ void Game::spawnZombie()
 
 		this->zombies.push_back(z);
 
-		++this->zombieSpawned;
-	}
-}
-
-void Game::processRunInput()
-{
-
-	if (Keyboard::isKeyPressed(Keyboard::W)) {
-		this->p.setMovePower(PersonMovePower::FORWARD);
-	}
-	else {
-		this->p.setMovePower(PersonMovePower::STOP);
-	}
-
-	auto mousePosition = sf::Mouse::getPosition(*this->window);
-
-	Position p(float(mousePosition.x), float(mousePosition.y));
-
-	this->p.setDirectionByPosition(p);
-
-	if (Mouse::isButtonPressed(Mouse::Right)) {
-		this->p.reload();
-	}
-
-	if (Mouse::isButtonPressed(Mouse::Left)) {
-
-		if (this->p.canShoot()) {
-			this->bullets.push_back(this->p.shoot());
-		}
+		++this->zombiesSpawned;
 	}
 }
 
@@ -118,6 +95,7 @@ void Game::updateZombies()
 
 		if (!it->isAlive()) {
 			it = this->zombies.erase(it);
+			++this->killedZombies;
 		}
 		else {
 			it++;
@@ -125,61 +103,84 @@ void Game::updateZombies()
 	}
 }
 
+void Game::processMouseMoved()
+{
+	auto mp = sf::Mouse::getPosition(*this->window);
+	this->mousePosition = Position(float(mp.x), float(mp.y));
+
+	if (this->state == GameState::RUN) {
+		this->p.setDirectionByPosition(this->mousePosition);
+	}
+}
+
+void Game::processMousePressed()
+{
+	if (Mouse::isButtonPressed(Mouse::Left)) {
+
+		this->mouseLeftBtnClicked = true;
+
+		if (this->state == GameState::RUN) {
+			if (this->p.canShoot()) {
+				this->bullets.push_back(this->p.shoot());
+			}
+		}
+	}
+	else{ 
+
+		this->mouseLeftBtnClicked = false;
+
+		if (Mouse::isButtonPressed(Mouse::Right)) {
+
+			if (this->state == GameState::RUN) {
+				this->p.reload();
+			}
+		}
+	}
+}
+
 void Game::updateRunGame()
 {
-	this->processRunInput();
+	if (Keyboard::isKeyPressed(Keyboard::W)) {
+		this->p.setMovePower(PersonMovePower::FORWARD);
+	}
+	else {
+		this->p.setMovePower(PersonMovePower::STOP);
+	}
 
 	this->updateBullets();
 	this->p.update(this->m);
 	this->updateZombies();
-	this->runPanel.update(this->p);
 	this->m.update();
-
 	this->spawnZombie();
+	this->runPanel.update(this->p);
+
+	if (this->p.getLives() <= 0) {
+		
+		this->state = GameState::END;
+
+		this->endPanel.setInfo(
+			this->p.getCollectedItems(),
+			this->m.getTotalItems(),
+			this->killedZombies,
+			this->zombiesSpawned
+		);
+	}
 }
 
 void Game::updateStartGame()
 {
-	if (Mouse::isButtonPressed(Mouse::Left)) {
+	if (this->startPanel.update(this->mousePosition, this->mouseLeftBtnClicked)) {
 
-		auto mP = Mouse::getPosition(*this->window);
-		Position mPosition(float(mP.x), float(mP.y));
-
-		if (this->startPanel.update(mPosition)) {
-
-			this->setupGame();
-			this->state = GameState::RUN;
-		}
-	}	
+		this->setupGame();
+	}
 }
 
 void Game::updateEndGame()
 {
-}
+	if (this->endPanel.update(this->mousePosition, this->mouseLeftBtnClicked)) {
 
-void Game::renderRunGame()
-{
-	this->m.render(this->window);
-
-	for (auto&& b : this->bullets) {
-		b.render(this->window);
+		this->setupGame();
 	}
-
-	for (auto&& z : this->zombies) {
-		z.render(this->window);
-	}
-
-	this->p.render(this->window);
-	this->runPanel.render(this->window);
-}
-
-void Game::renderStartGame()
-{
-	this->startPanel.render(this->window);
-}
-
-void Game::renderEndGame()
-{
 }
 
 void Game::update()
@@ -190,11 +191,19 @@ void Game::update()
 		{
 
 		case(Event::Closed):
-
 			this->window->close();
 			break;
 
+		case(Event::MouseButtonPressed):
+			this->processMousePressed();
+			break;
+
+		case(Event::MouseMoved):
+			this->processMouseMoved();
+			break;
+
 		default:
+			this->mouseLeftBtnClicked = false;
 			break;
 		}
 	}
@@ -215,6 +224,22 @@ void Game::update()
 	}
 }
 
+void Game::renderRunningGame()
+{
+	this->m.render(this->window);
+
+	for (auto&& b : this->bullets) {
+		b.render(this->window);
+	}
+
+	for (auto&& z : this->zombies) {
+		z.render(this->window);
+	}
+
+	this->p.render(this->window);
+	this->runPanel.render(this->window);
+}
+
 void Game::Render()
 {
 	this->window->clear(Color::White);
@@ -222,13 +247,13 @@ void Game::Render()
 	switch (this->state)
 	{
 	case GameState::START:
-		this->renderStartGame();
+		this->startPanel.render(this->window);
 		break;
 	case GameState::RUN:
-		this->renderRunGame();
+		this->renderRunningGame();
 		break;
 	case GameState::END:
-		this->renderEndGame();
+		this->endPanel.render(this->window);
 		break;
 	default:
 		break;

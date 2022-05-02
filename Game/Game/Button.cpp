@@ -13,7 +13,7 @@ void Button::setString(std::string s)
 	this->text.setString(s);
 
 	float sizeX = this->text.getLocalBounds().width + BTN_TEXT_PADDING * 2;
-	float sizeY = this->text.getLocalBounds().height + BTN_TEXT_PADDING * 3;
+	float sizeY = this->text.getLocalBounds().height + BTN_TEXT_PADDING * 4;
 
 	this->size = Float2Vector(sizeX, sizeY);
 	this->entity.setSize({ sizeX, sizeY});
@@ -27,7 +27,7 @@ void Button::setPosition(Position p)
 	this->entity.setPosition(bx, by);
 
 	float tx = bx + BTN_TEXT_PADDING;
-	float ty = by + BTN_TEXT_PADDING;
+	float ty = by + BTN_TEXT_PADDING - 5;
 
 	this->text.setPosition(tx, ty);
 
@@ -37,6 +37,11 @@ void Button::setPosition(Position p)
 void Button::setFont(sf::Font& font)
 {
 	this->text.setFont(font);
+}
+
+void Button::setFontSize(unsigned int s)
+{
+	this->text.setCharacterSize(s);
 }
 
 void Button::render(sf::RenderWindow* window)

@@ -9,6 +9,7 @@ public:
 	
 	void setPosition(Position p);
 	void setFont(sf::Font& font);
+	void setFontSize(unsigned int s);
 	void setString(std::string s);
 	void render(sf::RenderWindow* window);
 

@@ -14,6 +14,7 @@ public:
 	void setString(std::string s);
 	void setPosition(Position p);
 	void setFont(sf::Font& font);
+	void setFontSize(unsigned int s);
 	void render(sf::RenderWindow* window);
 	bool isMouseOver(Position p);
 

@@ -13,23 +13,23 @@ Bullet Player::shoot()
 	b.setStartPosition(p);
 	b.setDirection(this->getDirection());
 
-	--this->nBulletes;
+	--this->bulletesInStack;
 
-	if (this->nBulletes <= 0) {
+	if (this->bulletesInStack <= 0) {
 		this->reload();
 	}
 
 	return b;
 }
 
-int Player::getBulletesNumber()
+int Player::getBulletesInStack()
 {
-	return this->nBulletes;
+	return this->bulletesInStack;
 }
 
-int Player::getItemsNumber()
+int Player::getCollectedItems()
 {
-	return this->nItems;
+	return this->collectedItems;
 }
 
 int Player::getLives()
@@ -50,8 +50,8 @@ void Player::checkForCollectedItems()
 
 		if (this->bounds.inCollisionWith(ib)) {
 			i.collect();
-			++this->nItems;
-			std::cout << "Item collected" << std::endl;
+			++this->collectedItems;
+			//std::cout << "Item collected" << std::endl;
 		}
 	}
 }
@@ -60,7 +60,7 @@ void Player::update(Map& m)
 {
 	if (this->reloading && this->reloadClock.getElapsedTime().asMilliseconds() > PLAYER_RELOAD_COOLDOWN) {
 		this->reloading = false;
-		this->nBulletes = PLAYER_BULLETES_NUMBER;
+		this->bulletesInStack = PLAYER_BULLETES_NUMBER;
 	}
 
 	if (this->movePower == PersonMovePower::FORWARD) {
@@ -84,18 +84,19 @@ void Player::update(Map& m)
 void Player::setup(Room* room)
 {
 	this->lives = PLAYER_LIVES;
-	this->nBulletes = PLAYER_BULLETES_NUMBER;
-	this->nItems = 0;
+	this->bulletesInStack = PLAYER_BULLETES_NUMBER;
+	this->collectedItems = 0;
 
 	this->setStartPositionByRoom(room);
 
+	this->reloading = false;
 	this->reloadClock.restart();
 	this->shootClock.restart();
 }
 
 bool Player::canShoot()
 {
-	return (!this->reloading && this->nBulletes > 0 && this->shootClock.getElapsedTime().asMilliseconds() > PLAYER_SHOOT_COOLDOWN);
+	return (!this->reloading && this->bulletesInStack > 0 && this->shootClock.getElapsedTime().asMilliseconds() > PLAYER_SHOOT_COOLDOWN);
 }
 
 void Player::reload()

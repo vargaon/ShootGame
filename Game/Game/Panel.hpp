@@ -5,29 +5,45 @@
 #include "TextField.hpp"
 #include "Player.hpp"
 
-class StartPanel {
+class Panel {
+public:
+	Panel();
+protected:
+	sf::Font font;
+};
+
+class StartPanel: public Panel {
 
 public:
 	StartPanel();
 	void setup(Position p, Float2Vector size);
 	void render(sf::RenderWindow* window);
-	bool update(Position mPosition);
+	bool update(Position mPosition, bool mClicked);
 
 private:
-	sf::Font font;
 	TextField welcomeTextFiled;
 	Button startGameBtn;
 };
 
-class EndPanel {
+class EndPanel: public Panel {
 
 public:
-	void setInfo(int spendTime, int collecteItems, int totalItems, int killedZombies, int totalZombies);
+	EndPanel();
+	void setup(Position p, Float2Vector size);
+	void setInfo(int collecteItems, int totalItems, int killedZombies, int totalZombies);
 	void render(sf::RenderWindow* window);
-	bool update();
+	bool update(Position mPosition, bool mClicked);
+
+private:
+	Position p;
+	Float2Vector size;
+	Button newGameBtn;
+	TextField gameOverText;
+	TextField itemSummaryText;
+	TextField zombieSummaryText;
 };
 
-class RunPanel {
+class RunPanel: public Panel {
 
 public:
 	RunPanel();
@@ -36,6 +52,6 @@ public:
 	void update(Player& p);
 
 private:
-	sf::Font font;
+	Position infoTextPosition;
 	TextField infoTextField;
 };

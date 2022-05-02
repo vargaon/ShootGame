@@ -20,8 +20,8 @@ public:
 	bool canShoot();
 	bool isReloading();
 
-	int getBulletesNumber();
-	int getItemsNumber();
+	int getBulletesInStack();
+	int getCollectedItems();
 	int getLives();
 
 	void hurt();
@@ -32,8 +32,8 @@ public:
 private:
 
 	int lives = PLAYER_LIVES;
-	int nBulletes = PLAYER_BULLETES_NUMBER;
-	int nItems = 0;
+	int bulletesInStack = PLAYER_BULLETES_NUMBER;
+	int collectedItems = 0;
 	bool reloading = false;
 
 	sf::Clock shootClock;

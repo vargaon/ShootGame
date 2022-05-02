@@ -41,14 +41,16 @@ private:
 
 	sf::Clock zombieSpawnClock;
 
-	int zombieSpawned = 0;
+	int zombiesSpawned = 0;
+	int killedZombies = 0;
+
+	Position mousePosition;
+	bool mouseLeftBtnClicked = false;
 
 	void initWindow();
-
 	void setupGame();
 
 	void spawnZombie();
-	void processRunInput();
 	void updateBullets();
 	void updateZombies();
 
@@ -56,9 +58,10 @@ private:
 	void updateStartGame();
 	void updateEndGame();
 
-	void renderRunGame();
-	void renderStartGame();
-	void renderEndGame();
+	void processMouseMoved();
+	void processMousePressed();
+
+	void renderRunningGame();
 
 public:
 
