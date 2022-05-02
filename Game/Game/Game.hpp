@@ -23,6 +23,15 @@ enum class GameState {
 
 class Game {
 
+public:
+
+	Game();
+	~Game();
+
+	void update();
+	void Render();
+	bool IsRunning() const;
+
 private:
 
 	GameState state = GameState::START;
@@ -59,13 +68,4 @@ private:
 	void processMousePressed();
 
 	void renderRunningGame();
-
-public:
-
-	Game();
-	~Game();
-
-	void update();
-	void Render();
-	bool IsRunning();
 };

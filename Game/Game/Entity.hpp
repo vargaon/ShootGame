@@ -10,12 +10,12 @@ class Entity {
 public:
 
 	Entity() {};
-	Entity(float size, int pointCount, sf::Color color);
+	Entity(float size, unsigned int pointCount, sf::Color color);
 
 	virtual ~Entity() {};
 
 	Bounds getBounds() const;
-	Position getPosition();
+	Position getPosition() const;
 
 	void render(sf::RenderWindow* window);
 
@@ -40,7 +40,7 @@ public:
 	MoveableEntity() {};
 	MoveableEntity(float size, int pointCount, sf::Color color) : Entity(size, pointCount, color) {};
 
-	float getDirection();
+	float getDirection() const;
 	void setDirection(float direction);
 
 private:

@@ -5,8 +5,8 @@
 
 const int BTN_TEXT_PADDING = 5;
 
-class Button
-{
+class Button {
+
 public:
 	
 	Button();

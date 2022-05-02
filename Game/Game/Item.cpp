@@ -19,7 +19,7 @@ void Item::collect()
 	this->active = false;
 }
 
-bool Item::isActive()
+bool Item::isActive() const
 {
 	return active;
 }

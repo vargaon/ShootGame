@@ -122,7 +122,7 @@ Room* Map::getRandomRoom()
 	return this->getRoom(roomID);
 }
 
-int Map::getTotalItems()
+int Map::getTotalItems() const
 {
 	return this->itemsCreated;
 }

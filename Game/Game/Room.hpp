@@ -11,18 +11,6 @@ const int ROOM_PADDING = 10;
 
 class Room {
 
-private:
-
-	Position centrePosition;
-
-	Bounds spawnRange;
-
-	int maxX = 0;
-	int minX = 0;
-
-	int maxY = 0;
-	int minY = 0;
-
 public:
 
 	int id = 0;
@@ -41,4 +29,16 @@ public:
 
 	void render(sf::RenderWindow* window);
 	void update();
+
+private:
+
+	Position centrePosition;
+
+	Bounds spawnRange;
+
+	int maxX = 0;
+	int minX = 0;
+
+	int maxY = 0;
+	int minY = 0;
 };

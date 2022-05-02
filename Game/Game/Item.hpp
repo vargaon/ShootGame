@@ -8,17 +8,17 @@ const int ITEM_ACTIVE_COOLDOWN = 10000;
 
 class Item: public Entity {
 
-private:
-	bool active = true;
-	sf::Clock activeCooldownClock;
-
 public:
 
 	Item(Position p);
 
 	void update();
 	void collect();
-	bool isActive();
+	bool isActive() const;
+
+private:
+	bool active = true;
+	sf::Clock activeCooldownClock;
 };
 
 using items_con_t = std::vector<Item>;

@@ -13,6 +13,24 @@ using rooms_con_t = std::array<Room, NUM_OF_ROOM_PER_LINE * NUM_OF_ROOM_PER_LINE
 using door_mask_t = std::array<std::array<bool, NUM_OF_ROOM_PER_LINE - 1>, NUM_OF_ROOM_PER_LINE>;
 
 class Map {
+
+public:
+
+	rooms_con_t rooms;
+	doors_con_t doors;
+
+	Map();
+
+	Room* getRoom(int id);
+	Room* getRandomRoom();
+
+	int getTotalItems() const;
+
+	void setup(const door_mask_t hMask, const door_mask_t vMask);
+
+	void update();
+	void render(sf::RenderWindow* window);
+
 private:
 
 	float mapSize = NUM_OF_ROOM_PER_LINE * (WALL_THICKNESS + ROOM_SIZE) + WALL_THICKNESS;
@@ -30,21 +48,4 @@ private:
 	void createItem();
 
 	std::vector<sf::RectangleShape> walls;
-
-public:
-
-	rooms_con_t rooms;
-	doors_con_t doors;
-
-	Map();
-
-	Room* getRoom(int id);
-	Room* getRandomRoom();
-
-	int getTotalItems();
-
-	void setup(const door_mask_t hMask, const door_mask_t vMask);
-
-	void update();
-	void render(sf::RenderWindow* window);
 };

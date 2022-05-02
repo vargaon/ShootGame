@@ -5,16 +5,18 @@
 const float ZOMBIE_MOVE_SPEED = 1.f;
 
 class Zombie : public Person {
-private:
-
-	bool alive = true;
 
 public:
 
 	Zombie() : Person(sf::Color::Red) {};
 	void update(Map& m);
-	bool isAlive();
+	bool isAlive() const;
 	void die();
+
+private:
+
+	bool alive = true;
+
 };
 
 using zombies_con_t = std::vector<Zombie>;

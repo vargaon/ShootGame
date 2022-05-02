@@ -234,7 +234,7 @@ void Game::Render()
 	this->window->display();
 }
 
-bool Game::IsRunning()
+bool Game::IsRunning() const
 {
 	return this->window->isOpen();
 }

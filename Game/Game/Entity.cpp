@@ -3,7 +3,7 @@
 
 using namespace sf;
 
-Entity::Entity(float size, int pointCount, sf::Color color) : size(size)
+Entity::Entity(float size, unsigned int pointCount, sf::Color color) : size(size)
 {
 	this->entity = CircleShape(size, pointCount);
 	this->entity.setFillColor(color);
@@ -28,7 +28,7 @@ Bounds Entity::getBounds() const
 	return this->bounds;
 }
 
-Position Entity::getPosition()
+Position Entity::getPosition() const
 {
 	return this->position;
 }
@@ -44,7 +44,7 @@ void MoveableEntity::computeDirectionsPowers(float direction)
 	this->dy = sin(direction * float(PI) / 180);
 }
 
-float MoveableEntity::getDirection()
+float MoveableEntity::getDirection() const
 {
 	return this->direction;
 }

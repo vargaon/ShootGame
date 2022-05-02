@@ -1,6 +1,7 @@
 #pragma once
 
 class Float2Vector {
+
 public:
 	float x = 0.f;
 	float y = 0.f;
@@ -12,12 +13,14 @@ public:
 };
 
 class Position : public Float2Vector {
+
 public:
 	Position() {};
 	Position(float x, float y) : Float2Vector(x, y) {};
 };
 
 class Bounds {
+
 public:
 
 	float top = 0.f;

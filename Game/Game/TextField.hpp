@@ -4,6 +4,7 @@
 #include "Utils.hpp"
 
 class TextField {
+
 public:
 	TextField();
 	

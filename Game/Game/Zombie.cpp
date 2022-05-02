@@ -9,8 +9,7 @@ void Zombie::update(Map& m)
 		this->x += this->dx * ZOMBIE_MOVE_SPEED;
 		this->y += this->dy * ZOMBIE_MOVE_SPEED;
 
-		Position p(this->x, this->y);
-		this->setPosition(p);
+		this->setPosition({this->x, this->y});
 
 		this->moveInDoors(m.doors);
 
@@ -20,7 +19,7 @@ void Zombie::update(Map& m)
 	}
 }
 
-bool Zombie::isAlive()
+bool Zombie::isAlive() const
 {
 	return this->alive;
 }

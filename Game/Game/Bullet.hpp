@@ -11,12 +11,6 @@ const int BULLET_SPLIT_FRAME_COUNT = 2;
 
 class Bullet : public MoveableEntity {
 
-private:
-
-	bool active = true;
-	void moveInRooms(const rooms_con_t& rooms);
-	void moveInDoors(const doors_con_t& doors);
-
 public:
 
 	Bullet() : MoveableEntity(BULLET_SIZE, BULLET_POINT_COUNT, sf::Color::Black) {};
@@ -26,6 +20,12 @@ public:
 	void destroy();
 
 	void setStartPosition(Position p);
+
+private:
+
+	bool active = true;
+	void moveInRooms(const rooms_con_t& rooms);
+	void moveInDoors(const doors_con_t& doors);
 };
 
 using bulletes_con_t = std::vector<Bullet>;

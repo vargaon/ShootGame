@@ -6,8 +6,10 @@
 #include "Player.hpp"
 
 class Panel {
+
 public:
 	Panel();
+
 protected:
 	sf::Font font;
 };
