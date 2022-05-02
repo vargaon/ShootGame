@@ -2,7 +2,7 @@
 
 using namespace sf;
 
-void Bullet::moveInRooms(rooms_con_t& rooms)
+void Bullet::moveInRooms(const rooms_con_t& rooms)
 {
 	for (auto&& r : rooms) {
 
@@ -16,7 +16,7 @@ void Bullet::moveInRooms(rooms_con_t& rooms)
 	this->active = false;
 }
 
-void Bullet::moveInDoors(doors_con_t& doors)
+void Bullet::moveInDoors(const doors_con_t& doors)
 {
 	for (auto&& d : doors) {
 
@@ -37,7 +37,7 @@ bool Bullet::isActive()
 	return this->active;
 }
 
-void Bullet::update(Map& m)
+void Bullet::update(const Map& m)
 {
 	if (!this->active) return;
 

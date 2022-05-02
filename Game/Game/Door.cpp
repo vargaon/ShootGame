@@ -23,7 +23,7 @@ Door::Door(bool isHorizontal, Position p)
 	this->bounds = Bounds(p.y, p.y + s.y, p.x, p.x + s.x);
 }
 
-bool Door::isHorizontal()
+bool Door::isHorizontal() const
 {
 	return this->horizontal;
 }

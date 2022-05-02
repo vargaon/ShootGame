@@ -25,7 +25,7 @@ private:
 	void initRooms();
 
 	void createWall(bool isHorizontal, Position p);
-	void createDoorsByMask(bool isHorizontal, door_mask_t& mask);
+	void createDoorsByMask(bool isHorizontal, const door_mask_t& mask);
 
 	void createItem();
 
@@ -43,7 +43,7 @@ public:
 
 	int getTotalItems();
 
-	void setup(door_mask_t hMask, door_mask_t vMask);
+	void setup(const door_mask_t hMask, const door_mask_t vMask);
 
 	void update();
 	void render(sf::RenderWindow* window);

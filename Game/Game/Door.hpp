@@ -20,7 +20,7 @@ public:
 	
 	Door(bool isHorizontal, Position p);
 
-	bool isHorizontal();
+	bool isHorizontal() const;
 
 	void render(sf::RenderWindow* window);
 };

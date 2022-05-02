@@ -14,15 +14,15 @@ class Bullet : public MoveableEntity {
 private:
 
 	bool active = true;
-	void moveInRooms(rooms_con_t& rooms);
-	void moveInDoors(doors_con_t& doors);
+	void moveInRooms(const rooms_con_t& rooms);
+	void moveInDoors(const doors_con_t& doors);
 
 public:
 
 	Bullet() : MoveableEntity(BULLET_SIZE, BULLET_POINT_COUNT, sf::Color::Black) {};
 
 	bool isActive();
-	void update(Map& m);
+	void update(const Map& m);
 	void destroy();
 
 	void setStartPosition(Position p);

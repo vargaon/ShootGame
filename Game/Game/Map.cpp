@@ -24,11 +24,8 @@ void Map::initWalls()
 
 	for (int i = 0; i <= NUM_OF_ROOM_PER_LINE; i++) {
 
-		Position vp(i * wallDistance, 0);
-		Position hp(0, i * wallDistance);
-
-		this->createWall(false, vp);
-		this->createWall(true, hp);
+		this->createWall(false, { i * wallDistance, 0 });
+		this->createWall(true, { 0, i * wallDistance });
 	}
 }
 
@@ -41,7 +38,7 @@ void Map::initRooms()
 		for (int j = 0; j < NUM_OF_ROOM_PER_LINE; j++) {
 
 			int id = i * NUM_OF_ROOM_PER_LINE + j;
-			this->rooms[id] = Room(id, Position(i * distance, j * distance));
+			this->rooms[id] = Room(id, { i * distance, j * distance });
 		}
 	}
 }
@@ -65,7 +62,7 @@ void Map::createWall(bool isHorizontal, Position p)
 	this->walls.push_back(wall);
 }
 
-void Map::createDoorsByMask(bool isHorizontal, door_mask_t& mask)
+void Map::createDoorsByMask(bool isHorizontal, const door_mask_t& mask)
 {
 	for (int i = 0; i < NUM_OF_ROOM_PER_LINE; i++) {
 
@@ -87,7 +84,7 @@ void Map::createDoorsByMask(bool isHorizontal, door_mask_t& mask)
 	}
 }
 
-void Map::setup(door_mask_t hMask, door_mask_t vMask)
+void Map::setup(const door_mask_t hMask, const door_mask_t vMask)
 {
 	std::srand(42);
 

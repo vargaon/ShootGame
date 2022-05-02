@@ -1,12 +1,12 @@
 #include "Person.hpp"
 
-bool Person::inRoom(Room& r)
+bool Person::inRoom(const Room& r) const
 {
 	auto ob = r.outerBounds;
 	return this->bounds.isIn(ob);
 }
 
-void Person::moveInRoom(Room& r)
+void Person::moveInRoom(const Room& r)
 {
 	auto ib = r.innerBounds;
 
@@ -51,7 +51,7 @@ void Person::moveInRooms(rooms_con_t& rooms)
 	}
 }
 
-void Person::moveInDoors(doors_con_t& doors)
+void Person::moveInDoors(const doors_con_t& doors)
 {
 	for (auto&& d : doors) {
 
@@ -124,7 +124,7 @@ void Person::setStartPositionByRoom(Room* room)
 	this->setPosition(p);
 }
 
-Room* Person::getRoom()
+const Room* Person::getRoom() const
 {
 	return this->room;
 }

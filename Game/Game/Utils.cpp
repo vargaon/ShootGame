@@ -1,6 +1,6 @@
 #include "Utils.hpp"
 
-bool Bounds::inCollisionWith(Bounds& b)
+bool Bounds::inCollisionWith(const Bounds& b) const
 {
 	return !(
 		this->right <= b.left ||
@@ -10,7 +10,7 @@ bool Bounds::inCollisionWith(Bounds& b)
 		);
 }
 
-bool Bounds::inRange(bool horizontal, Bounds& b)
+bool Bounds::inRange(bool horizontal, const Bounds& b) const
 {
 	if (horizontal) {
 		return (
@@ -26,7 +26,7 @@ bool Bounds::inRange(bool horizontal, Bounds& b)
 	}
 }
 
-bool Bounds::contains(Float2Vector& v)
+bool Bounds::contains(const Float2Vector& v) const
 {
 	return (
 		this->left <= v.x && 
@@ -36,7 +36,7 @@ bool Bounds::contains(Float2Vector& v)
 		);
 }
 
-bool Bounds::isIn(Bounds& b)
+bool Bounds::isIn(const Bounds& b) const
 {
 	return (
 		this->inRange(true, b) &&

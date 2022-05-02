@@ -14,7 +14,7 @@ public:
 
 	virtual ~Entity() {};
 
-	Bounds getBounds();
+	Bounds getBounds() const;
 	Position getPosition();
 
 	void render(sf::RenderWindow* window);
@@ -29,7 +29,7 @@ protected:
 	float size = 0.f;
 	Bounds bounds;
 
-	void setPosition(Position& p);
+	void setPosition(Position p);
 	void setRotation(float direction);
 };
 
@@ -46,7 +46,7 @@ public:
 private:
 
 	float direction = 0.f;
-	void computeDirectionsPowers(float d);
+	void computeDirectionsPowers(float direction);
 
 protected:
 

@@ -28,8 +28,8 @@ public:
 	Bounds() {};
 	Bounds(float top, float bot, float left, float right) : top(top), bot(bot), left(left), right(right) {};
 
-	bool inCollisionWith(Bounds& b);
-	bool isIn(Bounds& b);
-	bool inRange(bool horizontal, Bounds& b);
-	bool contains(Float2Vector& v);
+	bool inCollisionWith(const Bounds& b) const;
+	bool isIn(const Bounds& b) const;
+	bool inRange(bool horizontal, const Bounds& b) const;
+	bool contains(const Float2Vector& v) const;
 };

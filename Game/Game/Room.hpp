@@ -12,10 +12,8 @@ const int ROOM_PADDING = 10;
 class Room {
 
 private:
-	Position p;
 
-	float cx = 0.f;
-	float cy = 0.f;
+	Position centrePosition;
 
 	Bounds spawnRange;
 
@@ -38,8 +36,8 @@ public:
 	Room(int id, Position p);
 
 	void addItem();
-	Position getRandomPosition();
-	Position getCentrePosition();
+	Position getRandomPosition() const;
+	Position getCentrePosition() const;
 
 	void render(sf::RenderWindow* window);
 	void update();

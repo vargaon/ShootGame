@@ -18,10 +18,11 @@ protected:
 	Room* room = nullptr;
 	PersonMovePower movePower = PersonMovePower::STOP;
 
-	bool inRoom(Room& r);
-	void moveInRoom(Room& r);
+	bool inRoom(const Room& r) const;
+
+	void moveInRoom(const Room& r);
 	void moveInRooms(rooms_con_t& rooms);
-	void moveInDoors(doors_con_t& doors);
+	void moveInDoors(const doors_con_t& doors);
 
 public:
 
@@ -30,5 +31,6 @@ public:
 	void setMovePower(PersonMovePower mp);
 	void setDirectionByPosition(Position& p);
 	void setStartPositionByRoom(Room* room);
-	Room* getRoom();
+
+	const Room* getRoom() const;
 };
