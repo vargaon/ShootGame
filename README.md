@@ -64,6 +64,8 @@ Hra má 3 stavy. START (po spuštění hry), RUN (po kliknutí na tlačítko *St
 Stav: **START**
 Po spuštění hry se v herním okně zobrazí název hry a tlačítko s nápisem *Start Game*. Kliknutím na tlačítko začíná hra.
 
+![startGamePanel](docs_images/startGame.jpg)
+
 Stav: **RUN**
 Herní okno se rozdělí na 2 části. Vrchní, větší část, zobrazuje hru. Spodní zobrazuje informace o životech hráče, počtu sebraných itemů a stav zásobníku hráče.
 
@@ -75,9 +77,12 @@ Na mapě se také, každé 2.5 sekundy na náhodné pozici, objevují itemy (žl
 
 Hra končí, pokud hráč přijde o všechny životy (3).
 
-Stav: **END**
+![runningGamePanel](docs_images/runningGame.jpg)
 
+Stav: **END**
 Zobrazí se nápis *Game Over* a pod ním informace o počtu sebraných itemů a zlikvidovaných nepřátel. Pod informacemi se zobrazí také tlačítko s nápisem *New Game*, které po kliknutí zahájí novou hru.
+
+![endGamePanel](docs_images/endGame.jpg)
 
 # Průběh práce
 
