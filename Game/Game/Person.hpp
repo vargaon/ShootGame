@@ -30,7 +30,7 @@ public:
 
 	void setMovePower(PersonMovePower mp);
 	void setDirectionByPosition(Position& p);
-	void setStartPositionByRoom(Room* room);
+	void setStartPositionByRoom(Room* pRoom);
 
 	const Room* getRoom() const;
 };

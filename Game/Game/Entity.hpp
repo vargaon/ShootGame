@@ -41,12 +41,12 @@ public:
 	MoveableEntity(float size, int pointCount, sf::Color color) : Entity(size, pointCount, color) {};
 
 	float getDirection() const;
-	void setDirection(float direction);
+	void setDirection(float dir);
 
 private:
 
 	float direction = 0.f;
-	void computeDirectionsPowers(float direction);
+	void computeDirectionsPowers();
 
 protected:
 

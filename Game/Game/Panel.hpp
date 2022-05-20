@@ -36,7 +36,7 @@ class EndPanel: public Panel {
 
 public:
 	EndPanel();
-	void setup(Position p, Float2Vector size);
+	void setup(Position pos, Float2Vector panelSize);
 	void setInfo(int collecteItems, int totalItems, int killedZombies, int totalZombies);
 	void render(sf::RenderWindow* window);
 	bool update(Position& mPosition, bool mClicked);

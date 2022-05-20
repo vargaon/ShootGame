@@ -38,20 +38,20 @@ void Entity::render(sf::RenderWindow* window)
 	window->draw(this->entity);
 }
 
-void MoveableEntity::computeDirectionsPowers(float direction)
-{
-	this->dx = cos(direction * float(PI) / 180);
-	this->dy = sin(direction * float(PI) / 180);
-}
-
 float MoveableEntity::getDirection() const
 {
 	return this->direction;
 }
 
-void MoveableEntity::setDirection(float direction)
+void MoveableEntity::setDirection(float dir)
 {
-	this->direction = direction;
-	this->setRotation(direction + 90.f);
-	this->computeDirectionsPowers(direction);
+	this->direction = dir;
+	this->setRotation(dir + 90.f);
+	this->computeDirectionsPowers();
+}
+
+void MoveableEntity::computeDirectionsPowers()
+{
+	this->dx = cos(this->direction * float(PI) / 180);
+	this->dy = sin(this->direction * float(PI) / 180);
 }

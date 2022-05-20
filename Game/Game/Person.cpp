@@ -113,10 +113,10 @@ void Person::setDirectionByPosition(Position& p)
 	this->setDirection(atan2(p.y - this->y, p.x - this->x) * 180 / float(PI));
 }
 
-void Person::setStartPositionByRoom(Room* room)
+void Person::setStartPositionByRoom(Room* pRoom)
 {
-	this->room = room;
-	auto p = room->getCentrePosition();
+	this->room = pRoom;
+	auto p = pRoom->getCentrePosition();
 
 	this->x = p.x;
 	this->y = p.y;

@@ -76,12 +76,12 @@ EndPanel::EndPanel()
 	this->zombieSummaryText.setString("Zombies: 0/0");
 }
 
-void EndPanel::setup(Position p, Float2Vector size)
+void EndPanel::setup(Position pos, Float2Vector panelSize)
 {
-	Panel::setup(p, size);
+	Panel::setup(pos, panelSize);
 
-	float cx = p.x + size.x / 2;
-	float cy = p.y + size.y / 2;
+	float cx = pos.x + panelSize.x / 2;
+	float cy = pos.y + panelSize.y / 2;
 
 	this->p = { cx, cy };
 
