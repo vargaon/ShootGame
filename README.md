@@ -1,92 +1,99 @@
-# cpp-hra
+# Anotace
+Cílem semestrální práce bylo vytvořit 2D střílecí hru v jazyce C++ s použitím grafické knihovny SFML.
 
+# Přesné zadání
+Hra bude ve 2D s pohledem ze shora. Hráč hraje za postavu, která se pohybuje po herní mapě.
+Hráč se po mapě pohybuje pomocí klávesnice a myši.
 
+Mapa se skládá ze zdí, které rozdělují herní mapu na 25 stejných místností. Hráč se nemůže pohybovat skrze zdi.
+Ve zdech jsou dále umístěny dveře, skrze které hráč může projít do vedlejších místností.
 
-## Getting started
+Na herní mapě se na náhodné pozici, jednou za zvolenou dobu, objeví nepřítel (zombie), který se pohybuje směrem k hráči. Pokud se nepřítel dotkne hráče, hráč přichází o jeden ze 3 životů a nepřítel zmizí. Pokud hráč přijde o všechny životy, hra končí. Hráč může nepřítele zlikvidovat pomocí střílení. Hráč vystřelí pomocí myši ve směru ukazatele. Pokud hráč zasáhne nepřítele, nepřítel zmizí. Maximální počet nepřátel na mapě je omezený.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Na herní mapě se také na náhodné pozici, jednou za zvolenou dobu, objevují itemy, které hráč sbírá. Počet sebraných itemů reprezentuje bodový zisk hráče. Item se na mapě vyskytuje omezenou dobu, po níž zmizí. 
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Cílem hry je sebrat co nejvíce itemů a zlikvidovat co nejvíce nepřátel. 
+Dalším modifikovaným cílem hry může být sebrání co nevíce itemů bez zlikvidování jediného nepřítele.
 
-## Add your files
+# Zvolený algoritmus
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Hra běží v herní smyčce a herní stav se upravuje každou iteraci pomocí vstupních dat hráče. 
+Hra se pomocí grafické knihovny každou iteraci vykreslí do herního okna.
 
-```
-cd existing_repo
-git remote add origin https://gitlab.mff.cuni.cz/vargaon/cpp-hra.git
-git branch -M master
-git push -uf origin master
-```
+Pohyb se počítá pomocí goniometrických funkcí a sčítáním vektorů pozic.
 
-## Integrate with your tools
+# Program
 
-- [ ] [Set up project integrations](https://gitlab.mff.cuni.cz/vargaon/cpp-hra/-/settings/integrations)
+## Game
+Třída reprezentující samotnou hru. Má 2 základní metody: `update` - upravení herního stavu podle vstupních dat hráče, každou iteraci herní smyčky, `render` - vykreslení herního okna každou iteraci herní smyčky. Hra si udržuje herní stav (START, RUN a END), instanci třídy `Player`, instancí třídy `Map` a kontejner instancí třídy `Zombie`.
 
-## Collaborate with your team
+## Player
+Třída reprezentující hráče. Základními metodami jsou kromě `update` a `render` metody `shoot` - vystřelení a `reload` - přebíjení. Hráč si udržuje kontejner instancí `Bullet` střel které vystřelí a odkaz na objekt třídy `Room` místnost v které se nachází. Pokud se hráč nachází ve dveřích, je hodnota odkazu nullptr.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+## Map
+Třida reprezentující herní mapu. Udržuje si kontejner instancí třídy `Room` a kontejner instancí třídy `Door`.
 
-## Test and Deploy
+## Zombie
+Třída reprezentující nepřítele.
 
-Use the built-in continuous integration in GitLab.
+## Bullet
+Třída reprezentující střelu.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+## Room 
+Třída reprezentující místnost. Místnost si udržuje kontejner instancí třídy `Item` itemů, které jsou v místnosti.
 
-***
+## Door
+Třída reprezentující dveře mezi místnostmi.
 
-# Editing this README
+## Person
+Předek tříd `Player` a `Zombie`. Definuje a implementuje pohyb hráče a nepřítele po herní mapě.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+## Moveable entity
+Předek tříd `Person` a `Bullet`. Udržuje si základní informace o směru a síle pohybu.
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+## Entity
+Předek tříd `Moveable Entity` a `Item`. Určuje základní vlastnosti herních entit.
 
-## Name
-Choose a self-explaining name for your project.
+## Panel
+Třída reprezentující informační část herního okna. Udržuje si instance třídy `TextField` textový polích a `Button` tlačítek.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+# Pravidla hry
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+Hra má 3 stavy. START (po spuštění hry), RUN (po kliknutí na tlačítko *Start Game*) a END (po ztrátě všech životů)
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+Stav: **START**
+Po spuštění hry se v herním okně zobrazí název hry a tlačítko s nápisem *Start Game*. Kliknutím na tlačítko začíná hra.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Stav: **RUN**
+Herní okno se rozdělí na 2 části. Vrchní, větší část, zobrazuje hru. Spodní zobrazuje informace o životech hráče, počtu sebraných itemů a stav zásobníku hráče.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Hráč (modrý trojúhelník) se zobrazí na mapě a pohybuje se po ní pomocí klávesnice a myši. Klávesou *W* se pohybuje směrem dopředu a pomocí ukazatele myši určuje směr pohybu. Hráč se může pohybovat kdekoliv po mapě, avšak nemůže projít skrze stěny (černé čáry). Z místnosti do místnosti může hráč projít pouze skrz dveře (zelený obdélník ve stěně). Hráč může vystřelit pomocí levého tlačítka myši. Po výstřelu se zobrazí černá kulička, která se pohybuje ve směru hráče v době výstřelu. Pro pohyb kulky platí stejná pravidla jako pro hráče čili nemůže projít skrze stěny a při střetu se stěnou zmizí. Hráč má omezenou kapacitu zásobníku a pokud vystřílí všechny střely se zásobníků, musí přebít. Kapacita zásobníku je 10 střel a doba přebíjení je 5 sekund. Přebíjení se provádí automaticky po vystřelení všech střel ze zásobníků nebo manuálně pomocí pravého tlačítka myši. Informace o tom, zda hráč přebíjí znázorňuje písmeno R v dolní části herního okna ve stavu zásobníku.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Na mapě se každé 2 sekundy objeví nepřítel (červený trojúhelník), který se pohybuje směrem k hráči. Pro pohyb nepřítele platí stejná pravidla jako pro pohyb hráče. Pokud se nepřítel dotkne hráče, hráč ztratí jeden život a nepřítel zmizí. Množství nepřátel, na herní mapě v jeden okamžik, je omezeno na 20. Hráč může nepřítele zlikvidovat pomocí výstřelu, který zasáhne nepřítele. Pohyb nepřátel je o něco pomalejší než pohyb hráče, hráč tudíž může před nepřáteli utíkat.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+Na mapě se také, každé 2.5 sekundy na náhodné pozici, objevují itemy (žluté kruhy), které může hráč sebrat. Item má omezenou dobu výskytu na mapě (10 sekund) a poté zmizí. Pokud se hráč dotkne itemu, item sebere. Počet sebraných itemů znázorňuje dosažené skóre hráče.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Hra končí, pokud hráč přijde o všechny životy (3).
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+Stav: **END**
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+Zobrazí se nápis *Game Over* a pod ním informace o počtu sebraných itemů a zlikvidovaných nepřátel. Pod informacemi se zobrazí také tlačítko s nápisem *New Game*, které po kliknutí zahájí novou hru.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+# Průběh práce
 
-## License
-For open source projects, say how it is licensed.
+Jako první jsem se začal učit s grafickou knihovnou SFML a poté jsem začal pracovat na pohybu herních entit. 
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Vytvořil jsem si herní okno, objekt, se kterým mohu pohybovat a stěnu, která mi v pohybu brání. Poté jsem přidal více stěn a vytvořil herní mapu. 
+
+Do herní mapy jsem začal přidávat dveře, kterými lze projít a itemy, které lze sebrat. Tím se hra stávala čím dál tím hratelnější a zábavnější.
+
+Úplné hratelnosti hra dosáhla s přidáním nepřátel a střílení. dlouho jsem přemýšlel nad pohybem nepřátel a globální sledování a pohyb za hráčem, se mi zdál nejsnazší, ale zároveň i nejúčinnější co se týče herního zážitku.
+
+Nakonec jsem přidal úvodní panel s tlačítkem pro zahájení hry, informační panel pro sledování herního stavu a závěrečný panel s tlačítkem pro spuštění nové hry.
+
+# Co nebylo doděláno
+
+Generování herní mapy je vytvořeno tak, aby byla mapa lehce modifikovatelná. Díky tomu by bylo možné definovat více různých herních map, které by na základě počtu a umístění dveří měli vliv na dynamiku hry. První návrh hry obsahoval místo na mapě, které by mapu změnilo (přesunulo hráče do dalšího levelu), avšak z časového důvodu jsem tuto funkcionalitu vynechal.
+
+# Závěrečný povzdech
+Jazyk C++ se teprve učím a primárně používám jazyky jiné. Na C++ jsem si ale rychle zvykl a snažil jsem se v průběhu práce využít jeho potenciál v rozsahu, který jsem se naučil. Vytváření hry mě moc bavilo a musím se přiznat, že jsem si chtěl podobnou hru zahrát už dlouho.
