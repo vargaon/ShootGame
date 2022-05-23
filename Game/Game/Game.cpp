@@ -12,6 +12,10 @@ Game::Game()
 	this->runPanel.setup({ 0, WIN_SIZE }, {WIN_SIZE, INFO_PANEL_SIZE });
 	this->startPanel.setup({ 0, 0 }, { WIN_SIZE, WIN_SIZE + INFO_PANEL_SIZE });
 	this->endPanel.setup({ 0, 0 }, { WIN_SIZE, WIN_SIZE + INFO_PANEL_SIZE });
+
+	LevelSettingParser parser;
+	this->levels = parser.parse("LevelSettings.txt");
+	this->maxLevel = this->levels.size() - 1;
 }
 
 Game::~Game()
@@ -25,35 +29,23 @@ void Game::initWindow()
 	this->window->setFramerateLimit(WIN_FRAME_LIMIT);
 }
 
-void Game::setupGame()
+void Game::setupGame(const LevelSetting& levelSetting)
 {
-	this->state = GameState::RUN;
-
 	this->zombies.clear();
 	this->zombieSpawnClock.restart();
 	this->zombiesSpawned = 0;
 
 	this->itemSpawnClock.restart();
 
-	//TODO: different doors masks
+	this->levelSetting = levelSetting;
 
-	door_mask_t doorsMask = { {
-		{true, true, true, true},
-		{false, true, true, false},
-		{true, true, true, true},
-		{false, true, true, false},
-		{true, true, true, true}
-	} };
-
-	MapSetting s(doorsMask, doorsMask, { 165,165,165,255 });
-
-	this->m.setup(s);
-	this->p.setup(this->m.getRoom(12));
+	this->m.setup(levelSetting.s);
+	this->p.setup(this->m.getRoom(levelSetting.playerStartRoomId));
 }
 
 void Game::spawnZombie()
 {
-	if (this->zombies.size() < MAX_ZOMBIES && this->zombieSpawnClock.getElapsedTime().asMilliseconds() > ZOMBI_SPAWN_COOLDOWN) {
+	if (this->zombies.size() < this->levelSetting.maxSpawnedZombies && this->zombieSpawnClock.getElapsedTime().asMilliseconds() > this->levelSetting.zombieSpawnCooldown) {
 
 		auto r = this->m.getRandomRoom();
 
@@ -91,7 +83,7 @@ void Game::updateZombies()
 
 void Game::spawnItem()
 {
-	if (this->itemSpawnClock.getElapsedTime().asMilliseconds() > ITEM_SPAW_COOLDOWN) {
+	if (this->itemSpawnClock.getElapsedTime().asMilliseconds() > this->levelSetting.itemSpawnCooldown) {
 
 		this->itemSpawnClock.restart();
 		this->m.createItem();
@@ -163,7 +155,9 @@ void Game::updateStartGame()
 {
 	if (this->startPanel.update(this->mousePosition, this->mouseLeftBtnClicked)) {
 
-		this->setupGame();
+		this->state = GameState::RUN;
+		this->p.init();
+		this->setupGame(this->levels[this->actualLevel]);
 	}
 }
 
@@ -171,7 +165,10 @@ void Game::updateEndGame()
 {
 	if (this->endPanel.update(this->mousePosition, this->mouseLeftBtnClicked)) {
 
-		this->setupGame();
+		this->state = GameState::RUN;
+		this->p.init();
+		this->actualLevel = 0;
+		this->setupGame(this->levels[this->actualLevel]);
 	}
 }
 

@@ -31,6 +31,7 @@ public:
 	void update(Map& m, zombies_con_t& zombies);
 	void render(sf::RenderWindow* window);
 
+	void init();
 	void setup(Room* pRoom);
 
 private:

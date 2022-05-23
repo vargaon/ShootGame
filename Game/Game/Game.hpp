@@ -9,15 +9,12 @@
 #include "Bullet.hpp"
 #include "Map.hpp"
 #include "Panel.hpp"
+#include "LevelSettingParser.hpp"
+#include "LevelSetting.hpp"
 
 const int WIN_SIZE = 524;
 const int INFO_PANEL_SIZE = 75;
 const int WIN_FRAME_LIMIT = 60;
-
-const int MAX_ZOMBIES = 20;
-const int ZOMBI_SPAWN_COOLDOWN = 2000;
-
-const int ITEM_SPAW_COOLDOWN = 2500;
 
 enum class GameState {
 	START,
@@ -59,8 +56,14 @@ private:
 	Position mousePosition;
 	bool mouseLeftBtnClicked = false;
 
+	level_setting_con_t levels;
+	LevelSetting levelSetting;
+
+	int actualLevel = 0;
+	int maxLevel;
+
 	void initWindow();
-	void setupGame();
+	void setupGame(const LevelSetting& levelSetting);
 
 	void spawnZombie();
 	void updateZombies();

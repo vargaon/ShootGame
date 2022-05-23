@@ -149,13 +149,16 @@ void Player::render(sf::RenderWindow* window)
 	}
 }
 
-void Player::setup(Room* pRoom)
+void Player::init()
 {
 	this->lives = PLAYER_LIVES;
-	this->bulletesInStack = PLAYER_STACK_CAPACITY;
 	this->collectedItems = 0;
 	this->killedZombies = 0;
+	this->bulletesInStack = PLAYER_STACK_CAPACITY;
+}
 
+void Player::setup(Room* pRoom)
+{
 	this->setStartPositionByRoom(pRoom);
 
 	this->reloading = false;
