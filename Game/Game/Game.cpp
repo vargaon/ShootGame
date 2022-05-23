@@ -5,6 +5,8 @@ using namespace sf;
 
 Game::Game()
 {
+	std::srand(42);
+
 	this->initWindow();
 	
 	this->runPanel.setup({ 0, WIN_SIZE }, {WIN_SIZE, INFO_PANEL_SIZE });
@@ -31,6 +33,8 @@ void Game::setupGame()
 	this->zombieSpawnClock.restart();
 	this->zombiesSpawned = 0;
 
+	this->itemSpawnClock.restart();
+
 	//TODO: different doors masks
 
 	door_mask_t doorsMask = { {
@@ -41,7 +45,9 @@ void Game::setupGame()
 		{true, true, true, true}
 	} };
 
-	this->m.setup(doorsMask, doorsMask);
+	MapSetting s(doorsMask, doorsMask, { 165,165,165,255 });
+
+	this->m.setup(s);
 	this->p.setup(this->m.getRoom(12));
 }
 
@@ -80,6 +86,15 @@ void Game::updateZombies()
 		else {
 			it++;
 		}
+	}
+}
+
+void Game::spawnItem()
+{
+	if (this->itemSpawnClock.getElapsedTime().asMilliseconds() > ITEM_SPAW_COOLDOWN) {
+
+		this->itemSpawnClock.restart();
+		this->m.createItem();
 	}
 }
 
@@ -127,6 +142,7 @@ void Game::updateRunGame()
 	this->m.update();
 
 	this->spawnZombie();
+	this->spawnItem();
 
 	this->runPanel.update(this->p);
 
@@ -214,7 +230,7 @@ void Game::renderRunningGame()
 
 void Game::Render()
 {
-	this->window->clear(this->backgColor);
+	this->window->clear(sf::Color::White);
 
 	switch (this->state)
 	{

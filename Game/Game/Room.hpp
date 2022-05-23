@@ -7,7 +7,7 @@
 
 const float WALL_THICKNESS = 4.f;
 const float ROOM_SIZE = 100.f;
-const int ROOM_PADDING = 10;
+const int ROOM_PADDING = 15;
 
 class Room {
 

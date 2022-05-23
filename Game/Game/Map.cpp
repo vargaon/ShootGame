@@ -4,14 +4,14 @@ using namespace sf;
 
 Map::Map()
 {
+	this->background.setSize({ this->mapSize, this->mapSize });
+
 	this->initWalls();
 	this->initRooms();
 }
 
 void Map::update()
 {
-	this->createItem();
-
 	for (auto&& r : this->rooms)
 	{
 		r.update();
@@ -84,31 +84,26 @@ void Map::createDoorsByMask(bool isHorizontal, const door_mask_t& mask)
 	}
 }
 
-void Map::setup(const door_mask_t hMask, const door_mask_t vMask)
+void Map::setup(const MapSetting& s)
 {
-	std::srand(42);
+	this->background.setFillColor(s.backgroundColor);
 
-	this->createDoorsByMask(false, vMask);
-	this->createDoorsByMask(true, hMask);
+	this->createDoorsByMask(false, s.verticalDoorMask);
+	this->createDoorsByMask(true, s.horizontalDoorMask);
 
 	for (auto&& r : this->rooms) {
 		r.items.clear();
 	}
 
-	this->itemSpawnClock.restart();
 	this->itemsCreated = 0;
 }
 
 void Map::createItem()
 {
-	if (this->itemSpawnClock.getElapsedTime().asMilliseconds() > ITEM_SPAW_COOLDOWN) {
+	auto r = this->getRandomRoom();
+	r->addItem();
 
-		this->itemSpawnClock.restart();
-		auto r = this->getRandomRoom();
-		r->addItem();
-
-		++this->itemsCreated;
-	}
+	++this->itemsCreated;
 }
 
 Room* Map::getRoom(int id)
@@ -129,6 +124,8 @@ int Map::getTotalItems() const
 
 void Map::render(sf::RenderWindow* window)
 {
+	window->draw(this->background);
+
 	for (auto&& w : this->walls) {
 		window->draw(w);
 	}

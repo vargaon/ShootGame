@@ -7,7 +7,7 @@
 const int BULLET_MOVE_SPEED = 10;
 const float BULLET_SIZE = 2.f;
 const int BULLET_POINT_COUNT = 30;
-const int BULLET_SPLIT_FRAME_COUNT = 2;
+const int BULLET_SPLIT_FRAME_COUNT = 4;
 const sf::Color BULLET_COLOR = { 0, 0, 0, 255 };
 
 class Bullet : public MoveableEntity {
