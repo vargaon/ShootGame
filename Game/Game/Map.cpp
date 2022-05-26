@@ -12,9 +12,11 @@ Map::Map()
 
 void Map::update()
 {
-	for (auto&& r : this->rooms)
+	for (auto&& roomRow : this->rooms)
 	{
-		r.update();
+		for (auto&& r : roomRow) {
+			r.update();
+		}
 	}
 }
 
@@ -24,26 +26,12 @@ void Map::initWalls()
 
 	for (int i = 0; i <= NUM_OF_ROOM_PER_LINE; i++) {
 
-		this->createWall(false, { i * wallDistance, 0 });
-		this->createWall(true, { 0, i * wallDistance });
+		walls[i] = this->createWall(false, { i * wallDistance, 0 });
+		walls[NUM_OF_ROOM_PER_LINE + i] = this->createWall(true, { 0, i * wallDistance });
 	}
 }
 
-void Map::initRooms()
-{
-	float distance = ROOM_SIZE + WALL_THICKNESS;
-
-	for (int i = 0; i < NUM_OF_ROOM_PER_LINE; i++) {
-
-		for (int j = 0; j < NUM_OF_ROOM_PER_LINE; j++) {
-
-			int id = i * NUM_OF_ROOM_PER_LINE + j;
-			this->rooms[id] = Room(id, { i * distance, j * distance });
-		}
-	}
-}
-
-void Map::createWall(bool isHorizontal, Position p)
+RectangleShape Map::createWall(bool isHorizontal, Position p)
 {
 	Vector2f s;
 
@@ -59,16 +47,73 @@ void Map::createWall(bool isHorizontal, Position p)
 	wall.setFillColor(WALL_COLOR);
 	wall.setPosition(p.x, p.y);
 
-	this->walls.push_back(wall);
+	return wall;
 }
 
-void Map::createDoorsByMask(bool isHorizontal, const door_mask_t& mask)
+void Map::initRooms()
+{
+	float distance = ROOM_SIZE + WALL_THICKNESS;
+
+	for (int i = 0; i < NUM_OF_ROOM_PER_LINE; i++) {
+
+		for (int j = 0; j < NUM_OF_ROOM_PER_LINE; j++) {
+
+			this->rooms[i][j] = Room(i * NUM_OF_ROOM_PER_LINE + j, { i * distance, j * distance });
+		}
+	}
+}
+
+void Map::setupRoomNeighbors(const door_mask_t& hMask, const door_mask_t& vMask)
+{
+	for (int i = 0; i < NUM_OF_ROOM_PER_LINE; i++) {
+		for (int j = 0; j < NUM_OF_ROOM_PER_LINE; j++) {
+
+			int top = j - 1;
+
+			if (top >= 0) {
+
+				if (hMask[i][top]) {
+					this->rooms[i][j].neighbors.push_back(&this->rooms[i][top]);
+				}
+			}
+
+			int bot = j + 1;
+
+			if (bot < NUM_OF_ROOM_PER_LINE) {
+
+				if (hMask[i][j]) {
+					this->rooms[i][j].neighbors.push_back(&this->rooms[i][bot]);
+				}
+			}
+
+			int left = i - 1;
+
+			if (left >= 0) {
+
+				if (vMask[j][left]) {
+					this->rooms[i][j].neighbors.push_back(&this->rooms[left][j]);
+				}
+			}
+
+			int right = i + 1;
+
+			if (right < NUM_OF_ROOM_PER_LINE) {
+
+				if (vMask[j][i]) {
+					this->rooms[i][j].neighbors.push_back(&this->rooms[right][j]);
+				}
+			}
+		}
+	}
+}
+
+void Map::setupDoors(bool isHorizontal, const door_mask_t& mask)
 {
 	for (int i = 0; i < NUM_OF_ROOM_PER_LINE; i++) {
 
 		for (int j = 0; j < NUM_OF_ROOM_PER_LINE - 1; j++) {
 
-			if (mask.at(i).at(j)) {
+			if (mask[i][j]) {
 
 				float x = i * (WALL_THICKNESS + ROOM_SIZE) + WALL_THICKNESS + ((ROOM_SIZE - DOOR_SIZE) / 2);
 				float y = (j + 1) * (WALL_THICKNESS + ROOM_SIZE);
@@ -88,12 +133,20 @@ void Map::setup(const MapSetting& s)
 {
 	this->background.setFillColor(s.backgroundColor);
 
-	this->createDoorsByMask(false, s.verticalDoorMask);
-	this->createDoorsByMask(true, s.horizontalDoorMask);
+	this->setupDoors(false, s.verticalDoorMask);
+	this->setupDoors(true, s.horizontalDoorMask);
 
-	for (auto&& r : this->rooms) {
-		r.items.clear();
+	for (auto&& roomRow : this->rooms) {
+
+		for (auto&& r : roomRow) {
+			r.items.clear();
+			r.neighbors.clear();
+		}
 	}
+
+	this->setupRoomNeighbors(s.horizontalDoorMask, s.verticalDoorMask);
+
+	
 
 	this->itemsCreated = 0;
 }
@@ -108,7 +161,11 @@ void Map::createItem()
 
 Room* Map::getRoom(int id)
 {
-	return &this->rooms.at(id);
+	int row = id / NUM_OF_ROOM_PER_LINE;
+
+	int col = id % NUM_OF_ROOM_PER_LINE;
+
+	return &this->rooms.at(row).at(col);
 }
 
 Room* Map::getRandomRoom()
@@ -145,7 +202,10 @@ void Map::render(sf::RenderWindow* window)
 		d.render(window);
 	}
 
-	for (auto&& r : this->rooms) {
-		r.render(window);
+	for (auto&& roomRow : this->rooms) {
+
+		for (auto&& r : roomRow) {
+			r.render(window);
+		}
 	}
 }

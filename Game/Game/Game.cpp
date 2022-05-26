@@ -131,7 +131,7 @@ void Game::updateRunGame()
 	this->updateZombies();
 	this->m.update();
 
-	this->spawnZombie();
+	//this->spawnZombie();
 	this->spawnItem();
 
 	this->runPanel.update(this->p);

@@ -9,6 +9,10 @@ const float WALL_THICKNESS = 4.f;
 const float ROOM_SIZE = 100.f;
 const int ROOM_PADDING = 15;
 
+class Room;
+
+using neighbor_rooms_con_t = std::vector<Room*>;
+
 class Room {
 
 public:
@@ -16,6 +20,7 @@ public:
 	int id = 0;
 
 	items_con_t items;
+	neighbor_rooms_con_t neighbors;
 
 	Bounds outerBounds;
 	Bounds innerBounds;

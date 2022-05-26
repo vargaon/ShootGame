@@ -7,7 +7,9 @@
 
 const sf::Color WALL_COLOR = { 0, 0, 0, 255 };
 
-using rooms_con_t = std::array<Room, NUM_OF_ROOM_PER_LINE* NUM_OF_ROOM_PER_LINE>;
+//using rooms_con_t = std::array<Room, NUM_OF_ROOM_PER_LINE* NUM_OF_ROOM_PER_LINE>;
+
+using rooms_con_t = std::array< std::array<Room, NUM_OF_ROOM_PER_LINE>, NUM_OF_ROOM_PER_LINE>;
 
 class Map {
 
@@ -36,14 +38,16 @@ private:
 	int roomNum = NUM_OF_ROOM_PER_LINE * NUM_OF_ROOM_PER_LINE;
 
 	sf::RectangleShape background;
+	//std::vector<sf::RectangleShape> walls;
+	std::array<sf::RectangleShape, (NUM_OF_ROOM_PER_LINE * 2) + 2> walls;
 
 	int itemsCreated = 0;
 
 	void initWalls();
+	sf::RectangleShape createWall(bool isHorizontal, Position p);
+
 	void initRooms();
 
-	void createWall(bool isHorizontal, Position p);
-	void createDoorsByMask(bool isHorizontal, const door_mask_t& mask);
-
-	std::vector<sf::RectangleShape> walls;
+	void setupRoomNeighbors(const door_mask_t& hMask, const door_mask_t& vMask);
+	void setupDoors(bool isHorizontal, const door_mask_t& mask);
 };

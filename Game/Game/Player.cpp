@@ -17,7 +17,7 @@ void Player::shoot()
 
 		--this->bulletesInStack;
 
-		std::cout << "Shot!" << std::endl;
+		//std::cout << "Shot!" << std::endl;
 
 		if (this->bulletesInStack <= 0) {
 			this->reload();
@@ -55,7 +55,7 @@ void Player::checkForCollectedItems()
 			i.collect();
 			++this->collectedItems;
 
-			std::cout << "Item collected!" << std::endl;
+			//std::cout << "Item collected!" << std::endl;
 		}
 	}
 }
@@ -70,7 +70,7 @@ void Player::checkForZombies(zombies_con_t& zombies)
 		if (this->bounds.inCollisionWith(zb)) {
 			--this->lives;
 			z.die();
-			std::cout << "Killed by zombie!" << std::endl;
+			//std::cout << "Killed by zombie!" << std::endl;
 		}
 		else {
 			z.setDirectionByPosition(p);
@@ -95,7 +95,7 @@ void Player::updateBulletes(Map& m, zombies_con_t& zombies)
 				it->destroy();
 				++this->killedZombies;
 
-				std::cout << "Killed zombie!" << std::endl;
+				//std::cout << "Killed zombie!" << std::endl;
 
 				break;
 			}
@@ -133,6 +133,14 @@ void Player::update(Map& m, zombies_con_t& zombies)
 
 			this->moveInRooms(m.rooms);
 			this->checkForCollectedItems();
+
+			std::cout << "R: " << this->room->id << " N: ";
+			for (auto&& n : this->room->neighbors) {
+				std::cout << n->id << " ,";
+			}
+
+			std::cout << std::endl;
+
 		}
 	}
 
@@ -177,7 +185,7 @@ void Player::reload()
 {
 	if (this->reloading || this->bulletesInStack == PLAYER_STACK_CAPACITY) return;
 
-	std::cout << "Reload!" << std::endl;
+	//std::cout << "Reload!" << std::endl;
 
 	this->reloading = true;
 	this->reloadClock.restart();

@@ -4,12 +4,14 @@ using namespace sf;
 
 void Bullet::moveInRooms(const rooms_con_t& rooms)
 {
-	for (auto&& r : rooms) {
+	for (auto&& roomRow : rooms) {
 
-		if (this->bounds.isIn(r.outerBounds)) {
+		for (auto&& r : roomRow) {
+			if (this->bounds.isIn(r.outerBounds)) {
 
-			this->active = this->bounds.isIn(r.innerBounds);
-			return;
+				this->active = this->bounds.isIn(r.innerBounds);
+				return;
+			}
 		}
 	}
 

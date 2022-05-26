@@ -39,13 +39,15 @@ void Person::moveInRooms(rooms_con_t& rooms)
 		this->moveInRoom(*this->room);
 	}
 	else {
-		for (auto&& r : rooms) {
+		for (auto&& roomRow : rooms) {
 
-			if (this->inRoom(r)) {
+			for (auto&& r : roomRow) {
+				if (this->inRoom(r)) {
 
-				this->room = &r;
-				this->moveInRoom(*this->room);
-				break;
+					this->room = &r;
+					this->moveInRoom(*this->room);
+					break;
+				}
 			}
 		}
 	}
