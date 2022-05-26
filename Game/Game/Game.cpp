@@ -7,7 +7,8 @@ Game::Game()
 {
 	std::srand(42);
 
-	this->initWindow();
+	this->window = new RenderWindow(VideoMode(WIN_SIZE, WIN_SIZE + INFO_PANEL_SIZE), "Shoot Game!", Style::Titlebar | Style::Close);
+	this->window->setFramerateLimit(WIN_FRAME_LIMIT);
 	
 	this->runPanel.setup({ 0, WIN_SIZE }, {WIN_SIZE, INFO_PANEL_SIZE });
 	this->startPanel.setup({ 0, 0 }, { WIN_SIZE, WIN_SIZE + INFO_PANEL_SIZE });
@@ -21,12 +22,6 @@ Game::Game()
 Game::~Game()
 {
 	delete this->window;
-}
-
-void Game::initWindow()
-{
-	this->window = new RenderWindow(VideoMode(WIN_SIZE, WIN_SIZE + INFO_PANEL_SIZE), "Shoot Game!", Style::Titlebar | Style::Close);
-	this->window->setFramerateLimit(WIN_FRAME_LIMIT);
 }
 
 void Game::setupGame(const LevelSetting& levelSetting)
@@ -47,10 +42,13 @@ void Game::spawnZombie()
 {
 	if (this->zombies.size() < this->levelSetting.maxSpawnedZombies && this->zombieSpawnClock.getElapsedTime().asMilliseconds() > this->levelSetting.zombieSpawnCooldown) {
 
-		auto r = this->m.getRandomRoom();
+		Room* r;
 
-		if (this->p.getRoom() != nullptr && this->p.getRoom()->id == r->id) {
-			return;
+		if (this->p.getRoom() != nullptr) {
+			r = this->m.getRandomRoom(this->p.getRoom()->id);
+		}
+		else {
+			r = this->m.getRandomRoom();
 		}
 
 		this->zombieSpawnClock.restart();

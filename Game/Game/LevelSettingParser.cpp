@@ -1,5 +1,4 @@
 #include "LevelSettingParser.hpp"
-#include <iostream>
 
 level_setting_con_t LevelSettingParser::parse(const std::string& filename)
 {

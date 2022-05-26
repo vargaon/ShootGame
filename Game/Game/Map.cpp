@@ -113,7 +113,18 @@ Room* Map::getRoom(int id)
 
 Room* Map::getRandomRoom()
 {
-	int roomID = rand() % (NUM_OF_ROOM_PER_LINE * NUM_OF_ROOM_PER_LINE);
+	int roomID = rand() % this->roomNum;
+	return this->getRoom(roomID);
+}
+
+Room* Map::getRandomRoom(int exclude)
+{
+	int roomID = rand() % this->roomNum;
+
+	if (roomID == exclude) {
+		roomID = (exclude + 1) % this->roomNum;
+	}
+
 	return this->getRoom(roomID);
 }
 

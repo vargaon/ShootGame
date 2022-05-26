@@ -20,6 +20,7 @@ public:
 
 	Room* getRoom(int id);
 	Room* getRandomRoom();
+	Room* getRandomRoom(int exclude);
 
 	int getTotalItems() const;
 	void createItem();
@@ -32,6 +33,7 @@ public:
 private:
 
 	float mapSize = NUM_OF_ROOM_PER_LINE * (WALL_THICKNESS + ROOM_SIZE) + WALL_THICKNESS;
+	int roomNum = NUM_OF_ROOM_PER_LINE * NUM_OF_ROOM_PER_LINE;
 
 	sf::RectangleShape background;
 

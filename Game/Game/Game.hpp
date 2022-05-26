@@ -62,7 +62,6 @@ private:
 	int actualLevel = 0;
 	int maxLevel;
 
-	void initWindow();
 	void setupGame(const LevelSetting& levelSetting);
 
 	void spawnZombie();
