@@ -4,8 +4,6 @@ using namespace sf;
 
 Map::Map()
 {
-	this->background.setSize({ this->mapSize, this->mapSize });
-
 	this->initWalls();
 	this->initRooms();
 }
@@ -27,7 +25,7 @@ void Map::initWalls()
 	for (int i = 0; i <= NUM_OF_ROOM_PER_LINE; i++) {
 
 		walls[i] = this->createWall(false, { i * wallDistance, 0 });
-		walls[NUM_OF_ROOM_PER_LINE + i] = this->createWall(true, { 0, i * wallDistance });
+		walls[NUM_OF_ROOM_PER_LINE + 1 + i] = this->createWall(true, { 0, i * wallDistance });
 	}
 }
 
@@ -131,8 +129,6 @@ void Map::setupDoors(bool isHorizontal, const door_mask_t& mask)
 
 void Map::setup(const MapSetting& s)
 {
-	this->background.setFillColor(s.backgroundColor);
-
 	this->setupDoors(false, s.verticalDoorMask);
 	this->setupDoors(true, s.horizontalDoorMask);
 
@@ -145,8 +141,6 @@ void Map::setup(const MapSetting& s)
 	}
 
 	this->setupRoomNeighbors(s.horizontalDoorMask, s.verticalDoorMask);
-
-	
 
 	this->itemsCreated = 0;
 }
@@ -192,8 +186,6 @@ int Map::getTotalItems() const
 
 void Map::render(sf::RenderWindow* window)
 {
-	window->draw(this->background);
-
 	for (auto&& w : this->walls) {
 		window->draw(w);
 	}

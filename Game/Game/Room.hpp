@@ -8,6 +8,7 @@
 const float WALL_THICKNESS = 4.f;
 const float ROOM_SIZE = 100.f;
 const int ROOM_PADDING = 15;
+const sf::Color ROOM_BACKGROUND_COLOR = { 165,165,165,255 };
 
 class Room;
 
@@ -32,6 +33,8 @@ public:
 	Position getRandomPosition() const;
 	Position getCentrePosition() const;
 
+	void setRoomBackgroupColor(sf::Color color);
+
 	void render(sf::RenderWindow* window);
 	void update();
 
@@ -39,6 +42,8 @@ private:
 
 	Position centrePosition;
 	Bounds spawnRange;
+
+	sf::RectangleShape background;
 
 	void updateItems();
 };

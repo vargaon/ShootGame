@@ -19,6 +19,11 @@ Room::Room(int id, Position p): id(id)
 		this->innerBounds.left + ROOM_PADDING, 
 		this->innerBounds.right - ROOM_PADDING
 	);
+
+	//initialize room background
+	this->background.setPosition(p.x + WALL_THICKNESS, p.y + WALL_THICKNESS);
+	this->background.setSize({ ROOM_SIZE, ROOM_SIZE });
+	this->setRoomBackgroupColor(ROOM_BACKGROUND_COLOR);
 }
 
 void Room::addItem()
@@ -39,8 +44,15 @@ Position Room::getCentrePosition() const
 	return this->centrePosition;
 }
 
+void Room::setRoomBackgroupColor(sf::Color color)
+{
+	this->background.setFillColor(color);
+}
+
 void Room::render(sf::RenderWindow* window)
 {
+	window->draw(this->background);
+
 	for (auto&& i : this->items) {
 		i.render(window);
 	}

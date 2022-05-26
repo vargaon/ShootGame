@@ -37,8 +37,6 @@ private:
 	float mapSize = NUM_OF_ROOM_PER_LINE * (WALL_THICKNESS + ROOM_SIZE) + WALL_THICKNESS;
 	int roomNum = NUM_OF_ROOM_PER_LINE * NUM_OF_ROOM_PER_LINE;
 
-	sf::RectangleShape background;
-	//std::vector<sf::RectangleShape> walls;
 	std::array<sf::RectangleShape, (NUM_OF_ROOM_PER_LINE * 2) + 2> walls;
 
 	int itemsCreated = 0;
