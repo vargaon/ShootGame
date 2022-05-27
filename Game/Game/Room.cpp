@@ -52,7 +52,10 @@ void Room::setRoomBackgroupColor(sf::Color color)
 void Room::render(sf::RenderWindow* window)
 {
 	window->draw(this->background);
+}
 
+void Room::renderItems(sf::RenderWindow* window)
+{
 	for (auto&& i : this->items) {
 		i.render(window);
 	}

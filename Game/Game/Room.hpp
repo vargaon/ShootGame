@@ -36,6 +36,7 @@ public:
 	void setRoomBackgroupColor(sf::Color color);
 
 	void render(sf::RenderWindow* window);
+	void renderItems(sf::RenderWindow* window);
 	void update();
 
 private:

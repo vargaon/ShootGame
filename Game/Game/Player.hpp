@@ -49,6 +49,7 @@ private:
 	bulletes_con_t bullets;
 
 	void checkForCollectedItems();
+	void tryCollectItem(Item& i);
 	void checkForZombies(zombies_con_t& zombies);
 	void updateBulletes(Map& m, zombies_con_t& zombies);
 };

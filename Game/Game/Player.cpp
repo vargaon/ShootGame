@@ -49,16 +49,29 @@ void Player::checkForCollectedItems()
 {
 	for (auto&& i : this->room->items) {
 
-		if (i.isActive()) {
+		this->tryCollectItem(i);
+	}
 
-			auto ib = i.getBounds();
+	for (auto&& r : this->room->neighbors) {
 
-			if (this->bounds.inCollisionWith(ib)) {
-				i.collect();
-				++this->collectedItems;
+		for (auto&& i : r->items) {
 
-				//std::cout << "Item collected!" << std::endl;
-			}
+			this->tryCollectItem(i);
+		}
+	}
+}
+
+void Player::tryCollectItem(Item& i)
+{
+	if (i.isActive()) {
+
+		auto ib = i.getBounds();
+
+		if (this->bounds.inCollisionWith(ib)) {
+			i.collect();
+			++this->collectedItems;
+
+			//std::cout << "Item collected!" << std::endl;
 		}
 	}
 }
@@ -138,18 +151,6 @@ void Player::update(Map& m, zombies_con_t& zombies)
 
 			this->moveInRooms(m.rooms, wasInDoor);
 			this->checkForCollectedItems();
-
-			/*
-
-			std::cout << "R: " << this->room->id << " N: ";
-			for (auto&& n : this->room->neighbors) {
-				std::cout << n->id << " ,";
-			}
-
-			std::cout << std::endl;
-
-			*/
-
 		}
 	}
 
@@ -172,6 +173,12 @@ void Player::render(sf::RenderWindow* window)
 
 	for (auto&& b : this->bullets) {
 		b.render(window);
+	}
+
+	this->room->renderItems(window);
+
+	for (auto&& r : this->room->neighbors) {
+		r->renderItems(window);
 	}
 }
 
