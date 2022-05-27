@@ -7,8 +7,11 @@ NextLevelGate::NextLevelGate()
 	this->entity.setFillColor(GATE_COLOR);
 }
 
-void NextLevelGate::setPosition(Position p)
+void NextLevelGate::setPosition(Room* room)
 {
+	this->room = room;
+	auto p = room->getCentrePosition();
+
 	this->bounds = Bounds(p.y - GATE_SIZE/2, p.y + GATE_SIZE/2, p.x - GATE_SIZE/2, p.x + GATE_SIZE/2);
 	this->entity.setPosition(p.x, p.y);
 }

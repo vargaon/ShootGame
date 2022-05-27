@@ -26,7 +26,6 @@ LevelSetting LevelSettingParser::parseLevelSetting(std::ifstream& fs)
 	levelSetting.itemSpawnCooldown = this->parseIntValue(fs);
 	levelSetting.coinsBeforeNextLevel = this->parseIntValue(fs);
 
-	levelSetting.playerStartRoomId = this->parseIntValue(fs);
 	levelSetting.mapSetting = this->parseMapSetting(fs);
 
 	return levelSetting;

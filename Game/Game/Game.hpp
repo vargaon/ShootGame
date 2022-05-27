@@ -66,6 +66,7 @@ private:
 	LevelSetting levelSetting;
 
 	void setupGameLevel(const LevelSetting& levelSetting);
+	void initRunningGame();
 
 	void spawnZombie();
 	void spawnItem();

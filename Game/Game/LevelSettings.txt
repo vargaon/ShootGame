@@ -2,7 +2,6 @@
 20
 2000
 1
-12
 xxxxxxxxxxx
 x.d.d.d.d.x
 xdxwxwxwxdx
@@ -18,8 +17,7 @@ xxxxxxxxxxx
 2500
 20
 2000
-3
-12
+2
 xxxxxxxxxxx
 x.d.d.d.d.x
 xdxwxdxwxdx
@@ -35,8 +33,7 @@ xxxxxxxxxxx
 1000
 50
 1000
-1
-12
+100
 xxxxxxxxxxx
 x.d.d.d.d.x
 xdxdxdxdxdx

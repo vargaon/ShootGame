@@ -8,7 +8,6 @@ public:
 
 	int itemSpawnCooldown = 2500;
 	int zombieSpawnCooldown = 2000;
-	int playerStartRoomId = 12;
 	int maxSpawnedZombies = 20;
 	int coinsBeforeNextLevel = 15;
 

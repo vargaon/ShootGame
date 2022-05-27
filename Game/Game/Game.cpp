@@ -28,15 +28,30 @@ void Game::setupGameLevel(const LevelSetting& levelSetting)
 {
 	this->zombies.clear();
 	this->zombieSpawnClock.restart();
-	this->zombiesSpawned = 0;
 
 	this->itemSpawnClock.restart();
 	this->levelSetting = levelSetting;
 
 	this->map.setup(levelSetting.mapSetting);
-	this->player.setup(this->map.getRoom(levelSetting.playerStartRoomId));
+
+	if (this->levelGate.room != nullptr) {
+		this->player.setup(this->levelGate.room);
+	}
+	else {
+		this->player.setup(this->map.getRandomRoom());
+	}
 
 	this->levelGateActive = false;
+}
+
+void Game::initRunningGame()
+{
+	this->state = GameState::RUN;
+	this->player.init();
+	this->currentLevel = 0;
+	this->zombiesSpawned = 0;
+
+	this->setupGameLevel(this->levels.at(this->currentLevel));
 }
 
 void Game::spawnZombie()
@@ -101,8 +116,7 @@ void Game::spawnItem()
 
 void Game::spawnLevelGate()
 {
-	auto r = this->map.getRandomRoom(this->player.getRoom()->neighborhood);
-	this->levelGate.setPosition(r->getCentrePosition());
+	this->levelGate.setPosition(this->map.getRandomRoom(this->player.getRoom()->neighborhood));
 	this->levelGateActive = true;
 }
 
@@ -187,9 +201,7 @@ void Game::observeStartGamePanel()
 {
 	if (this->startPanel.startGameBtnClicked(this->mousePosition, this->mouseLeftBtnClicked)) {
 
-		this->state = GameState::RUN;
-		this->player.init();
-		this->setupGameLevel(this->levels.at(this->currentLevel));
+		this->initRunningGame();
 	}
 }
 
@@ -197,10 +209,7 @@ void Game::observeEndGamePanel()
 {
 	if (this->endPanel.newGameBtnClicked(this->mousePosition, this->mouseLeftBtnClicked)) {
 
-		this->state = GameState::RUN;
-		this->player.init();
-		this->currentLevel = 0;
-		this->setupGameLevel(this->levels.at(this->currentLevel));
+		this->initRunningGame();
 	}
 }
 
