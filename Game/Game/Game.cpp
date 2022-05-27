@@ -127,11 +127,12 @@ void Game::updateRunGame()
 		this->p.setMovePower(PersonMovePower::STOP);
 	}
 
-	this->p.update(this->m, this->zombies);
-	this->updateZombies();
 	this->m.update();
 
-	//this->spawnZombie();
+	this->p.update(this->m, this->zombies);
+	this->updateZombies();
+
+	this->spawnZombie();
 	this->spawnItem();
 
 	this->runPanel.update(this->p);

@@ -49,13 +49,16 @@ void Player::checkForCollectedItems()
 {
 	for (auto&& i : this->room->items) {
 
-		auto ib = i.getBounds();
+		if (i.isActive()) {
 
-		if (this->bounds.inCollisionWith(ib)) {
-			i.collect();
-			++this->collectedItems;
+			auto ib = i.getBounds();
 
-			//std::cout << "Item collected!" << std::endl;
+			if (this->bounds.inCollisionWith(ib)) {
+				i.collect();
+				++this->collectedItems;
+
+				//std::cout << "Item collected!" << std::endl;
+			}
 		}
 	}
 }
@@ -126,13 +129,17 @@ void Player::update(Map& m, zombies_con_t& zombies)
 
 		Position p(this->x, this->y);
 		this->setPosition(p);
+
+		bool wasInDoor = this->inDoor;
 	
 		this->moveInDoors(m.doors);
 
 		if (!this->inDoor) {
 
-			this->moveInRooms(m.rooms);
+			this->moveInRooms(m.rooms, wasInDoor);
 			this->checkForCollectedItems();
+
+			/*
 
 			std::cout << "R: " << this->room->id << " N: ";
 			for (auto&& n : this->room->neighbors) {
@@ -141,11 +148,22 @@ void Player::update(Map& m, zombies_con_t& zombies)
 
 			std::cout << std::endl;
 
+			*/
+
 		}
 	}
 
 	this->checkForZombies(zombies);
 	this->updateBulletes(m, zombies);
+
+	if (this->room != nullptr) {
+
+		this->room->setRoomBackgroupColor(STANDING_ROOM_BACKGROUND_COLOR);
+
+		for (auto&& n : this->room->neighbors) {
+			n->setRoomBackgroupColor(STANDING_ROOM_BACKGROUND_COLOR);
+		}
+	}
 }
 
 void Player::render(sf::RenderWindow* window)

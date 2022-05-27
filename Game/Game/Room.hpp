@@ -8,7 +8,7 @@
 const float WALL_THICKNESS = 4.f;
 const float ROOM_SIZE = 100.f;
 const int ROOM_PADDING = 15;
-const sf::Color ROOM_BACKGROUND_COLOR = { 165,165,165,255 };
+const sf::Color ROOM_BACKGROUND_COLOR = { 140,140,140,255 };
 
 class Room;
 

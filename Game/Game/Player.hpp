@@ -10,6 +10,7 @@ const int PLAYER_SHOOT_COOLDOWN = 100;
 const int PLAYER_RELOAD_COOLDOWN = 2000;
 
 const sf::Color PLAYER_COLOR = { 0, 0, 255, 255 };
+const sf::Color STANDING_ROOM_BACKGROUND_COLOR = { 165,165,165,255 };
 
 class Player: public Person {
 

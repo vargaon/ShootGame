@@ -75,6 +75,7 @@ void Room::updateItems()
 
 void Room::update()
 {
+	this->setRoomBackgroupColor(ROOM_BACKGROUND_COLOR);
 	this->updateItems();
 }
 

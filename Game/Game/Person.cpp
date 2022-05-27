@@ -33,9 +33,9 @@ void Person::moveInRoom(const Room& r)
 	}
 }
 
-void Person::moveInRooms(rooms_con_t& rooms)
+void Person::moveInRooms(rooms_con_t& rooms, bool mayChangeRoom)
 {
-	if (this->room != nullptr) {
+	if (!mayChangeRoom) {
 		this->moveInRoom(*this->room);
 	}
 	else {
@@ -94,7 +94,6 @@ void Person::moveInDoors(const doors_con_t& doors)
 			else {
 				if (this->bounds.inRange(d.isHorizontal(), db)) {
 					this->inDoor = true;
-					this->room = nullptr;
 				}
 			}
 

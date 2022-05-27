@@ -11,10 +11,12 @@ void Zombie::update(Map& m)
 
 		this->setPosition({this->x, this->y});
 
+		bool wasInDoor = this->inDoor;
+
 		this->moveInDoors(m.doors);
 
 		if (!this->inDoor) {
-			this->moveInRooms(m.rooms);
+			this->moveInRooms(m.rooms, wasInDoor);
 		}
 	}
 }

@@ -21,7 +21,7 @@ protected:
 	bool inRoom(const Room& r) const;
 
 	void moveInRoom(const Room& r);
-	void moveInRooms(rooms_con_t& rooms);
+	void moveInRooms(rooms_con_t& rooms, bool mayChangeRoom);
 	void moveInDoors(const doors_con_t& doors);
 
 public:
