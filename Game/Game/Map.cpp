@@ -119,10 +119,12 @@ void Map::setupDoors(bool isHorizontal, const door_mask_t& mask)
 	}
 }
 
-void Map::setup(const MapSetting& s)
+void Map::setup(const MapSetting& mapSetting)
 {
-	this->setupDoors(false, s.verticalDoorMask);
-	this->setupDoors(true, s.horizontalDoorMask);
+	this->doors.clear();
+
+	this->setupDoors(false, mapSetting.verticalDoorMask);
+	this->setupDoors(true, mapSetting.horizontalDoorMask);
 
 	for (auto&& roomRow : this->rooms) {
 
@@ -132,8 +134,7 @@ void Map::setup(const MapSetting& s)
 		}
 	}
 
-	this->setupRoomNeighbors(s.horizontalDoorMask, s.verticalDoorMask);
-
+	this->setupRoomNeighbors(mapSetting.horizontalDoorMask, mapSetting.verticalDoorMask);
 	this->itemsCreated = 0;
 }
 

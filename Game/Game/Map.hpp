@@ -26,7 +26,7 @@ public:
 	int getTotalItems() const;
 	void createItem();
 
-	void setup(const MapSetting & s);
+	void setup(const MapSetting & mapSetting);
 
 	void update();
 	void render(sf::RenderWindow* window, const Room* playerRoom);

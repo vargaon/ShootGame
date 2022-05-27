@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClCompile Include="LevelSettingParser.cpp" />
     <ClCompile Include="MapSetting.cpp" />
+    <ClCompile Include="NextLevelGate.cpp" />
     <ClCompile Include="TextField.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Bullet.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="LevelSetting.hpp" />
     <ClInclude Include="LevelSettingParser.hpp" />
     <ClInclude Include="MapSetting.hpp" />
+    <ClInclude Include="NextLevelGate.hpp" />
     <ClInclude Include="TextField.hpp" />
     <ClInclude Include="Utils.hpp" />
     <ClInclude Include="Bullet.hpp" />

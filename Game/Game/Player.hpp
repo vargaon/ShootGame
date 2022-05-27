@@ -19,19 +19,16 @@ public:
 	Player() : Person(PLAYER_COLOR) {};
 
 	void shoot();
-	void reload();
-
 	bool canShoot();
+	void reload();
 	bool isReloading();
-
 	int getBulletesInStack();
-	int getCollectedItems();
+	int getTotalCoins();
+	int getLevelCoins();
 	int getKilledZombies();
 	int getLives();
-
 	void update(Map& m, zombies_con_t& zombies);
 	void render(sf::RenderWindow* window);
-
 	void init();
 	void setup(Room* pRoom);
 
@@ -39,7 +36,8 @@ private:
 
 	int lives = PLAYER_LIVES;
 	int bulletesInStack = PLAYER_STACK_CAPACITY;
-	int collectedItems = 0;
+	int totalCoins = 0;
+	int levelCoins = 0;
 	int killedZombies = 0;
 	bool reloading = false;
 

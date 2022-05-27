@@ -20,13 +20,14 @@ LevelSetting LevelSettingParser::parseLevelSetting(std::ifstream& fs)
 {
 	LevelSetting levelSetting;
 
-	levelSetting.itemSpawnCooldown = this->parseIntValue(fs);
 	levelSetting.zombieSpawnCooldown = this->parseIntValue(fs);
-	levelSetting.playerStartRoomId = this->parseIntValue(fs);
 	levelSetting.maxSpawnedZombies = this->parseIntValue(fs);
+
+	levelSetting.itemSpawnCooldown = this->parseIntValue(fs);
 	levelSetting.coinsBeforeNextLevel = this->parseIntValue(fs);
-	
-	levelSetting.s = this->parseMapSetting(fs);
+
+	levelSetting.playerStartRoomId = this->parseIntValue(fs);
+	levelSetting.mapSetting = this->parseMapSetting(fs);
 
 	return levelSetting;
 }

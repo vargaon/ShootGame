@@ -25,7 +25,7 @@ public:
 	StartPanel();
 	void setup(Position p, Float2Vector size);
 	void render(sf::RenderWindow* window);
-	bool update(Position& mPosition, bool mClicked);
+	bool startGameBtnClicked(Position& mPosition, bool mClicked);
 
 private:
 	TextField welcomeTextFiled;
@@ -39,7 +39,7 @@ public:
 	void setup(Position pos, Float2Vector panelSize);
 	void setInfo(int collecteItems, int totalItems, int killedZombies, int totalZombies);
 	void render(sf::RenderWindow* window);
-	bool update(Position& mPosition, bool mClicked);
+	bool newGameBtnClicked(Position& mPosition, bool mClicked);
 
 private:
 	Position p;

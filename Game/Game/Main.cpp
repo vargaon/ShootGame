@@ -6,10 +6,10 @@ int main()
 {
 	Game game;
 
-	while (game.IsRunning())
+	while (game.isRunning())
 	{
 		game.update();
-		game.Render();
+		game.render();
 	}
 
 	return 0;

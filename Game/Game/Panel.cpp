@@ -53,7 +53,7 @@ void StartPanel::render(sf::RenderWindow* window)
 	this->startGameBtn.render(window);
 }
 
-bool StartPanel::update(Position& mPosition, bool mClicked)
+bool StartPanel::startGameBtnClicked(Position& mPosition, bool mClicked)
 {
 	this->startGameBtn.update(mPosition);
 	return mClicked && this->startGameBtn.isMouseOver(mPosition);
@@ -112,7 +112,7 @@ void EndPanel::render(sf::RenderWindow* window)
 	this->newGameBtn.render(window);
 }
 
-bool EndPanel::update(Position& mPosition, bool mClicked)
+bool EndPanel::newGameBtnClicked(Position& mPosition, bool mClicked)
 {
 	this->newGameBtn.update(mPosition);
 	return mClicked && this->newGameBtn.isMouseOver(mPosition);
@@ -153,7 +153,7 @@ void RunPanel::render(sf::RenderWindow* window)
 void RunPanel::update(Player& p)
 {
 	int bulletes = p.getBulletesInStack();
-	int items = p.getCollectedItems();
+	int items = p.getTotalCoins();
 	int lives = p.getLives();
 
 	std::string sep = "  |  ";

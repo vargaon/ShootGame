@@ -2,7 +2,7 @@
 #include <vector>
 #include "Entity.hpp"
 
-const float ITEM_SIZE = 5;
+const float ITEM_SIZE = 5.f;
 const int ITEM_POINT_COUNT = 30;
 const int ITEM_ACTIVE_COOLDOWN = 10000;
 const sf::Color ITEM_COLOR = { 255, 255, 0, 255 };

@@ -12,7 +12,7 @@ public:
 	int maxSpawnedZombies = 20;
 	int coinsBeforeNextLevel = 15;
 
-	MapSetting s;
+	MapSetting mapSetting;
 
 	LevelSetting() {};
 };

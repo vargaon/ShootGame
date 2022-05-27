@@ -11,6 +11,7 @@
 #include "Panel.hpp"
 #include "LevelSettingParser.hpp"
 #include "LevelSetting.hpp"
+#include "NextLevelGate.hpp"
 
 const int WIN_SIZE = 524;
 const int INFO_PANEL_SIZE = 75;
@@ -30,8 +31,8 @@ public:
 	~Game();
 
 	void update();
-	void Render();
-	bool IsRunning() const;
+	void render();
+	bool isRunning() const;
 
 private:
 
@@ -44,34 +45,44 @@ private:
 	StartPanel startPanel;
 	EndPanel endPanel;
 
-	Map m;
-	Player p;
+	Map map;
+	Player player;
+	NextLevelGate levelGate;
+
 	zombies_con_t zombies;
 
 	sf::Clock zombieSpawnClock;
 	sf::Clock itemSpawnClock;
 
 	int zombiesSpawned = 0;
+	int currentLevel = 0;
+	int maxLevel;
 
 	Position mousePosition;
 	bool mouseLeftBtnClicked = false;
+	bool levelGateActive = false;
 
 	level_setting_con_t levels;
 	LevelSetting levelSetting;
 
-	int actualLevel = 0;
-	int maxLevel;
-
-	void setupGame(const LevelSetting& levelSetting);
+	void setupGameLevel(const LevelSetting& levelSetting);
 
 	void spawnZombie();
-	void updateZombies();
-
 	void spawnItem();
+	void spawnLevelGate();
 
-	void updateRunGame();
-	void updateStartGame();
-	void updateEndGame();
+	void updateZombies();
+	void updatePlayer();
+	void updateMap();
+
+	void updateRunningGame();
+	void observeStartGamePanel();
+	void observeEndGamePanel();
+
+	void observePlayerLives();
+	void observeNextLevelGateEntering();
+
+	void nextLevel();
 
 	void processMouseMoved();
 	void processMousePressed();

@@ -30,9 +30,14 @@ int Player::getBulletesInStack()
 	return this->bulletesInStack;
 }
 
-int Player::getCollectedItems()
+int Player::getTotalCoins()
 {
-	return this->collectedItems;
+	return this->totalCoins;
+}
+
+int Player::getLevelCoins()
+{
+	return this->levelCoins;
 }
 
 int Player::getKilledZombies()
@@ -64,7 +69,8 @@ void Player::tryCollectItem(Item& i)
 
 		if (this->bounds.inCollisionWith(ib)) {
 			i.collect();
-			++this->collectedItems;
+			++this->totalCoins;
+			++this->levelCoins;
 
 			//std::cout << "Item collected!" << std::endl;
 		}
@@ -170,9 +176,10 @@ void Player::render(sf::RenderWindow* window)
 void Player::init()
 {
 	this->lives = PLAYER_LIVES;
-	this->collectedItems = 0;
-	this->killedZombies = 0;
 	this->bulletesInStack = PLAYER_STACK_CAPACITY;
+	this->totalCoins = 0;
+	this->levelCoins = 0;
+	this->killedZombies = 0;
 }
 
 void Player::setup(Room* pRoom)
@@ -182,8 +189,9 @@ void Player::setup(Room* pRoom)
 	this->reloading = false;
 	this->reloadClock.restart();
 	this->shootClock.restart();
-
 	this->bullets.clear();
+
+	this->levelCoins = 0;
 }
 
 bool Player::canShoot()

@@ -24,25 +24,26 @@ Game::~Game()
 	delete this->window;
 }
 
-void Game::setupGame(const LevelSetting& levelSetting)
+void Game::setupGameLevel(const LevelSetting& levelSetting)
 {
 	this->zombies.clear();
 	this->zombieSpawnClock.restart();
 	this->zombiesSpawned = 0;
 
 	this->itemSpawnClock.restart();
-
 	this->levelSetting = levelSetting;
 
-	this->m.setup(levelSetting.s);
-	this->p.setup(this->m.getRoom(levelSetting.playerStartRoomId));
+	this->map.setup(levelSetting.mapSetting);
+	this->player.setup(this->map.getRoom(levelSetting.playerStartRoomId));
+
+	this->levelGateActive = false;
 }
 
 void Game::spawnZombie()
 {
 	if (this->zombies.size() < this->levelSetting.maxSpawnedZombies && this->zombieSpawnClock.getElapsedTime().asMilliseconds() > this->levelSetting.zombieSpawnCooldown) {
 
-		Room* r = this->m.getRandomRoom(this->p.getRoom()->neighborhood);
+		Room* r = this->map.getRandomRoom(this->player.getRoom()->neighborhood);
 
 		this->zombieSpawnClock.restart();
 
@@ -61,7 +62,7 @@ void Game::updateZombies()
 {
 	for (auto it = this->zombies.begin(); it != this->zombies.end();) {
 
-		it->update(this->m);
+		it->update(this->map);
 
 		if (!it->isAlive()) {
 			it = this->zombies.erase(it);
@@ -72,13 +73,37 @@ void Game::updateZombies()
 	}
 }
 
+void Game::updatePlayer()
+{
+	if (Keyboard::isKeyPressed(Keyboard::W)) {
+		this->player.setMovePower(PersonMovePower::FORWARD);
+	}
+	else {
+		this->player.setMovePower(PersonMovePower::STOP);
+	}
+
+	this->player.update(this->map, this->zombies);
+}
+
+void Game::updateMap()
+{
+	this->map.update();
+}
+
 void Game::spawnItem()
 {
 	if (this->itemSpawnClock.getElapsedTime().asMilliseconds() > this->levelSetting.itemSpawnCooldown) {
 
 		this->itemSpawnClock.restart();
-		this->m.createItem();
+		this->map.createItem();
 	}
+}
+
+void Game::spawnLevelGate()
+{
+	auto r = this->map.getRandomRoom(this->player.getRoom()->neighborhood);
+	this->levelGate.setPosition(r->getCentrePosition());
+	this->levelGateActive = true;
 }
 
 void Game::processMouseMoved()
@@ -87,7 +112,7 @@ void Game::processMouseMoved()
 	this->mousePosition = Position(float(mp.x), float(mp.y));
 
 	if (this->state == GameState::RUN) {
-		this->p.setDirectionByPosition(this->mousePosition);
+		this->player.setDirectionByPosition(this->mousePosition);
 	}
 }
 
@@ -98,12 +123,12 @@ void Game::processMousePressed()
 		if (Mouse::isButtonPressed(Mouse::Left)) {
 
 			if (this->state == GameState::RUN) {
-				this->p.shoot();
+				this->player.shoot();
 			}
 		}
 
 		if (Mouse::isButtonPressed(Mouse::Right)) {
-			this->p.reload();
+			this->player.reload();
 		}
 	}
 	else {
@@ -111,56 +136,71 @@ void Game::processMousePressed()
 	}
 }
 
-void Game::updateRunGame()
+void Game::updateRunningGame()
 {
-	if (Keyboard::isKeyPressed(Keyboard::W)) {
-		this->p.setMovePower(PersonMovePower::FORWARD);
-	}
-	else {
-		this->p.setMovePower(PersonMovePower::STOP);
-	}
-
-	this->m.update();
-
-	this->p.update(this->m, this->zombies);
+	this->updateMap();
+	this->updatePlayer();
 	this->updateZombies();
 
 	this->spawnZombie();
 	this->spawnItem();
 
-	this->runPanel.update(this->p);
+	if (this->currentLevel != this->maxLevel && !this->levelGateActive && this->player.getLevelCoins() >= this->levelSetting.coinsBeforeNextLevel) {
+		this->spawnLevelGate();
+	}
 
-	if (this->p.getLives() <= 0) {
-		
+	this->runPanel.update(this->player);
+
+	this->observePlayerLives();
+	this->observeNextLevelGateEntering();
+}
+
+void Game::observePlayerLives()
+{
+	if (this->player.getLives() <= 0) {
+
 		this->state = GameState::END;
 
 		this->endPanel.setInfo(
-			this->p.getCollectedItems(),
-			this->m.getTotalItems(),
-			this->p.getKilledZombies(),
+			this->player.getTotalCoins(),
+			this->map.getTotalItems(),
+			this->player.getKilledZombies(),
 			this->zombiesSpawned
 		);
 	}
 }
 
-void Game::updateStartGame()
+void Game::observeNextLevelGateEntering()
 {
-	if (this->startPanel.update(this->mousePosition, this->mouseLeftBtnClicked)) {
-
-		this->state = GameState::RUN;
-		this->p.init();
-		this->setupGame(this->levels[this->actualLevel]);
+	if (this->levelGateActive && this->levelGate.enteredGate(this->player.getBounds())) {
+		this->nextLevel();
 	}
 }
 
-void Game::updateEndGame()
+void Game::nextLevel()
 {
-	if (this->endPanel.update(this->mousePosition, this->mouseLeftBtnClicked)) {
+	++this->currentLevel;
+	this->setupGameLevel(this->levels.at(this->currentLevel));
+}
+
+void Game::observeStartGamePanel()
+{
+	if (this->startPanel.startGameBtnClicked(this->mousePosition, this->mouseLeftBtnClicked)) {
 
 		this->state = GameState::RUN;
-		this->p.init();
-		this->actualLevel = 0;
-		this->setupGame(this->levels[this->actualLevel]);
+		this->player.init();
+		this->setupGameLevel(this->levels.at(this->currentLevel));
+	}
+}
+
+void Game::observeEndGamePanel()
+{
+	if (this->endPanel.newGameBtnClicked(this->mousePosition, this->mouseLeftBtnClicked)) {
+
+		this->state = GameState::RUN;
+		this->player.init();
+		this->currentLevel = 0;
+		this->setupGameLevel(this->levels.at(this->currentLevel));
 	}
 }
 
@@ -192,13 +232,13 @@ void Game::update()
 	switch (this->state)
 	{
 	case GameState::START:
-		this->updateStartGame();
+		this->observeStartGamePanel();
 		break;
 	case GameState::RUN:
-		this->updateRunGame();
+		this->updateRunningGame();
 		break;
 	case GameState::END:
-		this->updateEndGame();
+		this->observeEndGamePanel();
 		break;
 	default:
 		break;
@@ -207,17 +247,22 @@ void Game::update()
 
 void Game::renderRunningGame()
 {
-	this->m.render(this->window, p.getRoom());
+	this->map.render(this->window, player.getRoom());
 
 	for (auto&& z : this->zombies) {
 		z.render(this->window);
 	}
 
-	this->p.render(this->window);
+	this->player.render(this->window);
+
+	if (this->levelGateActive) {
+		this->levelGate.render(this->window);
+	}
+
 	this->runPanel.render(this->window);
 }
 
-void Game::Render()
+void Game::render()
 {
 	this->window->clear(sf::Color::White);
 
@@ -239,7 +284,7 @@ void Game::Render()
 	this->window->display();
 }
 
-bool Game::IsRunning() const
+bool Game::isRunning() const
 {
 	return this->window->isOpen();
 }
