@@ -71,7 +71,7 @@ void Map::setupRoomNeighbors(const door_mask_t& hMask, const door_mask_t& vMask)
 			if (top >= 0) {
 
 				if (hMask[i][top]) {
-					this->rooms[i][j].neighbors.push_back(&this->rooms[i][top]);
+					this->rooms[i][j].neighborhood.push_back(&this->rooms[i][top]);
 				}
 			}
 
@@ -80,7 +80,7 @@ void Map::setupRoomNeighbors(const door_mask_t& hMask, const door_mask_t& vMask)
 			if (bot < NUM_OF_ROOM_PER_LINE) {
 
 				if (hMask[i][j]) {
-					this->rooms[i][j].neighbors.push_back(&this->rooms[i][bot]);
+					this->rooms[i][j].neighborhood.push_back(&this->rooms[i][bot]);
 				}
 			}
 
@@ -89,7 +89,7 @@ void Map::setupRoomNeighbors(const door_mask_t& hMask, const door_mask_t& vMask)
 			if (left >= 0) {
 
 				if (vMask[j][left]) {
-					this->rooms[i][j].neighbors.push_back(&this->rooms[left][j]);
+					this->rooms[i][j].neighborhood.push_back(&this->rooms[left][j]);
 				}
 			}
 
@@ -98,9 +98,11 @@ void Map::setupRoomNeighbors(const door_mask_t& hMask, const door_mask_t& vMask)
 			if (right < NUM_OF_ROOM_PER_LINE) {
 
 				if (vMask[j][i]) {
-					this->rooms[i][j].neighbors.push_back(&this->rooms[right][j]);
+					this->rooms[i][j].neighborhood.push_back(&this->rooms[right][j]);
 				}
 			}
+
+			this->rooms[i][j].neighborhood.push_back(&this->rooms[i][j]);
 		}
 	}
 }
@@ -136,7 +138,7 @@ void Map::setup(const MapSetting& s)
 
 		for (auto&& r : roomRow) {
 			r.items.clear();
-			r.neighbors.clear();
+			r.neighborhood.clear();
 		}
 	}
 
@@ -184,7 +186,7 @@ int Map::getTotalItems() const
 	return this->itemsCreated;
 }
 
-void Map::render(sf::RenderWindow* window)
+void Map::render(sf::RenderWindow* window, const Room* playerRoom)
 {
 	for (auto&& w : this->walls) {
 		window->draw(w);
@@ -197,7 +199,11 @@ void Map::render(sf::RenderWindow* window)
 	for (auto&& roomRow : this->rooms) {
 
 		for (auto&& r : roomRow) {
-			r.render(window);
+			r.renderBackground(window);
 		}
+	}
+
+	for (auto&& r : playerRoom->neighborhood) {
+		r->renderItems(window);
 	}
 }

@@ -214,7 +214,7 @@ void Game::update()
 
 void Game::renderRunningGame()
 {
-	this->m.render(this->window);
+	this->m.render(this->window, p.getRoom());
 
 	for (auto&& z : this->zombies) {
 		z.render(this->window);

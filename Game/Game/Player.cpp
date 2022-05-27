@@ -47,12 +47,7 @@ int Player::getLives()
 
 void Player::checkForCollectedItems()
 {
-	for (auto&& i : this->room->items) {
-
-		this->tryCollectItem(i);
-	}
-
-	for (auto&& r : this->room->neighbors) {
+	for (auto&& r : this->room->neighborhood) {
 
 		for (auto&& i : r->items) {
 
@@ -157,13 +152,9 @@ void Player::update(Map& m, zombies_con_t& zombies)
 	this->checkForZombies(zombies);
 	this->updateBulletes(m, zombies);
 
-	if (this->room != nullptr) {
 
-		this->room->setRoomBackgroupColor(STANDING_ROOM_BACKGROUND_COLOR);
-
-		for (auto&& n : this->room->neighbors) {
-			n->setRoomBackgroupColor(STANDING_ROOM_BACKGROUND_COLOR);
-		}
+	for (auto&& n : this->room->neighborhood) {
+		n->setRoomBackgroupColor(STANDING_ROOM_BACKGROUND_COLOR);
 	}
 }
 
@@ -173,12 +164,6 @@ void Player::render(sf::RenderWindow* window)
 
 	for (auto&& b : this->bullets) {
 		b.render(window);
-	}
-
-	this->room->renderItems(window);
-
-	for (auto&& r : this->room->neighbors) {
-		r->renderItems(window);
 	}
 }
 

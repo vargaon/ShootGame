@@ -21,7 +21,7 @@ public:
 	int id = 0;
 
 	items_con_t items;
-	neighbor_rooms_con_t neighbors;
+	neighbor_rooms_con_t neighborhood;
 
 	Bounds outerBounds;
 	Bounds innerBounds;
@@ -35,7 +35,7 @@ public:
 
 	void setRoomBackgroupColor(sf::Color color);
 
-	void render(sf::RenderWindow* window);
+	void renderBackground(sf::RenderWindow* window);
 	void renderItems(sf::RenderWindow* window);
 	void update();
 

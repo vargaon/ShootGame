@@ -49,7 +49,7 @@ void Room::setRoomBackgroupColor(sf::Color color)
 	this->background.setFillColor(color);
 }
 
-void Room::render(sf::RenderWindow* window)
+void Room::renderBackground(sf::RenderWindow* window)
 {
 	window->draw(this->background);
 }
