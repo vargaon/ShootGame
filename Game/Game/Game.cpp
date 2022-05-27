@@ -42,14 +42,7 @@ void Game::spawnZombie()
 {
 	if (this->zombies.size() < this->levelSetting.maxSpawnedZombies && this->zombieSpawnClock.getElapsedTime().asMilliseconds() > this->levelSetting.zombieSpawnCooldown) {
 
-		Room* r;
-
-		if (this->p.getRoom() != nullptr) {
-			r = this->m.getRandomRoom(this->p.getRoom()->id);
-		}
-		else {
-			r = this->m.getRandomRoom();
-		}
+		Room* r = this->m.getRandomRoom(this->p.getRoom()->neighborhood);
 
 		this->zombieSpawnClock.restart();
 

@@ -8,16 +8,6 @@ Map::Map()
 	this->initRooms();
 }
 
-void Map::update()
-{
-	for (auto&& roomRow : this->rooms)
-	{
-		for (auto&& r : roomRow) {
-			r.update();
-		}
-	}
-}
-
 void Map::initWalls()
 {
 	float wallDistance = ROOM_SIZE + WALL_THICKNESS;
@@ -147,6 +137,16 @@ void Map::setup(const MapSetting& s)
 	this->itemsCreated = 0;
 }
 
+void Map::update()
+{
+	for (auto&& roomRow : this->rooms)
+	{
+		for (auto&& r : roomRow) {
+			r.update();
+		}
+	}
+}
+
 void Map::createItem()
 {
 	auto r = this->getRandomRoom();
@@ -170,15 +170,21 @@ Room* Map::getRandomRoom()
 	return this->getRoom(roomID);
 }
 
-Room* Map::getRandomRoom(int exclude)
+Room* Map::getRandomRoom(const std::vector<Room*>& exclude)
 {
-	int roomID = rand() % this->roomNum;
+	std::vector<Room*> temp;
 
-	if (roomID == exclude) {
-		roomID = (exclude + 1) % this->roomNum;
+	for (auto&& roomRow : this->rooms) {
+		for (auto&& r : roomRow) {
+			if (std::find(exclude.begin(), exclude.end(), &r) == exclude.end()) {
+				temp.push_back(&r);
+			}
+		}
 	}
 
-	return this->getRoom(roomID);
+	int randomPos = rand() % temp.size();
+
+	return temp[randomPos];
 }
 
 int Map::getTotalItems() const

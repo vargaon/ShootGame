@@ -3,11 +3,10 @@
 #include <array>
 #include <vector>
 #include <cstdlib>
+#include <algorithm>
 #include "MapSetting.hpp"
 
 const sf::Color WALL_COLOR = { 0, 0, 0, 255 };
-
-//using rooms_con_t = std::array<Room, NUM_OF_ROOM_PER_LINE* NUM_OF_ROOM_PER_LINE>;
 
 using rooms_con_t = std::array< std::array<Room, NUM_OF_ROOM_PER_LINE>, NUM_OF_ROOM_PER_LINE>;
 
@@ -22,7 +21,7 @@ public:
 
 	Room* getRoom(int id);
 	Room* getRandomRoom();
-	Room* getRandomRoom(int exclude);
+	Room* getRandomRoom(const std::vector<Room*>& exclude);
 
 	int getTotalItems() const;
 	void createItem();
