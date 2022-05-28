@@ -25,8 +25,8 @@ public:
 	Room* getRandomRoom();
 	Room* getRandomRoom(const std::vector<Room*>& exclude);
 
-	int getTotalItems() const;
-	void createItem();
+	int getTotalCoins() const;
+	void createCoin();
 
 	void setup(const MapSetting & mapSetting);
 
@@ -40,7 +40,7 @@ private:
 
 	std::array<sf::RectangleShape, (NUM_OF_ROOM_PER_LINE * 2) + 2> walls;
 
-	int itemsCreated = 0;
+	int coinsCreated = 0;
 
 	void initWalls();
 	sf::RectangleShape createWall(bool isHorizontal, Position p);

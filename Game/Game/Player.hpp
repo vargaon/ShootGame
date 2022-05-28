@@ -51,7 +51,7 @@ private:
 
 	bulletes_con_t bullets;
 
-	void collectItems();
+	void collectCoins();
 	void observeZombies(zombies_con_t& zombies);
 	void updateBulletes(Map& m, zombies_con_t& zombies);
 };

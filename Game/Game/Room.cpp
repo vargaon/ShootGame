@@ -17,7 +17,7 @@ Room::Room(int id, Position p): id(id)
 	this->setRoomBackgroupColor(ROOM_BACKGROUND_COLOR);
 }
 
-void Room::createItem()
+void Room::createCoin()
 {
 	this->items.push_back({ this->getRandomPosition() });
 }
@@ -40,7 +40,7 @@ int Room::getId() const
 	return this->id;
 }
 
-items_con_t& Room::getItems()
+coins_con_t& Room::getCoins()
 {
 	return this->items;
 }

@@ -36,7 +36,7 @@
     <ClCompile Include="Room.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
-    <ClCompile Include="Item.cpp">
+    <ClCompile Include="Coin.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
     <ClCompile Include="Utils.cpp">
@@ -98,7 +98,7 @@
     <ClInclude Include="Room.hpp">
       <Filter>Hlavičkové soubory</Filter>
     </ClInclude>
-    <ClInclude Include="Item.hpp">
+    <ClInclude Include="Coin.hpp">
       <Filter>Hlavičkové soubory</Filter>
     </ClInclude>
     <ClInclude Include="Utils.hpp">

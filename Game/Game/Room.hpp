@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "Utils.hpp"
-#include "Item.hpp"
+#include "Coin.hpp"
 
 const float WALL_THICKNESS = 4.f;
 const float ROOM_SIZE = 100.f;
@@ -22,13 +22,13 @@ public:
 	Room() {};
 	Room(int id, Position p);
 
-	void createItem();
+	void createCoin();
 
 	Position getRandomPosition() const;
 	Position getCentrePosition() const;
 
 	int getId() const;
-	items_con_t& getItems();
+	coins_con_t& getCoins();
 	const neighbor_rooms_con_t& getNeighborhood() const;
 
 	const Bounds& getOuterBounds() const;
@@ -54,7 +54,7 @@ private:
 	Bounds innerBounds;
 	Bounds spawnRange;
 
-	items_con_t items;
+	coins_con_t items;
 	neighbor_rooms_con_t neighborhood;
 
 	sf::RectangleShape background;

@@ -101,7 +101,7 @@ void Player::update(Map& map, zombies_con_t& zombies)
 
 	this->move(map, PLAYER_MOVE_SPEED);
 
-	this->collectItems();
+	this->collectCoins();
 	this->observeZombies(zombies);
 
 	this->updateBulletes(map, zombies);
@@ -116,16 +116,16 @@ void Player::drawAt(sf::RenderWindow* window)
 	}
 }
 
-void Player::collectItems()
+void Player::collectCoins()
 {
 	for (auto&& r : this->room->getNeighborhood()) {
 
-		for (auto&& i : r->getItems()) {
+		for (auto&& c : r->getCoins()) {
 
-			if (i.tryCollect(this->getBounds())) {
+			if (c.tryCollect(this->getBounds())) {
 				++this->totalCoins;
 				++this->levelCoins;
-				//std::cout << "Item collected!" << std::endl;
+				//std::cout << "Coin collected!" << std::endl;
 			}
 		}
 	}
@@ -136,7 +136,7 @@ void Player::observeZombies(zombies_con_t& zombies)
 	auto p = this->getPosition();
 
 	for (auto&& z : zombies) {
-		auto zb = z.getBounds();
+		const auto& zb = z.getBounds();
 
 		if (this->getBounds().inCollisionWith(zb)) {
 			--this->lives;
@@ -154,11 +154,11 @@ void Player::updateBulletes(Map& m, zombies_con_t& zombies)
 	for (auto it = this->bullets.begin(); it != this->bullets.end();) {
 
 		it->update(m);
-		auto bb = it->getBounds();
+		const auto& bb = it->getBounds();
 
 		for (auto&& z : zombies) {
 
-			auto zb = z.getBounds();
+			const auto& zb = z.getBounds();
 
 			if (zb.inCollisionWith(bb)) {
 

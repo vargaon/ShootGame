@@ -177,7 +177,7 @@ void Game::spawnItem()
 	if (this->itemSpawnClock.getElapsedTime().asMilliseconds() > this->levelSetting.itemSpawnCooldown) {
 
 		this->itemSpawnClock.restart();
-		this->map.createItem();
+		this->map.createCoin();
 	}
 }
 
@@ -249,7 +249,7 @@ void Game::observePlayerLives()
 
 		this->endPanel.setInfo(
 			this->player.getTotalCoins(),
-			this->map.getTotalItems(),
+			this->map.getTotalCoins(),
 			this->player.getKilledZombies(),
 			this->zombiesSpawned
 		);

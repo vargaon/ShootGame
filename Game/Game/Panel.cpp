@@ -82,10 +82,10 @@ bool EndPanel::newGameBtnClicked(Position& mPosition, bool mClicked)
 	return mClicked && this->newGameBtn.isMouseOver(mPosition);
 }
 
-void EndPanel::setInfo(int collectedItems, int totalItems, int killedZombies, int totalZombies)
+void EndPanel::setInfo(int collectedCoins, int totalCoins, int killedZombies, int totalZombies)
 {
 	std::stringstream itemSummary;
-	itemSummary << "Items: " << collectedItems << "/" << totalItems;
+	itemSummary << "Coins: " << collectedCoins << "/" << totalCoins;
 	this->itemSummaryText.setString(itemSummary.str());
 	this->itemSummaryText.setPosition({ this->p.x, this->p.y - 50 });
 
@@ -127,7 +127,7 @@ RunPanel::RunPanel()
 	std::stringstream ss;
 
 	ss << sep << "L: " << 0 << "/" << PLAYER_LIVES << sep
-		<< "I: " << 0 << sep
+		<< "C: " << 0 << sep
 		<< "B: " << PLAYER_STACK_CAPACITY << "/" << PLAYER_STACK_CAPACITY << sep;
 
 	this->infoTextField.setString(ss.str());
@@ -154,7 +154,7 @@ void RunPanel::update(Player& p)
 	std::stringstream ss;
 
 	ss << "L: " << lives << "/" << PLAYER_LIVES << sep
-		<< "I: " << items << sep
+		<< "C: " << items << sep
 		<< "B: " << bulletes << "/" << PLAYER_STACK_CAPACITY;
 
 	if (p.isReloading()) {
