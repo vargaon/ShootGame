@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 #include <vector>
 
@@ -18,14 +19,14 @@ public:
 	Bullet() : MoveableEntity(BULLET_SIZE, BULLET_POINT_COUNT, BULLET_COLOR) {};
 
 	bool isActive();
-	void update(const Map& m);
-	void destroy();
-
 	void setStartPosition(Position p);
-
+	void destroy();
+	void update(const Map& m);
+	
 private:
 
 	bool active = true;
+
 	void moveInRooms(const rooms_con_t& rooms);
 	void moveInDoors(const doors_con_t& doors);
 };

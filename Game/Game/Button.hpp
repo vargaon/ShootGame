@@ -1,6 +1,8 @@
 #pragma once
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
+
 #include "Utils.hpp"
 
 const int BTN_TEXT_PADDING = 20;
@@ -15,12 +17,14 @@ public:
 	
 	Button();
 
+	bool isMouseOver(Position& p);
+
 	void setString(std::string s);
 	void setPosition(Position p);
 	void setFont(sf::Font& font);
 	void setFontSize(unsigned int s);
-	void render(sf::RenderWindow* window);
-	bool isMouseOver(Position& p);
+
+	void drawAt(sf::RenderWindow* window);
 	void update(Position& p);
 
 private:

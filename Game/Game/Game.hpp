@@ -1,4 +1,5 @@
 #pragma once
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
@@ -30,10 +31,11 @@ public:
 	Game();
 	~Game();
 
-	void update();
-	void render();
 	bool isRunning() const;
 
+	void update();
+	void render();
+	
 private:
 
 	GameState state = GameState::START;

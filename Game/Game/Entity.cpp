@@ -1,9 +1,8 @@
-#pragma once
 #include "Entity.hpp"
 
 using namespace sf;
 
-Bounds Entity::getBounds() const
+const Bounds& Entity::getBounds() const
 {
 	return this->bounds;
 }

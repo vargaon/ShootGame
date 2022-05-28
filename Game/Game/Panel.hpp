@@ -1,6 +1,8 @@
 #pragma once
+
 #include <SFML/Graphics.hpp>
 #include <sstream>
+
 #include "Button.hpp"
 #include "TextField.hpp"
 #include "Player.hpp"
@@ -10,11 +12,14 @@ const sf::Color PANEL_BACKG_COLOR = { 0, 0, 0, 255 };
 class Panel {
 
 public:
+
 	Panel();
+
 	void setup(Position p, Float2Vector size);
-	void render(sf::RenderWindow* window);
+	void drawAt(sf::RenderWindow* window);
 
 protected:
+
 	sf::Font font;
 	sf::RectangleShape backgroud;
 };
@@ -22,12 +27,16 @@ protected:
 class StartPanel: public Panel {
 
 public:
+
 	StartPanel();
-	void setup(Position p, Float2Vector size);
-	void render(sf::RenderWindow* window);
+
 	bool startGameBtnClicked(Position& mPosition, bool mClicked);
 
+	void setup(Position p, Float2Vector size);
+	void drawAt(sf::RenderWindow* window);
+
 private:
+
 	TextField welcomeTextFiled;
 	Button startGameBtn;
 };
@@ -35,13 +44,17 @@ private:
 class EndPanel: public Panel {
 
 public:
+
 	EndPanel();
-	void setup(Position pos, Float2Vector panelSize);
-	void setInfo(int collecteItems, int totalItems, int killedZombies, int totalZombies);
-	void render(sf::RenderWindow* window);
+
 	bool newGameBtnClicked(Position& mPosition, bool mClicked);
 
+	void setInfo(int collecteItems, int totalItems, int killedZombies, int totalZombies);
+	void setup(Position pos, Float2Vector panelSize);
+	void drawAt(sf::RenderWindow* window);
+	
 private:
+
 	Position p;
 	Float2Vector size;
 	Button newGameBtn;
@@ -53,12 +66,15 @@ private:
 class RunPanel: public Panel {
 
 public:
+
 	RunPanel();
+
 	void setup(Position p, Float2Vector size);
-	void render(sf::RenderWindow* window);
 	void update(Player& p);
+	void drawAt(sf::RenderWindow* window);
 
 private:
+
 	Position infoTextPosition;
 	TextField infoTextField;
 };

@@ -54,7 +54,7 @@ void Person::moveInRoom(const Room& r)
 {
 	const auto& roomBounds = r.getInnerBounds();
 
-	auto personBounds = this->getBounds();
+	const auto& personBounds = this->getBounds();
 
 	if (!personBounds.isIn(roomBounds)) {
 
@@ -102,8 +102,8 @@ void Person::moveInDoors(const doors_con_t& doors)
 {
 	for (auto&& d : doors) {
 
-		auto doorBounds = d.getBounds();
-		auto personBounds = this->getBounds();
+		const auto& doorBounds = d.getBounds();
+		const auto& personBounds = this->getBounds();
 
 		if (personBounds.inCollisionWith(doorBounds)) {
 

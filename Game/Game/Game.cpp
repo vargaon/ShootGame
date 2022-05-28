@@ -1,4 +1,3 @@
-#pragma once
 #include "Game.hpp"
 
 using namespace sf;
@@ -22,6 +21,74 @@ Game::Game()
 Game::~Game()
 {
 	delete this->window;
+}
+
+bool Game::isRunning() const
+{
+	return this->window->isOpen();
+}
+
+void Game::update()
+{
+	while (this->window->pollEvent(this->ev)) {
+
+		switch (this->ev.type)
+		{
+
+		case(Event::Closed):
+			this->window->close();
+			break;
+
+		case(Event::MouseButtonPressed):
+			this->processMousePressed();
+			break;
+
+		case(Event::MouseMoved):
+			this->processMouseMoved();
+			break;
+
+		default:
+			this->mouseLeftBtnClicked = false;
+			break;
+		}
+	}
+
+	switch (this->state)
+	{
+	case GameState::START:
+		this->observeStartGamePanel();
+		break;
+	case GameState::RUN:
+		this->updateRunningGame();
+		break;
+	case GameState::END:
+		this->observeEndGamePanel();
+		break;
+	default:
+		break;
+	}
+}
+
+void Game::render()
+{
+	this->window->clear(sf::Color::White);
+
+	switch (this->state)
+	{
+	case GameState::START:
+		this->startPanel.drawAt(this->window);
+		break;
+	case GameState::RUN:
+		this->renderRunningGame();
+		break;
+	case GameState::END:
+		this->endPanel.drawAt(this->window);
+		break;
+	default:
+		break;
+	}
+
+	this->window->display();
 }
 
 void Game::setupGameLevel(const LevelSetting& levelSet)
@@ -218,47 +285,6 @@ void Game::observeEndGamePanel()
 	}
 }
 
-void Game::update()
-{
-	while (this->window->pollEvent(this->ev)) {
-
-		switch (this->ev.type)
-		{
-
-		case(Event::Closed):
-			this->window->close();
-			break;
-
-		case(Event::MouseButtonPressed):
-			this->processMousePressed();
-			break;
-
-		case(Event::MouseMoved):
-			this->processMouseMoved();
-			break;
-
-		default:
-			this->mouseLeftBtnClicked = false;
-			break;
-		}
-	}
-
-	switch (this->state)
-	{
-	case GameState::START:
-		this->observeStartGamePanel();
-		break;
-	case GameState::RUN:
-		this->updateRunningGame();
-		break;
-	case GameState::END:
-		this->observeEndGamePanel();
-		break;
-	default:
-		break;
-	}
-}
-
 void Game::renderRunningGame()
 {
 	this->map.drawAt(this->window, player.getRoom());
@@ -273,32 +299,5 @@ void Game::renderRunningGame()
 		this->levelGate.drawAt(this->window);
 	}
 
-	this->runPanel.render(this->window);
-}
-
-void Game::render()
-{
-	this->window->clear(sf::Color::White);
-
-	switch (this->state)
-	{
-	case GameState::START:
-		this->startPanel.render(this->window);
-		break;
-	case GameState::RUN:
-		this->renderRunningGame();
-		break;
-	case GameState::END:
-		this->endPanel.render(this->window);
-		break;
-	default:
-		break;
-	}
-
-	this->window->display();
-}
-
-bool Game::isRunning() const
-{
-	return this->window->isOpen();
+	this->runPanel.drawAt(this->window);
 }

@@ -28,7 +28,7 @@ void TextField::setString(std::string s)
 	this->text.setString(s);
 }
 
-void TextField::render(sf::RenderWindow* window)
+void TextField::drawAt(sf::RenderWindow* window)
 {
 	window->draw(this->text);
 }

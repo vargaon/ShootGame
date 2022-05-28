@@ -10,11 +10,11 @@ bool Item::isActive() const
 	return active;
 }
 
-bool Item::tryCollect(Bounds bounds)
+bool Item::tryCollect(const Bounds& b)
 {
 	if (!this->active) return false;
 
-	if (this->getBounds().inCollisionWith(bounds)) {
+	if (this->getBounds().inCollisionWith(b)) {
 		this->active = false;
 
 		return true;

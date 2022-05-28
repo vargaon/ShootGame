@@ -1,46 +1,21 @@
 #include "Bullet.hpp"
 
-using namespace sf;
-
-void Bullet::moveInRooms(const rooms_con_t& rooms)
-{
-	auto bulletBounds = this->getBounds();
-
-	for (auto&& roomRow : rooms) {
-
-		for (auto&& r : roomRow) {
-			if (bulletBounds.isIn(r.getOuterBounds())) {
-
-				this->active = bulletBounds.isIn(r.getInnerBounds());
-				return;
-			}
-		}
-	}
-
-	this->active = false;
-}
-
-void Bullet::moveInDoors(const doors_con_t& doors)
-{
-	auto bulletBounds = this->getBounds();
-
-	for (auto&& d : doors) {
-
-		if (bulletBounds.inCollisionWith(d.getBounds())) {
-
-			this->inDoor = true;
-			this->active = bulletBounds.inRange(d.isHorizontal(), d.getBounds());
-
-			return;
-		}
-	}
-
-	this->inDoor = false;
-}
-
 bool Bullet::isActive()
 {
 	return this->active;
+}
+
+void Bullet::setStartPosition(Position p)
+{
+	this->x = p.x;
+	this->y = p.y;
+
+	this->setPosition(p);
+}
+
+void Bullet::destroy()
+{
+	this->active = false;
 }
 
 void Bullet::update(const Map& m)
@@ -63,20 +38,43 @@ void Bullet::update(const Map& m)
 		if (!this->inDoor && this->active) {
 			this->moveInRooms(m.rooms);
 		}
-		
+
 		if (!this->active) break;
 	}
 }
 
-void Bullet::destroy()
+void Bullet::moveInRooms(const rooms_con_t& rooms)
 {
+	const auto& bulletBounds = this->getBounds();
+
+	for (auto&& roomRow : rooms) {
+
+		for (auto&& r : roomRow) {
+			if (bulletBounds.isIn(r.getOuterBounds())) {
+
+				this->active = bulletBounds.isIn(r.getInnerBounds());
+				return;
+			}
+		}
+	}
+
 	this->active = false;
 }
 
-void Bullet::setStartPosition(Position p)
+void Bullet::moveInDoors(const doors_con_t& doors)
 {
-	this->x = p.x;
-	this->y = p.y;
+	const auto& bulletBounds = this->getBounds();
 
-	this->setPosition(p);
+	for (auto&& d : doors) {
+
+		if (bulletBounds.inCollisionWith(d.getBounds())) {
+
+			this->inDoor = true;
+			this->active = bulletBounds.inRange(d.isHorizontal(), d.getBounds());
+
+			return;
+		}
+	}
+
+	this->inDoor = false;
 }

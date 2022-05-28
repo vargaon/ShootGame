@@ -17,7 +17,7 @@ void Panel::setup(Position p, Float2Vector size)
 	this->backgroud.setFillColor(PANEL_BACKG_COLOR);
 }
 
-void Panel::render(sf::RenderWindow* window)
+void Panel::drawAt(sf::RenderWindow* window)
 {
 	window->draw(this->backgroud);
 }
@@ -34,6 +34,12 @@ StartPanel::StartPanel()
 	this->startGameBtn.setString("Play Game");
 }
 
+bool StartPanel::startGameBtnClicked(Position& mPosition, bool mClicked)
+{
+	this->startGameBtn.update(mPosition);
+	return mClicked && this->startGameBtn.isMouseOver(mPosition);
+}
+
 void StartPanel::setup(Position p, Float2Vector size)
 {
 	Panel::setup(p, size);
@@ -45,18 +51,12 @@ void StartPanel::setup(Position p, Float2Vector size)
 	this->startGameBtn.setPosition({ cx, cy + 20 });
 }
 
-void StartPanel::render(sf::RenderWindow* window)
+void StartPanel::drawAt(sf::RenderWindow* window)
 {
-	Panel::render(window);
+	Panel::drawAt(window);
 
-	this->welcomeTextFiled.render(window);
-	this->startGameBtn.render(window);
-}
-
-bool StartPanel::startGameBtnClicked(Position& mPosition, bool mClicked)
-{
-	this->startGameBtn.update(mPosition);
-	return mClicked && this->startGameBtn.isMouseOver(mPosition);
+	this->welcomeTextFiled.drawAt(window);
+	this->startGameBtn.drawAt(window);
 }
 
 EndPanel::EndPanel()
@@ -76,17 +76,10 @@ EndPanel::EndPanel()
 	this->zombieSummaryText.setString("Zombies: 0/0");
 }
 
-void EndPanel::setup(Position pos, Float2Vector panelSize)
+bool EndPanel::newGameBtnClicked(Position& mPosition, bool mClicked)
 {
-	Panel::setup(pos, panelSize);
-
-	float cx = pos.x + panelSize.x / 2;
-	float cy = pos.y + panelSize.y / 2;
-
-	this->p = { cx, cy };
-
-	this->gameOverText.setPosition({ cx, cy - 150 });
-	this->newGameBtn.setPosition({ cx, cy + 100 });
+	this->newGameBtn.update(mPosition);
+	return mClicked && this->newGameBtn.isMouseOver(mPosition);
 }
 
 void EndPanel::setInfo(int collectedItems, int totalItems, int killedZombies, int totalZombies)
@@ -102,20 +95,27 @@ void EndPanel::setInfo(int collectedItems, int totalItems, int killedZombies, in
 	this->zombieSummaryText.setPosition({ this->p.x, this->p.y });
 }
 
-void EndPanel::render(sf::RenderWindow* window)
+void EndPanel::setup(Position pos, Float2Vector panelSize)
 {
-	Panel::render(window);
+	Panel::setup(pos, panelSize);
 
-	this->gameOverText.render(window);
-	this->itemSummaryText.render(window);
-	this->zombieSummaryText.render(window);
-	this->newGameBtn.render(window);
+	float cx = pos.x + panelSize.x / 2;
+	float cy = pos.y + panelSize.y / 2;
+
+	this->p = { cx, cy };
+
+	this->gameOverText.setPosition({ cx, cy - 150 });
+	this->newGameBtn.setPosition({ cx, cy + 100 });
 }
 
-bool EndPanel::newGameBtnClicked(Position& mPosition, bool mClicked)
+void EndPanel::drawAt(sf::RenderWindow* window)
 {
-	this->newGameBtn.update(mPosition);
-	return mClicked && this->newGameBtn.isMouseOver(mPosition);
+	Panel::drawAt(window);
+
+	this->gameOverText.drawAt(window);
+	this->itemSummaryText.drawAt(window);
+	this->zombieSummaryText.drawAt(window);
+	this->newGameBtn.drawAt(window);
 }
 
 RunPanel::RunPanel()
@@ -143,13 +143,6 @@ void RunPanel::setup(Position p, Float2Vector size)
 	this->infoTextField.setPosition(tp);
 }
 
-void RunPanel::render(sf::RenderWindow* window)
-{
-	Panel::render(window);
-
-	this->infoTextField.render(window);
-}
-
 void RunPanel::update(Player& p)
 {
 	int bulletes = p.getBulletesInStack();
@@ -170,4 +163,11 @@ void RunPanel::update(Player& p)
 
 	this->infoTextField.setString(ss.str());
 	this->infoTextField.setPosition(this->infoTextPosition);
+}
+
+void RunPanel::drawAt(sf::RenderWindow* window)
+{
+	Panel::drawAt(window);
+
+	this->infoTextField.drawAt(window);
 }

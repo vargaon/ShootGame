@@ -17,7 +17,7 @@ public:
 
 	bool isActive() const;
 
-	bool tryCollect(Bounds bounds);
+	bool tryCollect(const Bounds& b);
 	void update();
 
 private:

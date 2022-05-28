@@ -16,5 +16,6 @@ protected:
 	void setPosition(Position p);
 
 private:
+
 	sf::RectangleShape entity;
 };

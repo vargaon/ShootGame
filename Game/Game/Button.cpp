@@ -8,6 +8,11 @@ Button::Button()
 	this->text.setFillColor(BTN_TEXT_COLOR);
 }
 
+bool Button::isMouseOver(Position& p)
+{
+	return this->bounds.contains(p);
+}
+
 void Button::setString(std::string s)
 {
 	this->text.setString(s);
@@ -44,15 +49,10 @@ void Button::setFontSize(unsigned int s)
 	this->text.setCharacterSize(s);
 }
 
-void Button::render(sf::RenderWindow* window)
+void Button::drawAt(sf::RenderWindow* window)
 {
 	window->draw(this->entity);
 	window->draw(this->text);
-}
-
-bool Button::isMouseOver(Position& p)
-{
-	return this->bounds.contains(p);
 }
 
 void Button::update(Position& p)

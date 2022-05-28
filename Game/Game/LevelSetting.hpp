@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+
 #include "MapSetting.hpp"
 
 class LevelSetting {

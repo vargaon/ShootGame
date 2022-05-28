@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp> 
+
 #include "Utils.hpp"
 
 class Entity {
@@ -12,7 +13,7 @@ public:
 
 	virtual ~Entity() {};
 
-	Bounds getBounds() const;
+	const Bounds& getBounds() const;
 	Position getPosition() const;
 	void transpose();
 
