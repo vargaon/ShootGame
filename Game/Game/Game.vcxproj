@@ -155,9 +155,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CircleEntity.cpp" />
     <ClCompile Include="LevelSettingParser.cpp" />
     <ClCompile Include="MapSetting.cpp" />
+    <ClCompile Include="MoveableEntity.cpp" />
     <ClCompile Include="NextLevelGate.cpp" />
+    <ClCompile Include="RectangleEntity.cpp" />
     <ClCompile Include="TextField.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Bullet.cpp" />
@@ -175,10 +178,13 @@
     <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CircleEntity.hpp" />
     <ClInclude Include="LevelSetting.hpp" />
     <ClInclude Include="LevelSettingParser.hpp" />
     <ClInclude Include="MapSetting.hpp" />
+    <ClInclude Include="MoveableEntity.hpp" />
     <ClInclude Include="NextLevelGate.hpp" />
+    <ClInclude Include="RectangleEntity.hpp" />
     <ClInclude Include="TextField.hpp" />
     <ClInclude Include="Utils.hpp" />
     <ClInclude Include="Bullet.hpp" />

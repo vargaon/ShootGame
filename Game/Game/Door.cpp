@@ -1,34 +1,19 @@
 #include "Door.hpp"
 
-using namespace sf;
-
-Door::Door(bool isHorizontal, Position p)
+Door::Door(bool horizontal, Position p) : RectangleEntity(DOOR_SIZE, WALL_THICKNESS, DOOR_COLOR)
 {
-	this->horizontal = isHorizontal;
+	this->horizontal = horizontal;
 
-	Vector2f s;
-
-	if (isHorizontal) {
-		s = Vector2f(DOOR_SIZE, WALL_THICKNESS);
+	if (horizontal) {
+		this->setPosition({ p.x + DOOR_SIZE / 2, p.y + WALL_THICKNESS / 2 });
 	}
-
 	else {
-		s = Vector2f(WALL_THICKNESS, DOOR_SIZE);
+		this->transpose();
+		this->setPosition({ p.x + WALL_THICKNESS / 2, p.y + DOOR_SIZE / 2 });
 	}
-
-	this->entity = RectangleShape(s);
-	this->entity.setFillColor(DOOR_COLOR);
-	this->entity.setPosition(p.x, p.y);
-
-	this->bounds = Bounds(p.y, p.y + s.y, p.x, p.x + s.x);
 }
 
 bool Door::isHorizontal() const
 {
 	return this->horizontal;
-}
-
-void Door::render(sf::RenderWindow* window)
-{
-	window->draw(this->entity);
 }

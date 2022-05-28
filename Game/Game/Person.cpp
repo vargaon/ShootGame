@@ -1,35 +1,80 @@
 #include "Person.hpp"
 
+Room* Person::getRoom() const
+{
+	return this->room;
+}
+
+void Person::setMovePower(PersonMovePower mp)
+{
+	this->movePower = mp;
+}
+
+void Person::setDirectionByPosition(Position& p)
+{
+	this->setDirection(atan2(p.y - this->y, p.x - this->x) * 180 / float(PI));
+}
+
+void Person::setStartPositionByRoom(Room* startRoom)
+{
+	this->room = startRoom;
+	auto p = startRoom->getCentrePosition();
+
+	this->x = p.x;
+	this->y = p.y;
+
+	this->setPosition(p);
+}
+
+void Person::move(Map& map, float speed)
+{
+	if (this->movePower == PersonMovePower::FORWARD) {
+
+		this->x += this->dx * speed;
+		this->y += this->dy * speed;
+
+		this->setPosition({ this->x, this->y });
+
+		bool wasInDoor = this->inDoor;
+
+		this->moveInDoors(map.doors);
+
+		if (!this->inDoor) {
+			this->moveInRooms(map.rooms, wasInDoor);
+		}
+	}
+}
+
 bool Person::inRoom(const Room& r) const
 {
-	auto ob = r.outerBounds;
-	return this->bounds.isIn(ob);
+	return this->getBounds().isIn(r.getOuterBounds());
 }
 
 void Person::moveInRoom(const Room& r)
 {
-	auto ib = r.innerBounds;
+	const auto& roomBounds = r.getInnerBounds();
 
-	if (!this->bounds.isIn(ib)) {
+	auto personBounds = this->getBounds();
 
-		if (this->bounds.left < ib.left) {
-			this->x = ib.left + this->size;
+	if (!personBounds.isIn(roomBounds)) {
+
+		if (personBounds.getLeft() < roomBounds.getLeft()) {
+			this->x = roomBounds.getLeft() + this->getSize();
 		}
 
-		if (this->bounds.right > ib.right) {
-			this->x = ib.right - this->size;
+		if (personBounds.getRight() > roomBounds.getRight()) {
+			this->x = roomBounds.getRight() - this->getSize();
 		}
 
-		if (this->bounds.top < ib.top) {
-			this->y = ib.top + this->size;
+		if (personBounds.getTop() < roomBounds.getTop()) {
+			this->y = roomBounds.getTop() + this->getSize();
 		}
 
-		if (bounds.bot > ib.bot) {
-			this->y = ib.bot - this->size;
+		if (personBounds.getBot() > roomBounds.getBot()) {
+			this->y = roomBounds.getBot() - this->getSize();
 		}
 
-		Position p(this->x, this->y);
-		this->setPosition(p);
+		this->setPosition({ this->x, this->y });
 	}
 }
 
@@ -57,42 +102,42 @@ void Person::moveInDoors(const doors_con_t& doors)
 {
 	for (auto&& d : doors) {
 
-		auto db = d.bounds;
+		auto doorBounds = d.getBounds();
+		auto personBounds = this->getBounds();
 
-		if (this->bounds.inCollisionWith(db)) {
+		if (personBounds.inCollisionWith(doorBounds)) {
 
 			if (this->inDoor) {
 
-				if (!this->bounds.inRange(d.isHorizontal(), db)) {
+				if (!personBounds.inRange(d.isHorizontal(), doorBounds)) {
 
 					if (d.isHorizontal()) {
 
-						if (this->bounds.left < db.left) {
-							this->x = db.left + this->size;
+						if (personBounds.getLeft() < doorBounds.getLeft()) {
+							this->x = doorBounds.getLeft() + this->getSize();
 						}
 
-						if (this->bounds.right > db.right) {
-							this->x = db.right - this->size;
+						if (personBounds.getRight() > doorBounds.getRight()) {
+							this->x = doorBounds.getRight() - this->getSize();
 						}
 					}
 					else {
 
-						if (this->bounds.top < db.top) {
-							this->y = db.top + this->size;
+						if (personBounds.getTop() < doorBounds.getTop()) {
+							this->y = doorBounds.getTop() + this->getSize();
 						}
 
-						if (this->bounds.bot > db.bot) {
-							this->y = db.bot - this->size;
+						if (personBounds.getBot() > doorBounds.getBot()) {
+							this->y = doorBounds.getBot() - this->getSize();
 						}
 					}
 
-					Position p(this->x, this->y);
-					this->setPosition(p);
+					this->setPosition({ this->x, this->y });
 				}
 			}
 
 			else {
-				if (this->bounds.inRange(d.isHorizontal(), db)) {
+				if (personBounds.inRange(d.isHorizontal(), doorBounds)) {
 					this->inDoor = true;
 				}
 			}
@@ -102,30 +147,4 @@ void Person::moveInDoors(const doors_con_t& doors)
 	}
 
 	this->inDoor = false;
-}
-
-void Person::setMovePower(PersonMovePower mp)
-{
-	this->movePower = mp;
-}
-
-void Person::setDirectionByPosition(Position& p)
-{
-	this->setDirection(atan2(p.y - this->y, p.x - this->x) * 180 / float(PI));
-}
-
-void Person::setStartPositionByRoom(Room* pRoom)
-{
-	this->room = pRoom;
-	auto p = pRoom->getCentrePosition();
-
-	this->x = p.x;
-	this->y = p.y;
-
-	this->setPosition(p);
-}
-
-const Room* Person::getRoom() const
-{
-	return this->room;
 }

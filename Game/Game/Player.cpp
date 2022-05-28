@@ -2,27 +2,14 @@
 
 using namespace sf;
 
-void Player::shoot()
+bool Player::canShoot()
 {
-	if (this->canShoot()) {
+	return (!this->reloading && this->bulletesInStack > 0 && this->shootClock.getElapsedTime().asMilliseconds() > PLAYER_SHOOT_COOLDOWN);
+}
 
-		this->shootClock.restart();
-
-		Bullet b;
-
-		b.setStartPosition(this->getPosition());
-		b.setDirection(this->getDirection());
-
-		this->bullets.push_back(b);
-
-		--this->bulletesInStack;
-
-		//std::cout << "Shot!" << std::endl;
-
-		if (this->bulletesInStack <= 0) {
-			this->reload();
-		}
-	}	
+bool Player::isReloading()
+{
+	return this->reloading;
 }
 
 int Player::getBulletesInStack()
@@ -50,41 +37,108 @@ int Player::getLives()
 	return this->lives;
 }
 
-void Player::checkForCollectedItems()
+void Player::init()
 {
-	for (auto&& r : this->room->neighborhood) {
+	this->lives = PLAYER_LIVES;
+	this->bulletesInStack = PLAYER_STACK_CAPACITY;
+	this->totalCoins = 0;
+	this->levelCoins = 0;
+	this->killedZombies = 0;
+}
 
-		for (auto&& i : r->items) {
+void Player::setup(Room* startRoom)
+{
+	this->setStartPositionByRoom(startRoom);
 
-			this->tryCollectItem(i);
+	this->reloading = false;
+	this->reloadClock.restart();
+	this->shootClock.restart();
+	this->bullets.clear();
+
+	this->levelCoins = 0;
+}
+
+void Player::shoot()
+{
+	if (this->canShoot()) {
+
+		this->shootClock.restart();
+
+		Bullet b;
+
+		b.setStartPosition(this->getPosition());
+		b.setDirection(this->getDirection());
+
+		this->bullets.push_back(b);
+
+		--this->bulletesInStack;
+
+		//std::cout << "Shot!" << std::endl;
+
+		if (this->bulletesInStack <= 0) {
+			this->reload();
+		}
+	}	
+}
+
+void Player::reload()
+{
+	if (this->reloading || this->bulletesInStack == PLAYER_STACK_CAPACITY) return;
+
+	//std::cout << "Reload!" << std::endl;
+
+	this->reloading = true;
+	this->reloadClock.restart();
+}
+
+void Player::update(Map& map, zombies_con_t& zombies)
+{
+	//reloading
+	if (this->reloading && this->reloadClock.getElapsedTime().asMilliseconds() > PLAYER_RELOAD_COOLDOWN) {
+		this->reloading = false;
+		this->bulletesInStack = PLAYER_STACK_CAPACITY;
+	}
+
+	this->move(map, PLAYER_MOVE_SPEED);
+
+	this->collectItems();
+	this->observeZombies(zombies);
+
+	this->updateBulletes(map, zombies);
+}
+
+void Player::drawAt(sf::RenderWindow* window)
+{
+	MoveableEntity::drawAt(window);
+
+	for (auto&& b : this->bullets) {
+		b.drawAt(window);
+	}
+}
+
+void Player::collectItems()
+{
+	for (auto&& r : this->room->getNeighborhood()) {
+
+		for (auto&& i : r->getItems()) {
+
+			if (i.tryCollect(this->getBounds())) {
+				++this->totalCoins;
+				++this->levelCoins;
+				//std::cout << "Item collected!" << std::endl;
+			}
 		}
 	}
 }
 
-void Player::tryCollectItem(Item& i)
-{
-	if (i.isActive()) {
-
-		auto ib = i.getBounds();
-
-		if (this->bounds.inCollisionWith(ib)) {
-			i.collect();
-			++this->totalCoins;
-			++this->levelCoins;
-
-			//std::cout << "Item collected!" << std::endl;
-		}
-	}
-}
-
-void Player::checkForZombies(zombies_con_t& zombies)
+void Player::observeZombies(zombies_con_t& zombies)
 {
 	auto p = this->getPosition();
 
 	for (auto&& z : zombies) {
 		auto zb = z.getBounds();
 
-		if (this->bounds.inCollisionWith(zb)) {
+		if (this->getBounds().inCollisionWith(zb)) {
 			--this->lives;
 			z.die();
 			//std::cout << "Killed by zombie!" << std::endl;
@@ -125,91 +179,4 @@ void Player::updateBulletes(Map& m, zombies_con_t& zombies)
 			it++;
 		}
 	}
-}
-
-void Player::update(Map& m, zombies_con_t& zombies)
-{
-	//reloading
-	if (this->reloading && this->reloadClock.getElapsedTime().asMilliseconds() > PLAYER_RELOAD_COOLDOWN) {
-		this->reloading = false;
-		this->bulletesInStack = PLAYER_STACK_CAPACITY;
-	}
-
-	//move
-	if (this->movePower == PersonMovePower::FORWARD) {
-
-		this->x += this->dx * PLAYER_MOVE_SPEED;
-		this->y += this->dy * PLAYER_MOVE_SPEED;
-
-		Position p(this->x, this->y);
-		this->setPosition(p);
-
-		bool wasInDoor = this->inDoor;
-	
-		this->moveInDoors(m.doors);
-
-		if (!this->inDoor) {
-
-			this->moveInRooms(m.rooms, wasInDoor);
-			this->checkForCollectedItems();
-		}
-	}
-
-	this->checkForZombies(zombies);
-	this->updateBulletes(m, zombies);
-
-
-	for (auto&& n : this->room->neighborhood) {
-		n->setRoomBackgroupColor(STANDING_ROOM_BACKGROUND_COLOR);
-	}
-}
-
-void Player::render(sf::RenderWindow* window)
-{
-	MoveableEntity::render(window);
-
-	for (auto&& b : this->bullets) {
-		b.render(window);
-	}
-}
-
-void Player::init()
-{
-	this->lives = PLAYER_LIVES;
-	this->bulletesInStack = PLAYER_STACK_CAPACITY;
-	this->totalCoins = 0;
-	this->levelCoins = 0;
-	this->killedZombies = 0;
-}
-
-void Player::setup(Room* pRoom)
-{
-	this->setStartPositionByRoom(pRoom);
-
-	this->reloading = false;
-	this->reloadClock.restart();
-	this->shootClock.restart();
-	this->bullets.clear();
-
-	this->levelCoins = 0;
-}
-
-bool Player::canShoot()
-{
-	return (!this->reloading && this->bulletesInStack > 0 && this->shootClock.getElapsedTime().asMilliseconds() > PLAYER_SHOOT_COOLDOWN);
-}
-
-void Player::reload()
-{
-	if (this->reloading || this->bulletesInStack == PLAYER_STACK_CAPACITY) return;
-
-	//std::cout << "Reload!" << std::endl;
-
-	this->reloading = true;
-	this->reloadClock.restart();
-}
-
-bool Player::isReloading()
-{
-	return this->reloading;
 }

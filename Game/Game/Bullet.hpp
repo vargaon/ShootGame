@@ -1,7 +1,8 @@
 #pragma once
 #include <iostream>
 #include <vector>
-#include "Entity.hpp"
+
+#include "MoveableEntity.hpp"
 #include "Map.hpp"
 
 const int BULLET_MOVE_SPEED = 10;

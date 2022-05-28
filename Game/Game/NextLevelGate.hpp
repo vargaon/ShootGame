@@ -1,22 +1,23 @@
 #pragma once
 
-#include <SFML/Graphics.hpp> 
+#include "RectangleEntity.hpp"
 #include "Room.hpp"
-#include "Utils.hpp"
 
 const float GATE_SIZE = 20.f;
 const sf::Color GATE_COLOR = {255,255,255,255};
 
-class NextLevelGate {
+class NextLevelGate : public RectangleEntity {
+
 public:
 
-	Room* room = nullptr;
+	NextLevelGate() : RectangleEntity(GATE_SIZE, GATE_SIZE, GATE_COLOR) {};
 
-	NextLevelGate();
-	void setPosition(Room* room);
-	bool enteredGate(const Bounds& b);
-	void render(sf::RenderWindow* window);
+	Room* getRoom();
+
+	void setPositionByRoom(Room* r);
+	bool tryEnter(const Bounds& b);
+
 private:
-	Bounds bounds;
-	sf::RectangleShape entity;
+
+	Room* room = nullptr;
 };

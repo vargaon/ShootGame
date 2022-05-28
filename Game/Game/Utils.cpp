@@ -1,5 +1,41 @@
 #include "Utils.hpp"
 
+Bounds::Bounds(float width, float height, Position p)
+{
+	this->width = width;
+	this->height = height;
+
+	this->updateByPosition(p);
+}
+
+float Bounds::getLeft() const
+{
+	return this->left;
+}
+
+float Bounds::getRight() const
+{
+	return this->right;
+}
+
+float Bounds::getTop() const
+{
+	return this->top;
+}
+
+float Bounds::getBot() const
+{
+	return this->bot;
+}
+
+bool Bounds::isIn(const Bounds& b) const
+{
+	return (
+		this->inRange(true, b) &&
+		this->inRange(false, b)
+		);
+}
+
 bool Bounds::inCollisionWith(const Bounds& b) const
 {
 	return !(
@@ -36,10 +72,10 @@ bool Bounds::contains(const Float2Vector& v) const
 		);
 }
 
-bool Bounds::isIn(const Bounds& b) const
+void Bounds::updateByPosition(Position p)
 {
-	return (
-		this->inRange(true, b) &&
-		this->inRange(false, b)
-		);
+	this->left = p.x - width / 2;
+	this->right = p.x + width / 2;
+	this->top = p.y - height / 2;
+	this->bot = p.y + height / 2;
 }

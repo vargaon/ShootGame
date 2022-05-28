@@ -31,7 +31,7 @@ void Button::setPosition(Position p)
 
 	this->text.setPosition(tx, ty);
 
-	this->bounds = Bounds(by, by + size.y, bx, bx + size.x);
+	this->bounds = Bounds(size.x, size.y, p);
 }
 
 void Button::setFont(sf::Font& font)

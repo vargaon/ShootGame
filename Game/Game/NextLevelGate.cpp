@@ -1,27 +1,18 @@
 #include "NextLevelGate.hpp"
 
-NextLevelGate::NextLevelGate()
+Room* NextLevelGate::getRoom()
 {
-	this->entity.setSize({ GATE_SIZE, GATE_SIZE });
-	this->entity.setOrigin(GATE_SIZE / 2, GATE_SIZE / 2);
-	this->entity.setFillColor(GATE_COLOR);
+	return this->room;
 }
 
-void NextLevelGate::setPosition(Room* room)
+void NextLevelGate::setPositionByRoom(Room* r)
 {
-	this->room = room;
-	auto p = room->getCentrePosition();
+	this->room = r;
 
-	this->bounds = Bounds(p.y - GATE_SIZE/2, p.y + GATE_SIZE/2, p.x - GATE_SIZE/2, p.x + GATE_SIZE/2);
-	this->entity.setPosition(p.x, p.y);
+	this->setPosition(r->getCentrePosition());
 }
 
-bool NextLevelGate::enteredGate(const Bounds& b)
+bool NextLevelGate::tryEnter(const Bounds& b)
 {
-	return this->bounds.inCollisionWith(b);
-}
-
-void NextLevelGate::render(sf::RenderWindow* window)
-{
-	window->draw(this->entity);
+	return this->getBounds().inCollisionWith(b);
 }

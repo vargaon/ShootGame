@@ -1,29 +1,24 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+
 #include <vector>
+
+#include "RectangleEntity.hpp"
 #include "Room.hpp"
-#include "Utils.hpp"
 
 const float DOOR_SIZE = 70.f;
 const sf::Color DOOR_COLOR = { 0,255,0,255 };
 
-class Door {
-
-private:
-
-	sf::RectangleShape entity;
-
-	bool horizontal;
+class Door : public RectangleEntity {
 
 public:
 
-	Bounds bounds;
-	
-	Door(bool isHorizontal, Position p);
+	Door(bool horizontal, Position p);
 
 	bool isHorizontal() const;
 
-	void render(sf::RenderWindow* window);
+private:
+
+	bool horizontal;
 };
 
 using doors_con_t = std::vector<Door>;

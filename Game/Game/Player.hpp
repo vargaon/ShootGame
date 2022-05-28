@@ -1,7 +1,10 @@
 #pragma once
-#include "Person.hpp"
-#include "Zombie.hpp"
+
 #include <iostream>
+
+#include "Person.hpp"
+#include "Bullet.hpp"
+#include "Zombie.hpp"
 
 const int PLAYER_LIVES = 3;
 const float PLAYER_MOVE_SPEED = 2.f;
@@ -18,19 +21,21 @@ public:
 
 	Player() : Person(PLAYER_COLOR) {};
 
-	void shoot();
 	bool canShoot();
-	void reload();
 	bool isReloading();
 	int getBulletesInStack();
 	int getTotalCoins();
 	int getLevelCoins();
 	int getKilledZombies();
 	int getLives();
-	void update(Map& m, zombies_con_t& zombies);
-	void render(sf::RenderWindow* window);
+
 	void init();
-	void setup(Room* pRoom);
+	void setup(Room* startRoom);
+
+	void shoot();
+	void reload();
+	void update(Map& map, zombies_con_t& zombies);
+	void drawAt(sf::RenderWindow* window);
 
 private:
 
@@ -46,8 +51,7 @@ private:
 
 	bulletes_con_t bullets;
 
-	void checkForCollectedItems();
-	void tryCollectItem(Item& i);
-	void checkForZombies(zombies_con_t& zombies);
+	void collectItems();
+	void observeZombies(zombies_con_t& zombies);
 	void updateBulletes(Map& m, zombies_con_t& zombies);
 };

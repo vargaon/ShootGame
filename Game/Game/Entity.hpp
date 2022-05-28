@@ -3,58 +3,30 @@
 #include <SFML/Graphics.hpp> 
 #include "Utils.hpp"
 
-const double PI = 3.14159265;
-
 class Entity {
 
 public:
 
 	Entity() {};
-	Entity(float size, unsigned int pointCount, sf::Color color);
+	Entity(float width, float height) : width(width), height(height), bounds(width, height) {};
 
 	virtual ~Entity() {};
 
 	Bounds getBounds() const;
 	Position getPosition() const;
+	void transpose();
 
-	void render(sf::RenderWindow* window);
-
-private:
-
-	sf::CircleShape entity;
-	Position position;
+	virtual void drawAt(sf::RenderWindow* window) = 0;
 
 protected:
 
-	float size = 0.f;
+	void updatePosition(Position p);
+
+private:
+
+	float width = 0.f;
+	float height = 0.f;
+
 	Bounds bounds;
-
-	void setPosition(Position p);
-	void setRotation(float direction);
-};
-
-class MoveableEntity : public Entity {
-
-public:
-
-	MoveableEntity() {};
-	MoveableEntity(float size, int pointCount, sf::Color color) : Entity(size, pointCount, color) {};
-
-	float getDirection() const;
-	void setDirection(float dir);
-
-private:
-
-	float direction = 0.f;
-	void computeDirectionsPowers();
-
-protected:
-
-	float x = 0.f;
-	float y = 0.f;
-
-	float dx = 0.f;
-	float dy = 0.f;
-	
-	bool inDoor = false;
+	Position position;
 };

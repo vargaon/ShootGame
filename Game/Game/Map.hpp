@@ -4,6 +4,7 @@
 #include <vector>
 #include <cstdlib>
 #include <algorithm>
+
 #include "MapSetting.hpp"
 
 const sf::Color WALL_COLOR = { 0, 0, 0, 255 };
@@ -29,7 +30,7 @@ public:
 	void setup(const MapSetting & mapSetting);
 
 	void update();
-	void render(sf::RenderWindow* window, const Room* playerRoom);
+	void drawAt(sf::RenderWindow* window, Room* playerRoom);
 
 private:
 

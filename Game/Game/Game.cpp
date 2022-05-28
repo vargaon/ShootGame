@@ -24,18 +24,18 @@ Game::~Game()
 	delete this->window;
 }
 
-void Game::setupGameLevel(const LevelSetting& levelSetting)
+void Game::setupGameLevel(const LevelSetting& levelSet)
 {
 	this->zombies.clear();
 	this->zombieSpawnClock.restart();
 
 	this->itemSpawnClock.restart();
-	this->levelSetting = levelSetting;
+	this->levelSetting = levelSet;
 
-	this->map.setup(levelSetting.mapSetting);
+	this->map.setup(levelSet.mapSetting);
 
-	if (this->levelGate.room != nullptr) {
-		this->player.setup(this->levelGate.room);
+	if (this->levelGate.getRoom() != nullptr) {
+		this->player.setup(this->levelGate.getRoom());
 	}
 	else {
 		this->player.setup(this->map.getRandomRoom());
@@ -56,9 +56,9 @@ void Game::initRunningGame()
 
 void Game::spawnZombie()
 {
-	if (this->zombies.size() < this->levelSetting.maxSpawnedZombies && this->zombieSpawnClock.getElapsedTime().asMilliseconds() > this->levelSetting.zombieSpawnCooldown) {
+	if (int(this->zombies.size()) < this->levelSetting.maxSpawnedZombies && this->zombieSpawnClock.getElapsedTime().asMilliseconds() > this->levelSetting.zombieSpawnCooldown) {
 
-		Room* r = this->map.getRandomRoom(this->player.getRoom()->neighborhood);
+		Room* r = this->map.getRandomRoom(this->player.getRoom()->getNeighborhood());
 
 		this->zombieSpawnClock.restart();
 
@@ -116,7 +116,7 @@ void Game::spawnItem()
 
 void Game::spawnLevelGate()
 {
-	this->levelGate.setPosition(this->map.getRandomRoom(this->player.getRoom()->neighborhood));
+	this->levelGate.setPositionByRoom(this->map.getRandomRoom(this->player.getRoom()->getNeighborhood()));
 	this->levelGateActive = true;
 }
 
@@ -154,6 +154,11 @@ void Game::updateRunningGame()
 {
 	this->updateMap();
 	this->updatePlayer();
+
+	for (auto&& n : this->player.getRoom()->getNeighborhood()) {
+		n->setRoomBackgroupColor(STANDING_ROOM_BACKGROUND_COLOR);
+	}
+
 	this->updateZombies();
 
 	this->spawnZombie();
@@ -186,7 +191,7 @@ void Game::observePlayerLives()
 
 void Game::observeNextLevelGateEntering()
 {
-	if (this->levelGateActive && this->levelGate.enteredGate(this->player.getBounds())) {
+	if (this->levelGateActive && this->levelGate.tryEnter(this->player.getBounds())) {
 		this->nextLevel();
 	}
 }
@@ -256,16 +261,16 @@ void Game::update()
 
 void Game::renderRunningGame()
 {
-	this->map.render(this->window, player.getRoom());
+	this->map.drawAt(this->window, player.getRoom());
 
 	for (auto&& z : this->zombies) {
-		z.render(this->window);
+		z.drawAt(this->window);
 	}
 
-	this->player.render(this->window);
+	this->player.drawAt(this->window);
 
 	if (this->levelGateActive) {
-		this->levelGate.render(this->window);
+		this->levelGate.drawAt(this->window);
 	}
 
 	this->runPanel.render(this->window);

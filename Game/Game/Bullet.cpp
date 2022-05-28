@@ -4,12 +4,14 @@ using namespace sf;
 
 void Bullet::moveInRooms(const rooms_con_t& rooms)
 {
+	auto bulletBounds = this->getBounds();
+
 	for (auto&& roomRow : rooms) {
 
 		for (auto&& r : roomRow) {
-			if (this->bounds.isIn(r.outerBounds)) {
+			if (bulletBounds.isIn(r.getOuterBounds())) {
 
-				this->active = this->bounds.isIn(r.innerBounds);
+				this->active = bulletBounds.isIn(r.getInnerBounds());
 				return;
 			}
 		}
@@ -20,12 +22,14 @@ void Bullet::moveInRooms(const rooms_con_t& rooms)
 
 void Bullet::moveInDoors(const doors_con_t& doors)
 {
+	auto bulletBounds = this->getBounds();
+
 	for (auto&& d : doors) {
 
-		if (this->bounds.inCollisionWith(d.bounds)) {
+		if (bulletBounds.inCollisionWith(d.getBounds())) {
 
 			this->inDoor = true;
-			this->active = this->bounds.inRange(d.isHorizontal(), d.bounds);
+			this->active = bulletBounds.inRange(d.isHorizontal(), d.getBounds());
 
 			return;
 		}
