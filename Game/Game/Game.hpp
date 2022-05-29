@@ -57,6 +57,7 @@ private:
 	sf::Clock itemSpawnClock;
 
 	int zombiesSpawned = 0;
+	int coinsCreated = 0;
 	int currentLevel = 0;
 	int maxLevel;
 

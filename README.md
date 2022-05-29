@@ -115,7 +115,7 @@ Hra končí, pokud hráč přijde o všechny životy (3).
 
 Stav: **END**
 
-Zobrazí se nápis *Game Over* a pod ním informace o počtu sebraných mincí a zlikvidovaných nepřátel. Pod informacemi se zobrazí také tlačítko s nápisem *New Game*, které po kliknutí zahájí novou hru.
+Zobrazí se nápis *Game Over* a pod ním informace o dosaženém levelu, počtu sebraných mincí a zlikvidovaných nepřátel. Pod informacemi se zobrazí také tlačítko s nápisem *New Game*, které po kliknutí zahájí novou hru.
 
 ![endGamePanel](docs_images/endGame.jpg)
 

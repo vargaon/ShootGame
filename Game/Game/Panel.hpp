@@ -49,7 +49,7 @@ public:
 
 	bool newGameBtnClicked(Position& mPosition, bool mClicked);
 
-	void setInfo(int collecteItems, int totalItems, int killedZombies, int totalZombies);
+	void setInfo(int collecteItems, int totalItems, int killedZombies, int totalZombies, int reachedLevel);
 	void setup(Position pos, Float2Vector panelSize);
 	void drawAt(sf::RenderWindow* window);
 	
@@ -59,6 +59,7 @@ private:
 	Float2Vector size;
 	Button newGameBtn;
 	TextField gameOverText;
+	TextField levelSummaryText;
 	TextField itemSummaryText;
 	TextField zombieSummaryText;
 };

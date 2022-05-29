@@ -134,7 +134,6 @@ void Map::setup(const MapSetting& mapSetting)
 	}
 
 	this->setupRoomNeighbors(mapSetting.horizontalDoorMask, mapSetting.verticalDoorMask);
-	this->coinsCreated = 0;
 }
 
 void Map::update()
@@ -151,8 +150,6 @@ void Map::createCoin()
 {
 	auto r = this->getRandomRoom();
 	r->createCoin();
-
-	++this->coinsCreated;
 }
 
 Room* Map::getRoom(int id)
@@ -185,11 +182,6 @@ Room* Map::getRandomRoom(const std::vector<Room*>& exclude)
 	int randomPos = rand() % temp.size();
 
 	return temp[randomPos];
-}
-
-int Map::getTotalCoins() const
-{
-	return this->coinsCreated;
 }
 
 void Map::drawAt(sf::RenderWindow* window, Room* playerRoom)

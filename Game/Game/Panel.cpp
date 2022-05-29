@@ -69,8 +69,12 @@ EndPanel::EndPanel()
 	this->newGameBtn.setFontSize(40);
 	this->newGameBtn.setString("New Game");
 
+	this->levelSummaryText.setFont(this->font);
+	this->levelSummaryText.setFontSize(25);
+	this->levelSummaryText.setString("Level: 1");
+
 	this->itemSummaryText.setFont(this->font);
-	this->itemSummaryText.setString("Items: 0/0");
+	this->itemSummaryText.setString("Coins: 0/0");
 
 	this->zombieSummaryText.setFont(this->font);
 	this->zombieSummaryText.setString("Zombies: 0/0");
@@ -82,12 +86,17 @@ bool EndPanel::newGameBtnClicked(Position& mPosition, bool mClicked)
 	return mClicked && this->newGameBtn.isMouseOver(mPosition);
 }
 
-void EndPanel::setInfo(int collectedCoins, int totalCoins, int killedZombies, int totalZombies)
+void EndPanel::setInfo(int collectedCoins, int totalCoins, int killedZombies, int totalZombies, int reachedLevel)
 {
+	std::stringstream levelSummary;
+	levelSummary << "Level: " << reachedLevel;
+	this->levelSummaryText.setString(levelSummary.str());
+	this->levelSummaryText.setPosition({ this->p.x, this->p.y - 100 });
+
 	std::stringstream itemSummary;
 	itemSummary << "Coins: " << collectedCoins << "/" << totalCoins;
 	this->itemSummaryText.setString(itemSummary.str());
-	this->itemSummaryText.setPosition({ this->p.x, this->p.y - 50 });
+	this->itemSummaryText.setPosition({ this->p.x, this->p.y - 40 });
 
 	std::stringstream zombiesSummary;
 	zombiesSummary << "Zombies: " << killedZombies << "/" << totalZombies;
@@ -104,7 +113,7 @@ void EndPanel::setup(Position pos, Float2Vector panelSize)
 
 	this->p = { cx, cy };
 
-	this->gameOverText.setPosition({ cx, cy - 150 });
+	this->gameOverText.setPosition({ cx, cy - 165 });
 	this->newGameBtn.setPosition({ cx, cy + 100 });
 }
 
@@ -113,6 +122,7 @@ void EndPanel::drawAt(sf::RenderWindow* window)
 	Panel::drawAt(window);
 
 	this->gameOverText.drawAt(window);
+	this->levelSummaryText.drawAt(window);
 	this->itemSummaryText.drawAt(window);
 	this->zombieSummaryText.drawAt(window);
 	this->newGameBtn.drawAt(window);

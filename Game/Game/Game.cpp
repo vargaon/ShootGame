@@ -117,6 +117,7 @@ void Game::initRunningGame()
 	this->player.init();
 	this->currentLevel = 0;
 	this->zombiesSpawned = 0;
+	this->coinsCreated = 0;
 
 	this->setupGameLevel(this->levels.at(this->currentLevel));
 }
@@ -178,6 +179,7 @@ void Game::spawnItem()
 
 		this->itemSpawnClock.restart();
 		this->map.createCoin();
+		++this->coinsCreated;
 	}
 }
 
@@ -249,9 +251,10 @@ void Game::observePlayerLives()
 
 		this->endPanel.setInfo(
 			this->player.getTotalCoins(),
-			this->map.getTotalCoins(),
+			this->coinsCreated,
 			this->player.getKilledZombies(),
-			this->zombiesSpawned
+			this->zombiesSpawned,
+			this->currentLevel + 1
 		);
 	}
 }
