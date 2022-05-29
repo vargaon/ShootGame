@@ -55,6 +55,8 @@ void Player::setup(Room* startRoom)
 	this->shootClock.restart();
 	this->bullets.clear();
 
+	this->bulletesInStack = PLAYER_STACK_CAPACITY;
+
 	this->levelCoins = 0;
 }
 
